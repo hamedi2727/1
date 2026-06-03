@@ -1,0 +1,111 @@
+﻿/* ========================= */
+/*      SIDEBAR (AZURE)      */
+/* ========================= */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 75px;
+    height: 100vh;
+    background: linear-gradient(180deg, #0F4C81, #0A3A67);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 90px;
+    gap: 25px;
+    box-shadow: 4px 0 12px rgba(0,0,0,0.25);
+    z-index: 9999;
+}
+
+.sidebar-icon {
+    width: 55px;
+    height: 55px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.25s ease;
+    position: relative;
+}
+
+/* Hover Animation */
+.sidebar-icon:hover {
+    transform: scale(1.2);
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 12px rgba(255,255,255,0.35);
+}
+
+/* Micro Shake */
+.sidebar-icon:hover {
+    animation: shake 0.25s ease;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-1px); }
+    100% { transform: translateX(0); }
+}
+
+/* Tooltip */
+.sidebar-icon::after {
+    content: attr(data-title);
+    position: absolute;
+    left: 70px;
+    background: #0F4C81;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-50%);
+    top: 50%;
+    white-space: nowrap;
+    transition: 0.2s ease;
+}
+
+.sidebar-icon:hover::after {
+    opacity: 1;
+    left: 85px;
+}
+
+/* Move dashboard to the right */
+.dashboard {
+    margin-left: 95px !important;
+}
+
+/* Fade + Slide Animation for sections */
+.box {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.4s ease;
+}
+
+.box.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Popup Animation */
+#popupWindow {
+    animation: popupZoom 0.35s ease;
+}
+
+@keyframes popupZoom {
+    0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+
+/* SVG Hover Animation */
+svg g:hover rect {
+    transform: scale(1.05);
+    transition: 0.2s ease;
+    filter: brightness(1.2);
+}

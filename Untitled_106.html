@@ -1,0 +1,1086 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC – SCADA Cyber Dashboard</title>
+
+<style>
+
+/* ================================
+   GLOBAL CYBER‑INDUSTRIAL THEME
+================================ */
+
+body {
+  margin: 0;
+  padding: 0;
+  background: radial-gradient(circle at center, #0b0f17 0%, #05070c 100%);
+  font-family: "Segoe UI", sans-serif;
+  color: #e5e7eb;
+  overflow: hidden;
+}
+
+/* Moving cyber grid */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(#1e293b 1px, transparent 1px),
+    linear-gradient(90deg, #1e293b 1px, transparent 1px);
+  background-size: 60px 60px;
+  opacity: 0.08;
+  animation: gridMove 18s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  from { transform: translate(0,0); }
+  to   { transform: translate(-200px, -200px); }
+}
+
+/* ================================
+   HEADER
+================================ */
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 62px;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  z-index: 1000;
+  box-shadow: 0 0 18px rgba(0, 150, 255, 0.25);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-logo {
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 0 6px #38bdf8);
+}
+
+.title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #e0f2fe;
+  text-shadow: 0 0 8px #0ea5e9;
+}
+
+/* ================================
+   LANGUAGE SWITCH
+================================ */
+
+.lang-switch button {
+  padding: 6px 14px;
+  margin-left: 6px;
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 6px;
+  color: #e2e8f0;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.lang-switch button.active {
+  background: #1e3a8a;
+  border-color: #3b82f6;
+  color: #fff;
+  box-shadow: 0 0 10px #3b82f6;
+}
+
+.lang-switch button:hover {
+  background: #1e293b;
+}
+
+/* ================================
+   DATE & TIME BAR
+================================ */
+
+.datetime-bar {
+  margin-top: 62px;
+  height: 40px;
+  background: rgba(15, 23, 42, 0.7);
+  border-bottom: 1px solid #1e293b;
+  display: flex;
+  align-items: center;
+  padding-right: 20px;
+  font-size: 15px;
+  color: #93c5fd;
+  text-shadow: 0 0 6px #0ea5e9;
+}
+
+/* ================================
+   DASHBOARD GRID
+================================ */
+
+.dashboard {
+  margin-top: 20px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  grid-template-rows: 420px 260px;
+  gap: 20px;
+  height: calc(100vh - 120px);
+}
+
+.box {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid #1e293b;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.15);
+  overflow: hidden;
+}
+
+.box h2 {
+  margin: 0 0 10px 0;
+  font-size: 17px;
+  color: #93c5fd;
+  text-shadow: 0 0 6px #0ea5e9;
+}
+/* ================================
+   MAP BOX + SVG WRAPPER
+================================ */
+
+#mapBox {
+  position: relative;
+}
+
+.svg-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  border: 1px solid #1e293b;
+  border-radius: 8px;
+  background: rgba(10, 15, 25, 0.6);
+  box-shadow: inset 0 0 12px rgba(0, 150, 255, 0.15);
+  cursor: grab;
+}
+
+.svg-wrapper:active {
+  cursor: grabbing;
+}
+
+.svg-container {
+  width: 1400px;
+  height: 650px;
+  transform-origin: top left;
+  transition: transform 0.15s ease-out;
+}
+
+/* ================================
+   SVG ELEMENTS — CYBER STYLE
+================================ */
+
+svg text {
+  font-family: "Segoe UI", sans-serif;
+  user-select: none;
+}
+
+svg rect {
+  transition: 0.25s;
+}
+
+svg rect:hover {
+  filter: drop-shadow(0 0 10px #38bdf8);
+  transform: scale(1.04);
+}
+
+/* ================================
+   FLOW PATHS (ANIMATED)
+================================ */
+
+.flow-path {
+  stroke-dasharray: 14;
+  animation: flowMove 1.2s linear infinite;
+  opacity: 0.85;
+}
+
+@keyframes flowMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -28; }
+}
+
+/* ================================
+   SPARK EFFECT
+================================ */
+
+.spark {
+  filter: url(#sparkFilter);
+  opacity: 0.55;
+  animation: sparkPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes sparkPulse {
+  from { opacity: 0.25; }
+  to   { opacity: 0.9; }
+}
+
+/* ================================
+   HIGHLIGHT EFFECT
+================================ */
+
+.highlighted {
+  filter: drop-shadow(0 0 12px #38bdf8) !important;
+  transform: scale(1.06) !important;
+}
+
+/* ================================
+   DETAILS PANEL
+================================ */
+
+#detailsBox p, #detailsBox a, #detailsBox td {
+  color: #cbd5e1;
+}
+
+#detailsBox a:hover {
+  color: #60a5fa;
+}
+
+/* ================================
+   REPORTS BOX
+================================ */
+
+#reportsBox button:hover {
+  background: #1e293b;
+  box-shadow: 0 0 10px #3b82f6;
+}
+
+/* ================================
+   END OF CSS
+================================ */
+</style>
+</head>
+
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Cyber‑Industrial SCADA Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<!-- START DASHBOARD -->
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">جاهز</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative;">
+      <div class="svg-container" id="svgContainer">
+      <!-- ============================
+     SVG — CYBER‑INDUSTRIAL MAP
+============================ -->
+
+<svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+  <!-- ============================
+       DEFINITIONS (ARROWS + SPARK)
+  ============================ -->
+  <defs>
+
+    <!-- Arrow Head -->
+    <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+      <polygon points="0 0, 6 3, 0 6" fill="#38bdf8"/>
+    </marker>
+
+    <!-- Spark Filter -->
+    <filter id="sparkFilter">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feColorMatrix type="matrix"
+        values="1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 15 -5"/>
+    </filter>
+
+  </defs>
+
+  <!-- Title (centered) -->
+  <text x="700" y="40" fill="#93c5fd" font-size="22" text-anchor="middle"
+        style="text-shadow:0 0 8px #0ea5e9;">
+  </text>
+
+  <!-- ============================
+       GRID LINES
+  ============================ -->
+  <g opacity="0.25">
+    <line x1="150" y1="60" x2="150" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="350" y1="60" x2="350" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="550" y1="60" x2="550" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="750" y1="60" x2="750" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="950" y1="60" x2="950" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="1150" y1="60" x2="1150" y2="620" stroke="#1e293b" stroke-width="0.8"/>
+
+    <line x1="100" y1="120" x2="1300" y2="120" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="100" y1="210" x2="1300" y2="210" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="100" y1="300" x2="1300" y2="300" stroke="#1e293b" stroke-width="0.8"/>
+    <line x1="100" y1="420" x2="1300" y2="420" stroke="#1e293b" stroke-width="0.8"/>
+  </g>
+
+  <!-- Side Labels -->
+  <text x="20" y="140" fill="#60a5fa" font-size="14" font-weight="bold">Locations</text>
+  <text x="20" y="230" fill="#60a5fa" font-size="14" font-weight="bold">Lev. Reducer</text>
+  <text x="20" y="320" fill="#60a5fa" font-size="14" font-weight="bold">ID Lines</text>
+  <text x="20" y="450" fill="#60a5fa" font-size="14" font-weight="bold">ID Pumps</text>
+
+  <!-- Divider -->
+  <line x1="140" y1="80" x2="140" y2="600" stroke="#334155" stroke-width="1.2" />
+
+  <!-- ============================
+       TOP ROW — DISTRIBUTORS
+  ============================ -->
+
+  <g id="Center core 1" onclick="showDetails('Center core 1','dist')" style="cursor:pointer">
+    <rect x="180" y="100" width="140" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="250" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">Center core</text>
+    <text x="250" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(Slabs)</text>
+  </g>
+
+  <g id="Wing C" onclick="showDetails('Wing C','dist')" style="cursor:pointer">
+    <rect x="380" y="100" width="140" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="450" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">Wing C</text>
+    <text x="450" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(SPB# 320043)</text>
+  </g>
+
+  <g id="Center core 2" onclick="showDetails('Center core 2','dist')" style="cursor:pointer">
+    <rect x="580" y="100" width="160" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="660" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">CC (TC3)</text>
+    <text x="660" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(SPB# 320050)</text>
+  </g>
+
+  <g id="Wing A" onclick="showDetails('Wing A','dist')" style="cursor:pointer">
+    <rect x="780" y="100" width="160" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="860" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">CC (TC2)</text>
+    <text x="860" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(SPB# 320051)</text>
+  </g>
+
+  <g id="Wing B" onclick="showDetails('Wing B','dist')" style="cursor:pointer">
+    <rect x="1000" y="100" width="140" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1070" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">Wing A</text>
+    <text x="1070" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(SPB# 320049)</text>
+  </g>
+
+  <g id="Wing B 2" onclick="showDetails('Wing B','dist')" style="cursor:pointer">
+    <rect x="1200" y="100" width="140" height="60"
+          fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1270" y="125" fill="#e0f2fe" font-size="12" text-anchor="middle">Wing B</text>
+    <text x="1270" y="145" fill="#93c5fd" font-size="12" text-anchor="middle">(SPB# 320048)</text>
+  </g>
+  <!-- ============================
+       SECOND ROW — LINES (L1–L6)
+  ============================ -->
+
+  <g id="L1" onclick="showDetails('L1','line')" style="cursor:pointer">
+    <rect x="210" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="250" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.76</text>
+  </g>
+
+  <g id="L2" onclick="showDetails('L2','line')" style="cursor:pointer">
+    <rect x="410" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="450" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.61</text>
+  </g>
+
+  <g id="L3" onclick="showDetails('L3','line')" style="cursor:pointer">
+    <rect x="610" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="650" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.73</text>
+  </g>
+
+  <g id="L4" onclick="showDetails('L4','line')" style="cursor:pointer">
+    <rect x="810" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="850" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.72</text>
+  </g>
+
+  <g id="L5" onclick="showDetails('L5','line')" style="cursor:pointer">
+    <rect x="1010" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1050" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.61</text>
+  </g>
+
+  <g id="L6" onclick="showDetails('L6','line')" style="cursor:pointer">
+    <rect x="1210" y="190" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1250" y="215" fill="#e0f2fe" font-size="12" text-anchor="middle">L.68</text>
+  </g>
+
+  <!-- ============================
+       THIRD ROW — ID LINES
+  ============================ -->
+
+  <g id="Line1" onclick="showDetails('L1','line')" style="cursor:pointer">
+    <rect x="210" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="250" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #1</text>
+  </g>
+
+  <g id="Line2" onclick="showDetails('L2','line')" style="cursor:pointer">
+    <rect x="410" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="450" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #2</text>
+  </g>
+
+  <g id="Line3" onclick="showDetails('L3','line')" style="cursor:pointer">
+    <rect x="610" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="650" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #3</text>
+  </g>
+
+  <g id="Line4" onclick="showDetails('L4','line')" style="cursor:pointer">
+    <rect x="810" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="850" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #4</text>
+  </g>
+
+  <g id="Line5" onclick="showDetails('L5','line')" style="cursor:pointer">
+    <rect x="1010" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1050" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #5</text>
+  </g>
+
+  <g id="Line6" onclick="showDetails('L6','line')" style="cursor:pointer">
+    <rect x="1210" y="280" width="80" height="50"
+          fill="#1e40af" stroke="#3b82f6" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1250" y="305" fill="#e0f2fe" font-size="12" text-anchor="middle">Line #6</text>
+  </g>
+
+  <!-- ============================
+       FOURTH ROW — PUMPS (SP1–SP4)
+  ============================ -->
+
+  <g id="SP1" onclick="showDetails('SP1','pump')" style="cursor:pointer">
+    <rect x="380" y="420" width="160" height="70"
+          fill="#f59e0b" stroke="#fbbf24" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="460" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (1)</text>
+    <text x="460" y="465" fill="#000" font-size="12" text-anchor="middle">8800126</text>
+  </g>
+
+  <g id="SP2" onclick="showDetails('SP2','pump')" style="cursor:pointer">
+    <rect x="580" y="420" width="160" height="70"
+          fill="#f59e0b" stroke="#fbbf24" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="660" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (2)</text>
+    <text x="660" y="465" fill="#000" font-size="12" text-anchor="middle">8800121</text>
+  </g>
+
+  <g id="SP3" onclick="showDetails('SP3','pump')" style="cursor:pointer">
+    <rect x="780" y="420" width="160" height="70"
+          fill="#f59e0b" stroke="#fbbf24" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="860" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (3)</text>
+    <text x="860" y="465" fill="#000" font-size="12" text-anchor="middle">8800124</text>
+  </g>
+
+  <g id="SP4" onclick="showDetails('SP4','pump')" style="cursor:pointer">
+    <rect x="980" y="420" width="160" height="70"
+          fill="#f59e0b" stroke="#fbbf24" stroke-width="1.8" rx="6" ry="6"/>
+    <text x="1060" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (4)</text>
+    <text x="1060" y="465" fill="#000" font-size="12" text-anchor="middle">8800127</text>
+  </g>
+
+  <!-- ============================
+       OLD CONNECTION LINES
+  ============================ -->
+
+  <line x1="250" y1="330" x2="250" y2="400" stroke="#475569" stroke-width="2"/>
+  <line x1="250" y1="400" x2="460" y2="400" stroke="#475569" stroke-width="2"/>
+  <line x1="460" y1="400" x2="460" y2="420" stroke="#475569" stroke-width="2"/>
+
+  <line x1="450" y1="330" x2="450" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="450" y1="380" x2="650" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="650" y1="380" x2="660" y2="420" stroke="#475569" stroke-width="2"/>
+
+  <line x1="850" y1="330" x2="850" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="850" y1="380" x2="860" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="860" y1="380" x2="860" y2="420" stroke="#475569" stroke-width="2"/>
+
+  <line x1="1050" y1="330" x2="1050" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="1050" y1="380" x2="1250" y2="380" stroke="#475569" stroke-width="2"/>
+  <line x1="1250" y1="380" x2="1060" y2="420" stroke="#475569" stroke-width="2"/>
+
+  <!-- ============================
+       NEW BEZIER CONNECTIONS
+  ============================ -->
+
+  <!-- SP1 → L1 -->
+  <path id="link_SP1"
+        d="M460 420 C 460 360, 250 360, 250 330"
+        stroke="#3b82f6" stroke-width="5" fill="none"
+        marker-end="url(#arrowHead)" class="flow-path"/>
+
+  <path d="M460 420 C 460 360, 250 360, 250 330"
+        stroke="#38bdf8" stroke-width="6" fill="none"
+        class="spark"/>
+
+  <!-- SP2 → L2 -->
+  <path id="link_SP2"
+        d="M660 420 C 660 360, 450 360, 450 330"
+        stroke="#22c55e" stroke-width="5" fill="none"
+        marker-end="url(#arrowHead)" class="flow-path"/>
+
+  <path d="M660 420 C 660 360, 450 360, 450 330"
+        stroke="#38bdf8" stroke-width="6" fill="none"
+        class="spark"/>
+
+  <!-- SP3 → L4 -->
+  <path id="link_SP3"
+        d="M860 420 C 860 360, 850 360, 850 330"
+        stroke="#22c55e" stroke-width="5" fill="none"
+        marker-end="url(#arrowHead)" class="flow-path"/>
+
+  <path d="M860 420 C 860 360, 850 360, 850 330"
+        stroke="#38bdf8" stroke-width="6" fill="none"
+        class="spark"/>
+
+  <!-- SP4 → L5 -->
+  <path id="link_SP4"
+        d="M1060 420 C 1060 360, 1050 360, 1050 330"
+        stroke="#22c55e" stroke-width="5" fill="none"
+        marker-end="url(#arrowHead)" class="flow-path"/>
+
+  <path d="M1060 420 C 1060 360, 1050 360, 1050 330"
+        stroke="#38bdf8" stroke-width="6" fill="none"
+        class="spark"/>
+</svg> <!-- END OF MAIN SVG -->
+
+      </div> <!-- svg-container -->
+    </div> <!-- svg-wrapper -->
+  </div> <!-- mapBox -->
+
+
+  <!-- ============================
+       RIGHT SIDE — DETAILS PANEL
+  ============================ -->
+
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1;">
+    <h2 id="detailName">اختر عنصرًا</h2>
+
+    <div id="detailInfo" style="font-size:14px; line-height:1.6;">
+      <p>—</p>
+    </div>
+
+    <div style="margin-top:15px; display:flex; gap:10px;">
+      <a id="btnCatalog" href="#" target="_blank"
+         style="padding:8px 12px; background:#0f172a; border:1px solid #1e293b;
+                border-radius:6px; color:#e5e7eb; text-decoration:none; font-size:13px;">
+        كتالوج
+      </a>
+
+      <a id="btnSpecs" href="#" target="_blank"
+         style="padding:8px 12px; background:#0f172a; border:1px solid #1e293b;
+                border-radius:6px; color:#e5e7eb; text-decoration:none; font-size:13px;">
+        المواصفات
+      </a>
+
+      <a id="btnInsurance" href="#" target="_blank"
+         style="padding:8px 12px; background:#0f172a; border:1px solid #1e293b;
+                border-radius:6px; color:#e5e7eb; text-decoration:none; font-size:13px;">
+        التأمين
+      </a>
+    </div>
+
+    <h3 style="margin-top:20px; font-size:15px;">أرشيف ملفات PDF</h3>
+
+    <table id="pdfTable" style="width:100%; margin-top:10px; font-size:13px; border-collapse:collapse;">
+      <thead>
+        <tr style="background:#1e293b;">
+          <th id="pdfDateHeader" style="padding:6px; border:1px solid #334155;">التاريخ</th>
+          <th id="pdfFileHeader" style="padding:6px; border:1px solid #334155;">الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3 style="margin-top:20px; font-size:15px;">ملفات الصيانة</h3>
+
+    <table id="maintenancePdfTable" style="width:100%; margin-top:10px; font-size:13px; border-collapse:collapse;">
+      <thead>
+        <tr style="background:#1e293b;">
+          <th style="padding:6px; border:1px solid #334155;">التاريخ</th>
+          <th style="padding:6px; border:1px solid #334155;">الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+  </div> <!-- detailsBox -->
+
+
+  <!-- ============================
+       BOTTOM LEFT — REPORT BUTTONS
+  ============================ -->
+
+  <div class="box" id="reportsBox" style="grid-column:1; grid-row:2;">
+    <h2>التقارير</h2>
+
+    <button onclick="openDailyReport()" style="
+      padding:10px 15px; background:#0f172a; border:1px solid #1e293b;
+      border-radius:6px; color:#e5e7eb; cursor:pointer; font-size:14px;">
+      التقرير اليومي
+    </button>
+
+    <button onclick="openMonthlyReport()" style="
+      padding:10px 15px; background:#0f172a; border:1px solid #1e293b;
+      border-radius:6px; color:#e5e7eb; cursor:pointer; font-size:14px; margin-left:10px;">
+      التقرير الشهري
+    </button>
+  </div>
+
+
+  <!-- ============================
+       BOTTOM RIGHT — EXTRA INFO
+  ============================ -->
+
+  <div class="box" id="emptyBox" style="grid-column:2; grid-row:2;">
+    <h2>معلومات إضافية</h2>
+    <p style="font-size:14px; color:#9ca3af;">—</p>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+<script>
+/* =======================
+   DATA — LINES STATUS
+======================= */
+
+const lines = [
+  { id: "L1", mode: "Ready" },
+  { id: "L2", mode: "ACTIVE" },
+  { id: "L3", mode: "Idle" },
+  { id: "L4", mode: "ACTIVE" },
+  { id: "L5", mode: "ACTIVE" },
+  { id: "L6", mode: "Idle" }
+];
+
+/* =======================
+   DATA — PUMPS
+======================= */
+
+const pumps = [
+  { id: "SP1", name: "8800126", mode: "Ready" },
+  { id: "SP2", name: "8800121", mode: "ACTIVE" },
+  { id: "SP3", name: "8800124", mode: "ACTIVE" },
+  { id: "SP4", name: "8800127", mode: "ACTIVE" }
+];
+
+/* =======================
+   DATA — DISTRIBUTORS
+======================= */
+
+const distributors = [
+  { id: "Center core 1", name: "Slabs" },
+  { id: "Wing C", name: "SPB# 320043" },
+  { id: "Center core 2", name: "SPB# 320050" },
+  { id: "Wing A", name: "SPB# 320051" },
+  { id: "Wing B", name: "SPB# 320049" },
+  { id: "Wing B 2", name: "SPB# 320048" }
+];
+
+/* =======================
+   PDF ARCHIVE
+======================= */
+
+const pdfArchive = {
+  SP1: { catalog: "#", specs: "#", insurance: "#", archive: [], maintenance: [] },
+  SP2: { catalog: "#", specs: "#", insurance: "#", archive: [], maintenance: [] },
+  SP3: { catalog: "#", specs: "#", insurance: "#", archive: [], maintenance: [] },
+  SP4: { catalog: "#", specs: "#", insurance: "#", archive: [], maintenance: [] }
+};
+
+/* =======================
+   TRANSLATIONS
+======================= */
+
+const translations = {
+  ar: {
+    mapTitle: "المخطط الهندسي",
+    legendActive: "نشط",
+    legendStandby: "جاهز",
+    legendIdle: "خامل",
+    type: "النوع",
+    id: "المعرف",
+    pumpLabel: "مضخة",
+    lineLabel: "خط",
+    distLabel: "موزع",
+    mode: "الوضع"
+  },
+  en: {
+    mapTitle: "Engineering Map",
+    legendActive: "Active",
+    legendStandby: "Standby",
+    legendIdle: "Idle",
+    type: "Type",
+    id: "ID",
+    pumpLabel: "Pump",
+    lineLabel: "Line",
+    distLabel: "Distributor",
+    mode: "Mode"
+  }
+};
+
+let currentLang = "ar";
+
+/* =======================
+   APPLY LANGUAGE
+======================= */
+
+function applyLanguage() {
+  const t = translations[currentLang];
+
+  document.getElementById("mapTitle").textContent = t.mapTitle;
+  document.getElementById("legendActive").textContent = t.legendActive;
+  document.getElementById("legendStandby").textContent = t.legendStandby;
+  document.getElementById("legendIdle").textContent = t.legendIdle;
+
+  document.getElementById("pdfDateHeader").textContent =
+    currentLang === "ar" ? "التاريخ" : "Date";
+  document.getElementById("pdfFileHeader").textContent =
+    currentLang === "ar" ? "الملف" : "File";
+}
+
+/* =======================
+   COLOR LINES BY MODE
+======================= */
+
+function applyLineColors() {
+  lines.forEach(line => {
+    const el = document.getElementById(line.id);
+    if (!el) return;
+
+    const rect = el.querySelector("rect");
+
+    if (line.mode === "ACTIVE") {
+      rect.setAttribute("fill", "#22c55e");
+      rect.setAttribute("stroke", "#15803d");
+    }
+    else if (line.mode === "Ready") {
+      rect.setAttribute("fill", "#eab308");
+      rect.setAttribute("stroke", "#b45309");
+    }
+    else {
+      rect.setAttribute("fill", "#6b7280");
+      rect.setAttribute("stroke", "#4b5563");
+    }
+  });
+}
+
+/* =======================
+   FLOW EFFECTS
+======================= */
+
+function applyFlowEffects() {
+  const activeLines = ["L2", "L4", "L5"];
+
+  activeLines.forEach(id => {
+    const line = document.getElementById(id);
+    if (!line) return;
+
+    line.querySelector("rect").classList.add("flow-path");
+  });
+}
+
+/* =======================
+   LINK PATHS
+======================= */
+
+const pumpLinkPaths = {
+  SP1: "link_SP1",
+  SP2: "link_SP2",
+  SP3: "link_SP3",
+  SP4: "link_SP4"
+};
+
+/* =======================
+   HIGHLIGHT ELEMENT
+======================= */
+
+function resetHighlight() {
+  document.querySelectorAll(".highlighted").forEach(el => {
+    el.classList.remove("highlighted");
+    el.style.filter = "";
+    el.style.transform = "";
+  });
+}
+
+function highlightElement(id, type) {
+  resetHighlight();
+
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.classList.add("highlighted");
+
+  if (type === "pump") {
+    const linkId = pumpLinkPaths[id];
+    const link = document.getElementById(linkId);
+    if (link) {
+      link.style.filter = "drop-shadow(0 0 12px #38bdf8)";
+      link.style.opacity = "1";
+    }
+  }
+}
+
+/* =======================
+   SHOW DETAILS
+======================= */
+
+function showDetails(id, type) {
+  resetHighlight();
+  highlightElement(id, type);
+
+  const t = translations[currentLang];
+  const detailName = document.getElementById("detailName");
+  const detailInfo = document.getElementById("detailInfo");
+
+  let title = "";
+  let info = "";
+
+  if (type === "pump") {
+    const pump = pumps.find(p => p.id === id);
+    if (!pump) return;
+
+    title = `${t.pumpLabel}: ${pump.id}`;
+    info = `
+      <p><strong>${t.id}:</strong> ${pump.name}</p>
+      <p><strong>${t.mode}:</strong> ${pump.mode}</p>
+    `;
+
+    document.getElementById("btnCatalog").href = pdfArchive[id].catalog;
+    document.getElementById("btnSpecs").href = pdfArchive[id].specs;
+    document.getElementById("btnInsurance").href = pdfArchive[id].insurance;
+
+    updatePdfTables(id);
+  }
+
+  else if (type === "line") {
+    const line = lines.find(l => l.id === id);
+    if (!line) return;
+
+    title = `${t.lineLabel}: ${line.id}`;
+    info = `<p><strong>${t.mode}:</strong> ${line.mode}</p>`;
+
+    updatePdfTables(null);
+  }
+
+  else if (type === "dist") {
+    const dist = distributors.find(d => d.id === id);
+    if (!dist) return;
+
+    title = `${t.distLabel}: ${dist.id}`;
+    info = `<p><strong>${t.id}:</strong> ${dist.name}</p>`;
+
+    updatePdfTables(null);
+  }
+
+  detailName.textContent = title;
+  detailInfo.innerHTML = info;
+}
+
+/* =======================
+   UPDATE PDF TABLES
+======================= */
+
+function updatePdfTables(pumpId) {
+  const table = document.querySelector("#pdfTable tbody");
+  const table2 = document.querySelector("#maintenancePdfTable tbody");
+
+  table.innerHTML = "";
+  table2.innerHTML = "";
+
+  if (!pumpId) return;
+
+  const archive = pdfArchive[pumpId].archive;
+  const maintenance = pdfArchive[pumpId].maintenance;
+
+  archive.forEach(item => {
+    table.innerHTML += `
+      <tr>
+        <td style="padding:6px; border:1px solid #334155;">${item.date}</td>
+        <td style="padding:6px; border:1px solid #334155;">
+          <a href="${item.url}" target="_blank" style="color:#38bdf8;">${item.name}</a>
+        </td>
+      </tr>`;
+  });
+
+  maintenance.forEach(item => {
+    table2.innerHTML += `
+      <tr>
+        <td style="padding:6px; border:1px solid #334155;">${item.date}</td>
+        <td style="padding:6px; border:1px solid #334155;">
+          <a href="${item.url}" target="_blank" style="color:#38bdf8;">${item.name}</a>
+        </td>
+      </tr>`;
+  });
+}
+
+/* =======================
+   REPORT BUTTONS
+======================= */
+
+function openDailyReport() {
+  window.open("daily_report.pdf", "_blank");
+}
+
+function openMonthlyReport() {
+  window.open("monthly_report.pdf", "_blank");
+}
+
+/* =======================
+   SVG DRAGGING
+======================= */
+
+let isDragging = false;
+let startX, startY;
+let scrollLeft, scrollTop;
+
+const svgWrapper = document.getElementById("svgWrapper");
+const svgContainer = document.getElementById("svgContainer");
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isDragging = true;
+  startX = e.pageX - svgWrapper.offsetLeft;
+  startY = e.pageY - svgWrapper.offsetTop;
+  scrollLeft = svgWrapper.scrollLeft;
+  scrollTop = svgWrapper.scrollTop;
+});
+
+svgWrapper.addEventListener("mouseleave", () => {
+  isDragging = false;
+});
+
+svgWrapper.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+svgWrapper.addEventListener("mousemove", (e) => {
+  if (!isDragging) return;
+  e.preventDefault();
+
+  const x = e.pageX - svgWrapper.offsetLeft;
+  const y = e.pageY - svgWrapper.offsetTop;
+
+  const walkX = (x - startX);
+  const walkY = (y - startY);
+
+  svgWrapper.scrollLeft = scrollLeft - walkX;
+  svgWrapper.scrollTop = scrollTop - walkY;
+});
+
+/* =======================
+   SVG ZOOM
+======================= */
+
+let zoomLevel = 1;
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+
+  if (e.deltaY < 0) zoomLevel += 0.05;
+  else zoomLevel -= 0.05;
+
+  zoomLevel = Math.min(Math.max(zoomLevel, 0.5), 2);
+
+  svgContainer.style.transform = `scale(${zoomLevel})`;
+});
+
+/* =======================
+   UPDATE DATE & TIME
+======================= */
+
+function updateDateTime() {
+  const now = new Date();
+  const formatted = now.toLocaleString("ar-SA", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  document.getElementById("dateTime").textContent = formatted;
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* =======================
+   LANGUAGE SWITCH
+======================= */
+
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  document.getElementById("langAr").classList.add("active");
+  document.getElementById("langEn").classList.remove("active");
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  document.getElementById("langEn").classList.add("active");
+  document.getElementById("langAr").classList.remove("active");
+  applyLanguage();
+};
+
+/* =======================
+   INITIALIZATION
+======================= */
+
+applyLanguage();
+applyLineColors();
+applyFlowEffects();
+
+</script>
+
+</body>
+</html>
+

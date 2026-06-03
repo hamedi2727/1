@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fuel System Dashboard</title>
+    <link rel="stylesheet" href="styles1.css" />
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2 class="sidebar-title">Fuel System</h2>
+
+            <div class="legend">
+                <h3>وسيلة الإيضاح</h3>
+                <div class="legend-item">
+                    <span class="legend-color active"></span>
+                    <span>نشط (Active)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color standby"></span>
+                    <span>جاهز (Ready)</span>
+                </div>
+                <div class="legend-item">
+                    <span class="legend-color idle"></span>
+                    <span>خامل (Idle)</span>
+                </div>
+            </div>
+
+            <div class="details-box">
+                <h3>تفاصيل العنصر</h3>
+                <div id="details-content">اختر عنصرًا من المخطط</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+
+            <div class="header">
+                <h1>Fuel Distribution System</h1>
+            </div>
+
+            <!-- SVG Diagram -->
+            <div class="diagram-container">
+                <svg id="fuel-diagram" width="1500" height="600">
+
+                    <!-- Distributors -->
+                    <rect x="200" y="100" width="100" height="60" class="distributor" data-id="Wing C"></rect>
+                    <rect x="400" y="100" width="100" height="60" class="distributor" data-id="Center core 1"></rect>
+                    <rect x="600" y="100" width="100" height="60" class="distributor" data-id="Center core 2"></rect>
+                    <rect x="800" y="100" width="100" height="60" class="distributor" data-id="Wing A"></rect>
+                    <rect x="1000" y="100" width="100" height="60" class="distributor" data-id="Wing B"></rect>
+
+                    <!-- Lines (Top to Middle) -->
+                    <line x1="250" y1="160" x2="250" y2="190" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="450" y1="160" x2="450" y2="190" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="650" y1="160" x2="650" y2="190" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="850" y1="160" x2="850" y2="190" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="1050" y1="160" x2="1050" y2="190" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+
+                    <!-- Middle Boxes -->
+                    <rect x="200" y="190" width="100" height="50" class="line-box" data-id="L1"></rect>
+                    <rect x="400" y="190" width="100" height="50" class="line-box" data-id="L2"></rect>
+                    <rect x="600" y="190" width="100" height="50" class="line-box" data-id="L3"></rect>
+                    <rect x="800" y="190" width="100" height="50" class="line-box" data-id="L4"></rect>
+                    <rect x="1000" y="190" width="100" height="50" class="line-box" data-id="L5"></rect>
+
+                    <!-- Lines (Middle to Lower) -->
+                    <line x1="250" y1="240" x2="250" y2="280" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="450" y1="240" x2="450" y2="280" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="650" y1="240" x2="650" y2="280" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="850" y1="240" x2="850" y2="280" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+                    <line x1="1050" y1="240" x2="1050" y2="280" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6 4"/>
+
+                    <!-- Lower Boxes -->
+                    <rect x="200" y="280" width="100" height="50" class="line-box" data-id="L6"></rect>
+
+                    <!-- Pumps -->
+                    <rect x="430" y="420" width="60" height="60" class="pump" data-id="SP1"></rect>
+                    <rect x="630" y="420" width="60" height="60" class="pump" data-id="SP2"></rect>
+                    <rect x="830" y="420" width="60" height="60" class="pump" data-id="SP3"></rect>
+                    <rect x="1030" y="420" width="60" height="60" class="pump" data-id="SP4"></rect>
+
+                </svg>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="script1.js"></script>
+
+</body>
+</html>
