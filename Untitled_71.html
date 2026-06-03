@@ -1,0 +1,856 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+.fixed-header {
+  direction: ltr !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: ltr !important;
+}
+
+.header-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  direction: rtl;
+}
+
+.lang-switch {
+  display:flex;
+  gap:8px;
+  direction:ltr !important;
+}
+
+.lang-switch button {
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid #1f2937;
+  background:#020617;
+  color:#e5e7eb;
+  cursor:pointer;
+  font-size:13px;
+}
+.lang-switch button.active {
+  background:#0ea5e9;
+  border-color:#38bdf8;
+}
+
+/* GRID LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container { transform-origin: center center; cursor: grab; }
+.svg-container:active { cursor: grabbing; }
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg { width:100%; height:100%; }
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* LEGEND */
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#020617;
+  border:1px solid #1f2937;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-icon { color: #f97316; font-size: 18px; }
+
+/* DOCUMENT BOX */
+.doc-box {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  box-shadow: 0 0 18px rgba(0,0,0,0.35);
+}
+.doc-box h2 {
+  margin: 0 0 15px;
+  font-size: 17px;
+  color: #e2e8f0;
+  text-align:center;
+}
+
+/* ICON BUTTONS */
+.doc-icons {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.doc-btn {
+  flex:1;
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:15px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s;
+}
+.doc-btn:hover {
+  background:#0f172a;
+  transform:translateY(-3px);
+}
+.doc-btn div {
+  font-size:26px;
+  margin-bottom:6px;
+}
+.doc-btn span {
+  font-size:13px;
+  opacity:0.85;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DATETIME BAR */
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  direction:ltr;
+}
+
+/* ============================
+   LINE EFFECTS (Glow + Pulse)
+============================ */
+.line-active {
+  stroke-width: 10 !important;
+  filter: drop-shadow(0 0 6px #0ea5e9);
+  animation: pulseGlow 1.2s ease-out;
+}
+
+@keyframes pulseGlow {
+  0%   { stroke-width: 6; filter: drop-shadow(0 0 0px #0ea5e9); }
+  50%  { stroke-width: 12; filter: drop-shadow(0 0 12px #38bdf8); }
+  100% { stroke-width: 10; filter: drop-shadow(0 0 6px #0ea5e9); }
+}
+
+/* FLOW EFFECT */
+.flow-effect {
+  stroke-dasharray: 8;
+  animation: flowMove 1.5s linear infinite;
+}
+
+@keyframes flowMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -40; }
+}
+
+/* WAVE EFFECT */
+.wave-effect {
+  stroke: #38bdf8;
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: waveMove 1.2s ease-out forwards;
+}
+
+@keyframes waveMove {
+  0% {
+    stroke-dasharray: 0 300;
+    opacity: 0.9;
+  }
+  50% {
+    stroke-dasharray: 150 300;
+    opacity: 1;
+  }
+  100% {
+    stroke-dasharray: 300 300;
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<!-- START DASHBOARD -->
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">استعداد</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#ef4444; display:inline-block;"></span>
+        <span id="legendReady">جاهز</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative;">
+      <div class="svg-container" id="svgContainer">
+
+        <!-- SVG -->
+        <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 800 260">
+
+          <defs>
+            <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 z" fill="#e5e7eb" />
+            </marker>
+          </defs>
+
+          <!-- PUMPS -->
+          <g id="SP1" onclick="showDetails('SP1','pump')" style="cursor:pointer">
+            <rect x="50" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="90" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P1</text>
+          </g>
+
+          <g id="SP2" onclick="showDetails('SP2','pump')" style="cursor:pointer">
+            <rect x="200" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="240" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P2</text>
+          </g>
+
+          <g id="SP3" onclick="showDetails('SP3','pump')" style="cursor:pointer">
+            <rect x="350" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="390" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P3</text>
+          </g>
+
+          <g id="SP4" onclick="showDetails('SP4','pump')" style="cursor:pointer">
+            <rect x="500" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="540" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P4</text>
+          </g>
+
+          <!-- LINES -->
+          <g onclick="showDetails('L1','line')" style="cursor:pointer">
+            <path id="L1" d="M90 200 L90 130 L150 130 L150 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L2','line')" style="cursor:pointer">
+            <path id="L2" d="M240 200 L240 130 L300 130 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L3','line')" style="cursor:pointer">
+            <path id="L3" d="M390 200 L390 130 L450 130 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L4','line')" style="cursor:pointer">
+            <path id="L4" d="M540 200 L540 130 L600 130 L600 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L5','line')" style="cursor:pointer">
+            <path id="L5" d="M390 200 L390 150 L300 150 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L6','line')" style="cursor:pointer">
+            <path id="L6" d="M540 200 L540 150 L450 150 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <!-- DISTRIBUTORS -->
+          <g id="SPB1" onclick="showDetails('SPB1','dist')" style="cursor:pointer">
+            <circle cx="150" cy="40" r="30" fill="#f97316"/>
+            <text x="150" y="45" fill="#e5e7eb" font-size="14" text-anchor="middle">320043</text>
+          </g>
+
+          <g id="SPB2" onclick="showDetails('SPB2','dist')" style="cursor:pointer">
+            <circle cx="300" cy="40" r="30" fill="#f97316"/>
+            <text x="300" y="45" fill="#e5e7eb" font-size="14" text-anchor="middle">320050</text>
+          </g>
+
+          <g id="SPB3" onclick="showDetails('SPB3','dist')" style="cursor:pointer">
+            <circle cx="450" cy="40" r="30" fill="#f97316"/>
+            <text x="450" y="45" fill="#e5e7eb" font-size="14" text-anchor="middle">320051</text>
+          </g>
+
+          <g id="SPB4" onclick="showDetails('SPB4','dist')" style="cursor:pointer">
+            <circle cx="600" cy="40" r="30" fill="#f97316"/>
+            <text x="600" y="45" fill="#e5e7eb" font-size="14" text-anchor="middle">320049</text>
+          </g>
+
+          <g id="SPB5" onclick="showDetails('SPB5','dist')" style="cursor:pointer">
+            <circle cx="750" cy="40" r="30" fill="#f97316"/>
+            <text x="750" y="45" fill="#e5e7eb" font-size="14" text-anchor="middle">320048</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- MINIMAP -->
+      <div class="minimap">
+        <svg viewBox="0 0 800 260">
+
+          <rect x="50" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="200" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="350" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="500" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+
+          <path d="M90 200 L90 130 L150 130 L150 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M240 200 L240 130 L300 130 L300 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 200 L390 130 L450 130 L450 90" stroke="#6b7280" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 200 L540 130 L600 130 L600 90" stroke="#ef4444" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 200 L390 150 L300 150 L300 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 200 L540 150 L450 150 L450 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+
+          <circle cx="150" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="300" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="450" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="600" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="750" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+
+          <rect id="minimapViewport" class="minimap-viewport" x="0" y="0" width="200" height="80"/>
+
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: DETAILS BOX -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1; height:420px; overflow-y:auto;">
+
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <div class="doc-box">
+      <h2>الكتلوج – التأمين – المواصفات</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn">
+          <div>🔒</div>
+          <span>التأمين</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📘</div>
+          <span>الكتلوج</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📑</div>
+          <span>المواصفات</span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 id="pdfTitle" style="margin-top:20px">أرشيف ملفات PDF</h3>
+
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>الصيانة</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn">
+          <div>🛠️</div>
+          <span>سجل الصيانة</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📅</div>
+          <span>الجدولة</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📂</div>
+          <span>ملفات الصيانة</span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px">ملفات PDF الخاصة بالصيانة</h3>
+
+    <table class="pdf-table" id="maintenancePdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- REPORT BOX UNDER MAP ONLY -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>تقرير التشغيل</h2>
+    <p style="opacity:0.7; font-size:14px;">— لا يوجد تقرير —</p>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+
+<!-- ===========================
+       JAVASCRIPT SECTION
+=========================== -->
+<script>
+
+/* =======================
+   SYSTEM DATA
+======================= */
+const pumps = [
+  { id: "SP1", name: "P1" },
+  { id: "SP2", name: "P2" },
+  { id: "SP3", name: "P3" },
+  { id: "SP4", name: "P4" }
+];
+
+const lines = [
+  { id: "L1", name: "L1", mode: "ACTIVE" },
+  { id: "L2", name: "L2", mode: "STANDBY" },
+  { id: "L3", name: "L3", mode: "Idle" },
+  { id: "L4", name: "L4", mode: "Ready" },
+  { id: "L5", name: "L5", mode: "ACTIVE" },
+  { id: "L6", name: "L6", mode: "STANDBY" }
+];
+
+const distributors = [
+  { id: "SPB1", name: "320043" },
+  { id: "SPB2", name: "320050" },
+  { id: "SPB3", name: "320051" },
+  { id: "SPB4", name: "320049" },
+  { id: "SPB5", name: "320048" }
+];
+
+const pdfArchive = {
+  L1: [],
+  L2: [],
+  L3: [],
+  L4: [],
+  L5: [],
+  L6: [
+    { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBxtC3Ysx3-QocBl2ZS34ZTASpsgVdXbMg_qyPu5Uw3zrE?e=YON0hJ" },
+    { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA4jZVOge-3QY__bMyqM4kcAWDj6fblAxp-xYICF2cyCww?e=psCQWZ" },
+    { date: "2026-01-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDm4N5D3ZGBRLK6XSSSTtGcAd2nodCSodaf4uWFw8E9a4E?e=8lhle2" },
+    { date: "2026-01-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAgn_8ibJs7RIr-lwWSgzAuAepATknM9nXDvNlz3AEci4I?e=mPfTZp" },
+    { date: "2026-01-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDwqThzeB9URYTZziBTzo7qARtWNLRdjyhIHnkHjQ62XW8?e=qGa8oW" }
+  ],
+  SPB1: [],
+  SPB2: [],
+  SPB3: [],
+  SPB4: [],
+  SPB5: [],
+  maintenance: [
+    { date: "2026-01-20", url: "#" },
+    { date: "2026-01-18", url: "#" }
+  ]
+};
+
+/* =======================
+   LANGUAGE SYSTEM
+======================= */
+let currentLang = "ar";
+
+const translations = {
+  ar: {
+    map: "المخطط الهندسي",
+    legend: "وسيلة الإيضاح – وضع تشغيل الخطوط",
+    active: "نشط",
+    standby: "استعداد",
+    idle: "خامل",
+    ready: "جاهز",
+    pdfArchive: "أرشيف ملفات PDF",
+    selectItem: "اختر عنصرًا",
+    pumpLabel: "المضخة",
+    lineLabel: "الخط",
+    distLabel: "الموزع",
+    type: "نوع العنصر",
+    id: "المعرف",
+    mode: "وضع التشغيل",
+    pdfDate: "التاريخ",
+    pdfFile: "الملف"
+  },
+  en: {
+    map: "Engineering Layout",
+    legend: "Legend – Line Status",
+    active: "ACTIVE",
+    standby: "STANDBY",
+    idle: "Idle",
+    ready: "Ready",
+    pdfArchive: "PDF Archive",
+    selectItem: "Select an item",
+    pumpLabel: "Pump",
+    lineLabel: "Line",
+    distLabel: "Distributor",
+    type: "Type",
+    id: "ID",
+    mode: "Mode",
+    pdfDate: "Date",
+    pdfFile: "File"
+  }
+};
+
+function applyLanguage() {
+  const t = translations[currentLang];
+
+  document.getElementById("mapTitle").textContent = t.map;
+  document.getElementById("legendTitle").textContent = t.legend;
+  document.getElementById("legendActive").textContent = t.active;
+  document.getElementById("legendStandby").textContent = t.standby;
+  document.getElementById("legendIdle").textContent = t.idle;
+  document.getElementById("legendReady").textContent = t.ready;
+  document.getElementById("pdfTitle").textContent = t.pdfArchive;
+  document.getElementById("pdfDateHeader").textContent = t.pdfDate;
+  document.getElementById("pdfFileHeader").textContent = t.pdfFile;
+
+  if (!selectedItem) {
+    document.getElementById("detailName").textContent = t.selectItem;
+    document.getElementById("detailInfo").innerHTML = "<p>—</p>";
+  }
+
+  document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("langAr").classList.toggle("active", currentLang === "ar");
+  document.getElementById("langEn").classList.toggle("active", currentLang === "en");
+}
+
+/* =======================
+   COLOR BY MODE
+======================= */
+function getLineColor(mode) {
+  switch (mode) {
+    case "ACTIVE": return "#22c55e";
+    case "STANDBY": return "#eab308";
+    case "Idle": return "#6b7280";
+    case "Ready": return "#ef4444";
+    default: return "#22c55e";
+  }
+}
+
+function applyLineColors() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) el.setAttribute("stroke", getLineColor(l.mode));
+  });
+}
+
+/* =======================
+   WAVE EFFECT
+======================= */
+function createWaveEffect(lineId) {
+  const line = document.getElementById(lineId);
+  if (!line) return;
+
+  const wave = line.cloneNode(true);
+  wave.removeAttribute("id");
+  wave.classList.add("wave-effect");
+
+  line.parentNode.appendChild(wave);
+
+  setTimeout(() => wave.remove(), 1200);
+}
+
+/* =======================
+   HIGHLIGHT + EFFECTS
+======================= */
+let selectedItem = null;
+
+function resetHighlight() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) {
+      el.style.opacity = 0.25;
+      el.classList.remove("line-active");
+      el.classList.remove("flow-effect");
+      el.setAttribute("stroke-width", 6);
+    }
+  });
+}
+
+function highlightElement(id, type) {
+  if (type !== "line") return;
+
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.style.opacity = 1;
+
+  el.classList.add("line-active");
+  el.classList.add("flow-effect");
+
+  createWaveEffect(id);
+}
+
+/* =======================
+   SHOW DETAILS
+======================= */
+function showDetails(id, type) {
+  selectedItem = { id, type };
+  const t = translations[currentLang];
+
+  let title = "";
+  let extra = "";
+
+  if (type === "pump") {
+    const obj = pumps.find(x => x.id === id);
+    title = `${t.pumpLabel} ${obj.name}`;
+  }
+
+  if (type === "line") {
+    const obj = lines.find(x => x.id === id);
+    title = `${t.lineLabel} ${obj.name}`;
+    extra = `<p>${t.mode}: ${obj.mode}</p>`;
+  }
+
+  if (type === "dist") {
+    const obj = distributors.find(x => x.id === id);
+    title = `${t.distLabel} ${obj.name}`;
+  }
+
+  document.getElementById("detailName").textContent = title;
+
+  document.getElementById("detailInfo").innerHTML = `
+    <p>${t.type}: ${type}</p>
+    <p>${t.id}: ${id}</p>
+    ${extra}
+  `;
+
+  renderPDFTable(id);
+
+  resetHighlight();
+  highlightElement(id, type);
+}
+
+/* =======================
+   PDF TABLES
+======================= */
+function renderPDFTable(id) {
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id] || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function renderMaintenancePDF() {
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  pdfArchive.maintenance.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+let currentScale = 1;
+let currentTranslate = { x: 0, y: 0 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+/* =======================
+   DATE & TIME
+======================= */
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString("en-GB");
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* =======================
+   INIT
+======================= */
+applyLineColors();
+resetHighlight();
+updateTransform();
+applyLanguage();
+renderMaintenancePDF();
+
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  applyLanguage();
+};
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,726 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Corporate Dashboard</title>
+
+<style>
+    :root {
+        --bg-main: #111317;
+        --bg-panel: #181b22;
+        --bg-header: #0b0d11;
+        --bg-info: #151821;
+        --bg-sidebar: #0c0f16;
+        --text-main: #ffffff;
+        --text-muted: #b0b4c3;
+        --accent: #1e88e5;
+        --accent-soft: rgba(30,136,229,0.15);
+        --border-soft: #262a36;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: var(--bg-main);
+        font-family: Arial, sans-serif;
+        color: var(--text-main);
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    /* وضع نهاري */
+    body.light-mode {
+        --bg-main: #f3f4f7;
+        --bg-panel: #ffffff;
+        --bg-header: #ffffff;
+        --bg-info: #f1f2f5;
+        --bg-sidebar: #ffffff;
+        --text-main: #111317;
+        --text-muted: #555a6b;
+        --accent: #1565c0;
+        --accent-soft: rgba(21,101,192,0.12);
+        --border-soft: #dde0ea;
+    }
+
+    /* الشريط العلوي */
+    .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 64px;
+        background: var(--bg-header);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 22px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+        z-index: 1000;
+        border-bottom: 1px solid var(--border-soft);
+        animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideDown {
+        from { transform: translateY(-60px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .top-left,
+    .top-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .logo {
+        height: 40px;
+        width: 40px;
+        border-radius: 8px;
+        object-fit: contain;
+        background: #000;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+        color: var(--text-main);
+        white-space: nowrap;
+    }
+
+    .subtitle {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    .title-block {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .btn {
+        background: #1b1f2a;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        cursor: pointer;
+        border: 1px solid #2b3040;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        transition: background 0.2s ease, transform 0.1s ease, border 0.2s ease;
+    }
+
+    body.light-mode .btn {
+        background: #e6e8f0;
+        color: #111317;
+        border-color: #c5cadb;
+    }
+
+    .btn:hover {
+        background: var(--accent);
+        border-color: var(--accent);
+        transform: translateY(-1px);
+    }
+
+    .btn-icon {
+        font-size: 14px;
+    }
+
+    /* الشريط الثاني (الوقت والتاريخ) */
+    .info-bar {
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        height: 34px;
+        background: var(--bg-info);
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        color: var(--text-muted);
+        font-size: 13px;
+        padding: 0 22px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        z-index: 999;
+        border-bottom: 1px solid var(--border-soft);
+    }
+
+    #datetime {
+        letter-spacing: 0.4px;
+    }
+
+    /* Layout عام */
+    .layout {
+        display: flex;
+        margin-top: 98px; /* top-bar + info-bar */
+    }
+
+    /* Sidebar */
+    .sidebar {
+        width: 230px;
+        background: var(--bg-sidebar);
+        border-right: 1px solid var(--border-soft);
+        min-height: calc(100vh - 98px);
+        padding: 16px 14px;
+        box-sizing: border-box;
+    }
+
+    .sidebar-title {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .nav-section {
+        margin-bottom: 18px;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 9px;
+        border-radius: 6px;
+        color: var(--text-muted);
+        font-size: 13px;
+        cursor: pointer;
+        transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-item:hover {
+        background: var(--accent-soft);
+        color: var(--accent);
+    }
+
+    .nav-item.active {
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+    }
+
+    .nav-icon {
+        font-size: 15px;
+        width: 18px;
+        text-align: center;
+    }
+
+    /* منطقة المحتوى */
+    .content {
+        flex: 1;
+        padding: 16px 18px 24px;
+        box-sizing: border-box;
+    }
+
+    /* Cards علوية */
+    .cards-row {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .card {
+        background: var(--bg-panel);
+        border-radius: 10px;
+        padding: 10px 12px;
+        border: 1px solid var(--border-soft);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .card-label {
+        font-size: 11px;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+    }
+
+    .card-value {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .card-foot {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    /* بانل المخطط */
+    .panel {
+        background: var(--bg-panel);
+        border-radius: 10px;
+        padding: 10px 10px 18px;
+        border: 1px solid var(--border-soft);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+        overflow-x: auto;
+        margin-bottom: 14px;
+    }
+
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 6px;
+        padding: 0 4px;
+    }
+
+    .panel-title {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .panel-sub {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    /* SVG */
+    svg {
+        background: var(--bg-panel);
+        border-radius: 8px;
+    }
+
+    /* مربعات */
+    .box-green { fill:#4CAF50; stroke:#2E7D32; stroke-width:1.5; rx:6; ry:6; }
+    .box-blue  { fill:#42A5F5; stroke:#1E88E5; stroke-width:1.5; rx:6; ry:6; }
+    .box-peach { fill:#FFCC80; stroke:#FB8C00; stroke-width:1.5; rx:6; ry:6; }
+
+    /* نصوص */
+    .txt       { fill:#fff; font-size:12px; text-anchor:middle; }
+    .txt-small { fill:#fff; font-size:11px; text-anchor:middle; }
+    .title-svg { fill:#fff; font-size:22px; font-weight:bold; text-anchor:middle; }
+    .side-label{ fill:#fff; font-size:16px; font-weight:bold; text-anchor:start; }
+
+    body.light-mode .txt,
+    body.light-mode .txt-small,
+    body.light-mode .title-svg,
+    body.light-mode .side-label {
+        fill: #111317;
+    }
+
+    /* خطوط التوصيل */
+    .conn {
+        stroke:#ddd;
+        stroke-width:2;
+        fill:none;
+    }
+
+    body.light-mode .conn {
+        stroke:#555a6b;
+    }
+
+    /* بانل إضافي (Logs / Charts Placeholder) */
+    .grid-2 {
+        display: grid;
+        grid-template-columns: 2fr 1.2fr;
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .placeholder {
+        background: var(--bg-panel);
+        border-radius: 10px;
+        border: 1px solid var(--border-soft);
+        padding: 10px 12px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .placeholder-title {
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: var(--text-main);
+    }
+
+    @media (max-width: 1100px) {
+        .cards-row {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .grid-2 {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 800px) {
+        .layout {
+            flex-direction: column;
+        }
+        .sidebar {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .nav-section {
+            width: 50%;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<!-- الشريط العلوي -->
+<div class="top-bar">
+    <div class="top-left">
+        <!-- ضع هنا صورة اللوقو الفعلي الذي أرسلته بعد حفظه باسم logo.png -->
+        <img src="qq.png" class="logo" alt="Logo">
+        <div class="title-block">
+            <div class="title">Engineering Building Distribution Dashboard</div>
+            <div class="subtitle">Corporate View · Pumps · Lines · Locations</div>
+        </div>
+    </div>
+    <div class="top-right">
+        <div class="btn" onclick="toggleLang()">
+            <span class="btn-icon">🌐</span>
+            <span id="lang-label">AR / EN</span>
+        </div>
+        <div class="btn" onclick="toggleMode()">
+            <span class="btn-icon" id="mode-icon">🌙</span>
+            <span id="mode-label">وضع ليلي</span>
+        </div>
+    </div>
+</div>
+
+<!-- الشريط الثاني (الوقت والتاريخ) -->
+<div class="info-bar">
+    <span id="datetime"></span>
+</div>
+
+<div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="nav-section">
+            <div class="sidebar-title">MAIN</div>
+            <div class="nav-item active">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard Overview</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🧱</span>
+                <span>Building Zones</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">💧</span>
+                <span>Pumps - Lines</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="sidebar-title">OPERATIONS</div>
+            <div class="nav-item">
+                <span class="nav-icon">📈</span>
+                <span>Performance Charts</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🛠️</span>
+                <span>Maintenance Logs</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">📁</span>
+                <span>Reports - Export</span>
+            </div>
+        </div>
+
+        <div class="nav-section">
+            <div class="sidebar-title">SYSTEM</div>
+            <div class="nav-item">
+                <span class="nav-icon">👤</span>
+                <span>User Profile</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">⚙️</span>
+                <span>Settings</span>
+            </div>
+            <div class="nav-item">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- المحتوى -->
+    <main class="content">
+        <!-- Cards علوية -->
+        <div class="cards-row">
+            <div class="card">
+                <div class="card-label">TOTAL LINES</div>
+                <div class="card-value">6</div>
+                <div class="card-foot">Active distribution lines</div>
+            </div>
+            <div class="card">
+                <div class="card-label">PUMPS</div>
+                <div class="card-value">4</div>
+                <div class="card-foot">Service pumps in this diagram</div>
+            </div>
+            <div class="card">
+                <div class="card-label">LOCATIONS</div>
+                <div class="card-value">6</div>
+                <div class="card-foot">Core + Wings + CC</div>
+            </div>
+            <div class="card">
+                <div class="card-label">STATUS</div>
+                <div class="card-value">Normal</div>
+                <div class="card-foot">No active alarms</div>
+            </div>
+        </div>
+
+        <!-- بانل المخطط -->
+        <div class="panel">
+            <div class="panel-header">
+                <div>
+                    <div class="panel-title" id="panel-title-main">Building Distribution Flow Diagram</div>
+                    <div class="panel-sub" id="panel-sub-main">Static engineering layout · Corporate view</div>
+                </div>
+            </div>
+
+            <svg viewBox="0 0 1400 650" width="100%" height="650">
+
+                <!-- العنوان داخل الـ SVG -->
+                <text x="700" y="40" class="title-svg" id="svg-title">
+                    Building Distribution Flow Diagram
+                </text>
+
+                <!-- التسميات الجانبية -->
+                <text x="40" y="135" class="side-label" id="lbl-locations">Locations</text>
+                <text x="40" y="225" class="side-label" id="lbl-reducer">Lev. Reducer</text>
+                <text x="40" y="315" class="side-label" id="lbl-lines">ID Lines</text>
+                <text x="40" y="455" class="side-label" id="lbl-pumps">ID Pumps</text>
+
+                <!-- Locations -->
+                <rect x="180" y="100" width="140" height="60" class="box-green"/>
+                <text x="250" y="130" class="txt-small">Center core</text>
+                <text x="250" y="148" class="txt-small">(Slabs)</text>
+
+                <rect x="380" y="100" width="140" height="60" class="box-green"/>
+                <text x="450" y="130" class="txt-small">Wing C</text>
+                <text x="450" y="148" class="txt-small">(SPB# 320043)</text>
+
+                <rect x="580" y="100" width="160" height="60" class="box-green"/>
+                <text x="660" y="130" class="txt-small">CC (TC3)</text>
+                <text x="660" y="148" class="txt-small">(SPB# 320050)</text>
+
+                <rect x="780" y="100" width="160" height="60" class="box-green"/>
+                <text x="860" y="130" class="txt-small">CC (TC2)</text>
+                <text x="860" y="148" class="txt-small">(SPB# 320051)</text>
+
+                <rect x="1000" y="100" width="140" height="60" class="box-green"/>
+                <text x="1070" y="130" class="txt-small">Wing A</text>
+                <text x="1070" y="148" class="txt-small">(SPB# 320049)</text>
+
+                <rect x="1200" y="100" width="140" height="60" class="box-green"/>
+                <text x="1270" y="130" class="txt-small">Wing B</text>
+                <text x="1270" y="148" class="txt-small">(SPB# 320048)</text>
+
+                <!-- Reducers -->
+                <rect x="210" y="190" width="80" height="50" class="box-blue"/>
+                <text x="250" y="220" class="txt">L.75</text>
+
+                <rect x="410" y="190" width="80" height="50" class="box-blue"/>
+                <text x="450" y="220" class="txt">L.61</text>
+
+                <rect x="610" y="190" width="80" height="50" class="box-blue"/>
+                <text x="650" y="220" class="txt">L.73</text>
+
+                <rect x="810" y="190" width="80" height="50" class="box-blue"/>
+                <text x="850" y="220" class="txt">L.72</text>
+
+                <rect x="1010" y="190" width="80" height="50" class="box-blue"/>
+                <text x="1050" y="220" class="txt">L.62</text>
+
+                <rect x="1210" y="190" width="80" height="50" class="box-blue"/>
+                <text x="1250" y="220" class="txt">L.61</text>
+
+                <!-- Lines -->
+                <rect x="210" y="280" width="80" height="50" class="box-blue"/>
+                <text x="250" y="310" class="txt">Line #1</text>
+
+                <rect x="410" y="280" width="80" height="50" class="box-blue"/>
+                <text x="450" y="310" class="txt">Line #2</text>
+
+                <rect x="610" y="280" width="80" height="50" class="box-blue"/>
+                <text x="650" y="310" class="txt">Line #3</text>
+
+                <rect x="810" y="280" width="80" height="50" class="box-blue"/>
+                <text x="850" y="310" class="txt">Line #4</text>
+
+                <rect x="1010" y="280" width="80" height="50" class="box-blue"/>
+                <text x="1050" y="310" class="txt">Line #5</text>
+
+                <rect x="1210" y="280" width="80" height="50" class="box-blue"/>
+                <text x="1250" y="310" class="txt">Line #6</text>
+
+                <!-- Pumps -->
+                <rect x="380" y="420" width="160" height="70" class="box-peach"/>
+                <text x="460" y="450" class="txt-small">S.Pump (1)</text>
+                <text x="460" y="468" class="txt-small">8800126</text>
+
+                <rect x="580" y="420" width="160" height="70" class="box-peach"/>
+                <text x="660" y="450" class="txt-small">S.Pump (2)</text>
+                <text x="660" y="468" class="txt-small">8800121</text>
+
+                <rect x="780" y="420" width="160" height="70" class="box-peach"/>
+                <text x="860" y="450" class="txt-small">S.Pump (3)</text>
+                <text x="860" y="468" class="txt-small">8800124</text>
+
+                <rect x="980" y="420" width="160" height="70" class="box-peach"/>
+                <text x="1060" y="450" class="txt-small">S.Pump (4)</text>
+                <text x="1060" y="468" class="txt-small">8800127</text>
+
+                <!-- خطوط التوصيل L-Shape -->
+
+                <!-- Locations → Reducers -->
+                <polyline class="conn" points="250,160 250,175 250,190"/>
+                <polyline class="conn" points="450,160 450,175 450,190"/>
+                <polyline class="conn" points="660,160 660,175 650,190"/>
+                <polyline class="conn" points="860,160 860,175 850,190"/>
+                <polyline class="conn" points="1070,160 1070,175 1050,190"/>
+                <polyline class="conn" points="1270,160 1270,175 1250,190"/>
+
+                <!-- Reducers → Lines -->
+                <polyline class="conn" points="250,240 250,260 250,280"/>
+                <polyline class="conn" points="450,240 450,260 450,280"/>
+                <polyline class="conn" points="650,240 650,260 650,280"/>
+                <polyline class="conn" points="850,240 850,260 850,280"/>
+                <polyline class="conn" points="1050,240 1050,260 1050,280"/>
+                <polyline class="conn" points="1250,240 1250,260 1250,280"/>
+
+                <!-- Lines → Pumps -->
+                <polyline class="conn" points="250,330 250,380 460,380 460,420"/>
+                <polyline class="conn" points="450,330 450,380 460,380 460,420"/>
+
+                <polyline class="conn" points="650,330 650,380 660,380 660,420"/>
+
+                <polyline class="conn" points="850,330 850,380 860,380 860,420"/>
+                <polyline class="conn" points="1050,330 1050,380 860,380 860,420"/>
+
+                <polyline class="conn" points="1250,330 1250,380 1060,380 1060,420"/>
+
+            </svg>
+        </div>
+
+        <!-- بانلات إضافية (Placeholder للـ Charts / Logs) -->
+        <div class="grid-2">
+            <div class="placeholder">
+                <div class="placeholder-title" id="ph-charts-title">Performance - Flow Charts</div>
+                <div id="ph-charts-body">
+                    Placeholder for future integration with live data, flow rates, pump performance, and alarms.
+                </div>
+            </div>
+            <div class="placeholder">
+                <div class="placeholder-title" id="ph-logs-title">Operations - Maintenance Logs</div>
+                <div id="ph-logs-body">
+                    Placeholder for maintenance records, interventions, and scheduled inspections related to pumps and lines.
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+function updateDateTime() {
+    const now = new Date();
+    const options = {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+    };
+    document.getElementById("datetime").textContent =
+        now.toLocaleString(document.documentElement.lang === 'ar' ? 'ar-SA' : 'en-US', options);
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+function toggleLang() {
+    const html = document.documentElement;
+    const svgTitle = document.getElementById('svg-title');
+    const lblLoc = document.getElementById('lbl-locations');
+    const lblRed = document.getElementById('lbl-reducer');
+    const lblLines = document.getElementById('lbl-lines');
+    const lblPumps = document.getElementById('lbl-pumps');
+    const langLabel = document.getElementById('lang-label');
+    const panelTitle = document.getElementById('panel-title-main');
+    const panelSub = document.getElementById('panel-sub-main');
+    const phChartsTitle = document.getElementById('ph-charts-title');
+    const phChartsBody = document.getElementById('ph-charts-body');
+    const phLogsTitle = document.getElementById('ph-logs-title');
+    const phLogsBody = document.getElementById('ph-logs-body');
+
+    if (html.dir === 'rtl') {
+        html.dir = 'ltr';
+        html.lang = 'en';
+
+        svgTitle.textContent = 'Building Distribution Flow Diagram';
+        lblLoc.textContent = 'Locations';
+        lblRed.textContent = 'Lev. Reducer';
+        lblLines.textContent = 'ID Lines';
+        lblPumps.textContent = 'ID Pumps';
+        langLabel.textContent = 'EN / AR';
+
+        panelTitle.textContent = 'Building Distribution Flow Diagram';
+        panelSub.textContent = 'Static engineering layout · Corporate view';
+
+        phChartsTitle.textContent = 'Performance & Flow Charts';
+        phChartsBody.textContent =
+            'Placeholder for future integration with live data, flow rates, pump performance, and alarms.';
+
+        phLogsTitle.textContent = 'Operations & Maintenance Logs';
+        phLogsBody.textContent =
+            'Placeholder for maintenance records, interventions, and scheduled inspections related to pumps and lines.';
+    } else {
+        html.dir = 'rtl';
+        html.lang = 'ar';
+
+        svgTitle.textContent = 'مخطط توزيع المبنى';
+        lblLoc.textContent = 'المواقع';
+        lblRed.textContent = 'مخفّض المناسيب';
+        lblLines.textContent = 'خطوط التعريف';
+        lblPumps.textContent = 'مضخات التعريف';
+        langLabel.textContent = 'AR / EN';
+
+        panelTitle.textContent = 'مخطط توزيع المبنى';
+        panelSub.textContent = 'عرض هندسي ثابت · نمط رسمي';
+
+        phChartsTitle.textContent = 'مخططات الأداء والتدفق';
+        phChartsBody.textContent =
+            'مكان مخصص لاحقًا لربط بيانات حية عن التدفقات، أداء المضخات، والتنبيهات.';
+
+        phLogsTitle.textContent = 'سجلات التشغيل والصيانة';
+        phLogsBody.textContent =
+            'مكان مخصص لسجلات الصيانة، التدخلات، والجولات المجدولة المرتبطة بالمضخات والخطوط.';
+    }
+
+    updateDateTime();
+}
+
+function toggleMode() {
+    const body = document.body;
+    const modeIcon = document.getElementById('mode-icon');
+    const modeLabel = document.getElementById('mode-label');
+
+    body.classList.toggle('light-mode');
+
+    if (body.classList.contains('light-mode')) {
+        modeIcon.textContent = '☀️';
+        modeLabel.textContent = 'وضع نهاري';
+    } else {
+        modeIcon.textContent = '🌙';
+        modeLabel.textContent = 'وضع ليلي';
+    }
+}
+</script>
+
+</body>
+</html>

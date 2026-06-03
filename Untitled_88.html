@@ -1,0 +1,895 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ============================
+   GLOBAL STYLES
+============================ */
+
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* ============================
+   HEADER
+============================ */
+
+.fixed-header {
+  direction: ltr !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: ltr !important;
+}
+
+.header-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  direction: rtl;
+}
+
+.lang-switch {
+  display:flex;
+  gap:8px;
+  direction:ltr !important;
+}
+
+.lang-switch button {
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid #1f2937;
+  background:#020617;
+  color:#e5e7eb;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.lang-switch button.active {
+  background:#0ea5e9;
+  border-color:#38bdf8;
+}
+/* ============================
+   GRID LAYOUT
+============================ */
+
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* ============================
+   BOXES
+============================ */
+
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* ============================
+   SVG WRAPPER
+============================ */
+
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+
+.svg-container {
+  transform-origin: center center;
+  cursor: grab;
+}
+
+.svg-container:active {
+  cursor: grabbing;
+}
+
+/* ============================
+   DOCUMENT BOX
+============================ */
+
+.doc-box {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  box-shadow: 0 0 18px rgba(0,0,0,0.35);
+}
+
+.doc-box h2 {
+  margin: 0 0 15px;
+  font-size: 17px;
+  color: #e2e8f0;
+  text-align:center;
+}
+
+/* ============================
+   DOCUMENT ICON BUTTONS
+============================ */
+
+.doc-icons {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.doc-btn {
+  flex:1;
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:10px;
+  padding:10px 8px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+.doc-btn:hover {
+  background:#0f172a;
+  transform:translateY(-3px);
+}
+
+.doc-btn div {
+  font-size:20px;
+  margin-bottom:4px;
+}
+
+.doc-btn span {
+  font-size:11px;
+  opacity:0.85;
+}
+
+/* ============================
+   DATETIME BAR
+============================ */
+
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  direction:ltr;
+}
+
+/* ============================
+   EFFECTS
+============================ */
+
+.pulse-strong {
+  animation: strongPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes strongPulse {
+  0%   { stroke-width: 4; filter: drop-shadow(0 0 0px #0ea5e9); }
+  50%  { stroke-width: 10; filter: drop-shadow(0 0 12px #38bdf8); }
+  100% { stroke-width: 4; filter: drop-shadow(0 0 0px #0ea5e9); }
+}
+
+.flow-effect {
+  stroke-dasharray: 8;
+  animation: flowMove 1.5s linear infinite;
+}
+
+@keyframes flowMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -40; }
+}
+
+.arrow-flow {
+  animation: arrowFlow 1.2s linear infinite;
+}
+
+@keyframes arrowFlow {
+  0%   { opacity: 0.3; transform: scale(0.8); }
+  50%  { opacity: 1;   transform: scale(1.2); }
+  100% { opacity: 0.3; transform: scale(0.8); }
+}
+
+.line-selected {
+  stroke: #0ea5e9 !important;
+  stroke-width: 8 !important;
+  filter: drop-shadow(0 0 10px #38bdf8);
+}
+
+/* ============================
+   PDF TABLE
+============================ */
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+
+.pdf-icon {
+  color: #f97316;
+  font-size: 18px;
+}
+
+/* ============================
+   ANIMATION
+============================ */
+
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
+</head>
+<body>
+<!-- ============================
+     BODY START
+============================ -->
+<body>
+
+<!-- ============================
+     DATETIME BAR
+============================ -->
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<!-- ============================
+     DASHBOARD LAYOUT
+============================ -->
+<div class="dashboard">
+
+  <!-- ============================
+       LEFT SIDE — ENGINEERING MAP
+  ============================= -->
+  <div class="box" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <div class="svg-wrapper" id="svgWrapper">
+      <div class="svg-container" id="svgContainer">
+
+        <!-- ============================
+             MAIN SVG
+        ============================= -->
+        <svg id="mainSvg" width="1600" height="900">
+
+          <!-- ============================
+               DEFINITIONS (ARROWS)
+          ============================= -->
+          <defs>
+
+            <!-- Arrow Start -->
+            <marker id="arrowStart" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto">
+              <polygon points="6 0, 0 3, 6 6" fill="currentColor"></polygon>
+            </marker>
+
+            <!-- Arrow End -->
+            <marker id="arrowEnd" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+              <polygon points="0 0, 6 3, 0 6" fill="currentColor"></polygon>
+            </marker>
+
+          </defs>
+
+          <!-- ============================
+               DISTRIBUTORS (Clickable)
+          ============================= -->
+
+          <!-- Wing C -->
+          <g id="Wing C" onclick="showDetails('Wing C','dist')" style="cursor:pointer">
+            <rect x="200" y="100" width="120" height="50"
+                  fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+            <text x="260" y="130" fill="#000" font-size="14" text-anchor="middle">
+              Wing C
+            </text>
+          </g>
+
+          <!-- Center core 1 -->
+          <g id="Center core 1" onclick="showDetails('Center core 1','dist')" style="cursor:pointer">
+            <rect x="400" y="100" width="140" height="50"
+                  fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+            <text x="470" y="130" fill="#000" font-size="14" text-anchor="middle">
+              Center core 1
+            </text>
+          </g>
+
+          <!-- Center core 2 -->
+          <g id="Center core 2" onclick="showDetails('Center core 2','dist')" style="cursor:pointer">
+            <rect x="620" y="100" width="140" height="50"
+                  fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+            <text x="690" y="130" fill="#000" font-size="14" text-anchor="middle">
+              Center core 2
+            </text>
+          </g>
+
+          <!-- Wing A -->
+          <g id="Wing A" onclick="showDetails('Wing A','dist')" style="cursor:pointer">
+            <rect x="840" y="100" width="120" height="50"
+                  fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+            <text x="900" y="130" fill="#000" font-size="14" text-anchor="middle">
+              Wing A
+            </text>
+          </g>
+
+          <!-- Wing B -->
+          <g id="Wing B" onclick="showDetails('Wing B','dist')" style="cursor:pointer">
+            <rect x="1040" y="100" width="120" height="50"
+                  fill="#93c5fd" stroke="#1d4ed8" stroke-width="2" rx="6"/>
+            <text x="1100" y="130" fill="#000" font-size="14" text-anchor="middle">
+              Wing B
+            </text>
+          </g>
+
+          <!-- ============================
+               LINES (Pipes / Connections)
+          ============================= -->
+
+          <!-- Line L1 -->
+          <line id="L1"
+                x1="260" y1="150"
+                x2="260" y2="300"
+                stroke="#22c55e"
+                stroke-width="3"
+                marker-start="url(#arrowStart)"
+                marker-end="url(#arrowEnd)">
+          </line>
+
+          <!-- Line L2 -->
+          <line id="L2"
+                x1="470" y1="150"
+                x2="470" y2="300"
+                stroke="#ef4444"
+                stroke-width="3"
+                marker-start="url(#arrowStart)"
+                marker-end="url(#arrowEnd)">
+          </line>
+
+          <!-- Line L3 -->
+          <line id="L3"
+                x1="690" y1="150"
+                x2="690" y2="300"
+                stroke="#6b7280"
+                stroke-width="3"
+                marker-start="url(#arrowStart)"
+                marker-end="url(#arrowEnd)">
+          </line>
+
+          <!-- Line L4 -->
+          <line id="L4"
+                x1="900" y1="150"
+                x2="900" y2="300"
+                stroke="#eab308"
+                stroke-width="3"
+                marker-start="url(#arrowStart)"
+                marker-end="url(#arrowEnd)">
+          </line>
+
+          <!-- Line L5 -->
+          <line id="L5"
+                x1="1100" y1="150"
+                x2="1100" y2="300"
+                stroke="#22c55e"
+                stroke-width="3"
+                marker-start="url(#arrowStart)"
+                marker-end="url(#arrowEnd)">
+          </line>
+
+        </svg> <!-- END OF MAIN SVG -->
+      </div>
+    </div>
+  </div> <!-- END LEFT MAP BOX -->
+    <!-- ============================
+       RIGHT SIDE — DETAILS BOX
+  ============================= -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1 / span 2; overflow-y:auto;">
+
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <!-- DOCUMENT BOX -->
+    <div class="doc-box">
+      <h2>الكتلوج – التأمين – المواصفات</h2>
+
+      <div class="doc-icons">
+
+        <!-- التأمين -->
+        <div class="doc-btn">
+          <div>🔒</div>
+          <span>التأمين</span>
+        </div>
+
+        <!-- الكتلوج -->
+        <div class="doc-btn" onclick="window.open('https://example.com/catalog.pdf','_blank')">
+          <div>📘</div>
+          <span>الكتلوج</span>
+        </div>
+
+        <!-- المواصفات -->
+        <div class="doc-btn">
+          <div>📑</div>
+          <span>المواصفات</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PDF ARCHIVE TABLE -->
+    <h3 id="pdfTitle" style="margin-top:20px">أرشيف ملفات PDF</h3>
+
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MAINTENANCE BOX -->
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>الصيانة</h2>
+
+      <div class="doc-icons">
+
+        <!-- سجل الصيانة -->
+        <div class="doc-btn">
+          <div>🛠️</div>
+          <span>سجل الصيانة</span>
+        </div>
+
+        <!-- الجدولة -->
+        <div class="doc-btn">
+          <div>📅</div>
+          <span>الجدولة</span>
+        </div>
+
+        <!-- ملفات الصيانة -->
+        <div class="doc-btn">
+          <div>📂</div>
+          <span>ملفات الصيانة</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- MAINTENANCE PDF TABLE -->
+    <h3 style="margin-top:20px">ملفات PDF الخاصة بالصيانة</h3>
+
+    <table class="pdf-table" id="maintenancePdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+  </div> <!-- END DETAILS BOX -->
+
+  <!-- ============================
+       REPORT BOX
+  ============================= -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>تقرير التشغيل</h2>
+    <p style="opacity:0.7; font-size:14px;">— لا يوجد تقرير —</p>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+
+<!-- ============================
+     SYSTEM DATA (JS OBJECTS)
+============================ -->
+<script>
+
+/* ============================
+   DISTRIBUTORS
+============================ */
+const distributors = [
+  { id: "Wing C", nameAr: "جناح C", nameEn: "Wing C" },
+  { id: "Center core 1", nameAr: "النواة المركزية 1", nameEn: "Center core 1" },
+  { id: "Center core 2", nameAr: "النواة المركزية 2", nameEn: "Center core 2" },
+  { id: "Wing A", nameAr: "جناح A", nameEn: "Wing A" },
+  { id: "Wing B", nameAr: "جناح B", nameEn: "Wing B" }
+];
+
+/* ============================
+   PUMPS
+============================ */
+const pumps = [
+  { id: "P1", nameAr: "مضخة 1", nameEn: "Pump 1", status: "ACTIVE" },
+  { id: "P2", nameAr: "مضخة 2", nameEn: "Pump 2", status: "STANDBY" },
+  { id: "P3", nameAr: "مضخة 3", nameEn: "Pump 3", status: "Idle" },
+  { id: "P4", nameAr: "مضخة 4", nameEn: "Pump 4", status: "Ready" }
+];
+
+/* ============================
+   LINES
+============================ */
+const lines = [
+  { id: "L1", from: "P1", to: "Wing C", mode: "ACTIVE" },
+  { id: "L2", from: "P2", to: "Center core 1", mode: "STANDBY" },
+  { id: "L3", from: "P3", to: "Center core 2", mode: "Idle" },
+  { id: "L4", from: "P4", to: "Wing A", mode: "Ready" },
+  { id: "L5", from: "P4", to: "Wing B", mode: "ACTIVE" }
+];
+
+/* ============================
+   LINE COLORS
+============================ */
+function getLineColor(mode) {
+  switch (mode) {
+    case "ACTIVE": return "#22c55e";   // أخضر
+    case "STANDBY": return "#ef4444";  // أحمر
+    case "Idle": return "#6b7280";     // رمادي
+    case "Ready": return "#eab308";    // أصفر
+    default: return "#94a3b8";         // أزرق باهت
+  }
+}
+
+/* ============================
+   PDF ARCHIVE
+============================ */
+const pdfArchive = {
+
+  "Wing C": {
+    archive: [
+      { date: "2024-01-12", url: "https://example.com/wingc1.pdf" },
+      { date: "2024-02-18", url: "https://example.com/wingc2.pdf" }
+    ],
+    maintenance: [
+      { date: "2024-03-10", url: "https://example.com/wingc-maint1.pdf" }
+    ]
+  },
+
+  "Center core 1": {
+    archive: [
+      { date: "2024-01-05", url: "https://example.com/core1-1.pdf" }
+    ],
+    maintenance: []
+  },
+
+  "Center core 2": {
+    archive: [],
+    maintenance: []
+  },
+
+  "Wing A": {
+    archive: [
+      { date: "2024-01-20", url: "https://example.com/winga1.pdf" }
+    ],
+    maintenance: [
+      { date: "2024-02-15", url: "https://example.com/winga-maint.pdf" }
+    ]
+  },
+
+  "Wing B": {
+    archive: [],
+    maintenance: []
+  }
+
+};
+
+</script>
+<!-- ============================
+     LANGUAGE SYSTEM
+============================ -->
+<script>
+
+let currentLang = "ar";
+
+/* ============================
+   APPLY LANGUAGE
+============================ */
+function applyLanguage() {
+
+  document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("mapTitle").textContent =
+    currentLang === "ar" ? "المخطط الهندسي" : "Engineering Map";
+
+  document.getElementById("detailName").textContent =
+    currentLang === "ar" ? "اختر عنصرًا" : "Select an item";
+
+  document.getElementById("pdfTitle").textContent =
+    currentLang === "ar" ? "أرشيف ملفات PDF" : "PDF Archive";
+
+  document.getElementById("pdfDateHeader").textContent =
+    currentLang === "ar" ? "التاريخ" : "Date";
+
+  document.getElementById("pdfFileHeader").textContent =
+    currentLang === "ar" ? "الملف" : "File";
+
+  /* Document Buttons */
+  const docButtons = document.querySelectorAll(".doc-btn span");
+
+  docButtons[0].textContent = currentLang === "ar" ? "التأمين" : "Insurance";
+  docButtons[1].textContent = currentLang === "ar" ? "الكتلوج" : "Catalog";
+  docButtons[2].textContent = currentLang === "ar" ? "المواصفات" : "Specs";
+
+  docButtons[3].textContent = currentLang === "ar" ? "سجل الصيانة" : "Maintenance Log";
+  docButtons[4].textContent = currentLang === "ar" ? "الجدولة" : "Scheduling";
+  docButtons[5].textContent = currentLang === "ar" ? "ملفات الصيانة" : "Maintenance Files";
+
+  /* Report Box */
+  document.querySelector("#reportBox h2").textContent =
+    currentLang === "ar" ? "تقرير التشغيل" : "Operation Report";
+
+  document.querySelector("#reportBox p").textContent =
+    currentLang === "ar" ? "— لا يوجد تقرير —" : "— No report —";
+
+  /* Language Buttons */
+  document.getElementById("langAr").classList.toggle("active", currentLang === "ar");
+  document.getElementById("langEn").classList.toggle("active", currentLang === "en");
+}
+
+/* ============================
+     SHOW DETAILS
+============================ */
+function showDetails(id, type) {
+
+  const box = document.getElementById("detailInfo");
+  const title = document.getElementById("detailName");
+
+  const dist = distributors.find(d => d.id === id);
+
+  title.textContent = currentLang === "ar" ? dist.nameAr : dist.nameEn;
+
+  box.innerHTML = `
+    <p>${currentLang === "ar" ? "موزع" : "Distributor"}</p>
+  `;
+
+  renderPDFTable(id);
+  renderMaintenancePDF(id);
+}
+
+/* ============================
+     RENDER PDF TABLE
+============================ */
+function renderPDFTable(id) {
+
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.archive || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* ============================
+     RENDER MAINTENANCE PDF
+============================ */
+function renderMaintenancePDF(id) {
+
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.maintenance || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+</script>
+<!-- ============================
+     LINE COLORING + HIGHLIGHT
+============================ -->
+<script>
+
+/* ============================
+   APPLY LINE COLORS
+============================ */
+function applyLineColors() {
+  lines.forEach(line => {
+    const el = document.getElementById(line.id);
+    if (el) {
+      el.setAttribute("stroke", getLineColor(line.mode));
+    }
+  });
+}
+
+/* ============================
+   RESET HIGHLIGHT
+============================ */
+function resetHighlight() {
+  document.querySelectorAll("line").forEach(l => {
+    l.classList.remove("line-selected");
+  });
+}
+
+/* ============================
+   SELECT LINE
+============================ */
+function selectLine(id) {
+  resetHighlight();
+  const line = document.getElementById(id);
+  if (line) line.classList.add("line-selected");
+}
+
+/* ============================
+     ZOOM & DRAG
+============================ */
+
+let scale = 1;
+let originX = 0;
+let originY = 0;
+let isDragging = false;
+let startX, startY;
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+/* DRAG START */
+svgWrapper.addEventListener("mousedown", e => {
+  isDragging = true;
+  startX = e.clientX - originX;
+  startY = e.clientY - originY;
+});
+
+/* DRAG END */
+svgWrapper.addEventListener("mouseup", () => {
+  isDragging = false;
+});
+
+/* DRAG MOVE */
+svgWrapper.addEventListener("mousemove", e => {
+  if (!isDragging) return;
+
+  originX = e.clientX - startX;
+  originY = e.clientY - startY;
+
+  updateTransform();
+});
+
+/* ZOOM */
+svgWrapper.addEventListener("wheel", e => {
+  e.preventDefault();
+
+  const zoomIntensity = 0.1;
+  const delta = e.deltaY < 0 ? 1 : -1;
+
+  scale += delta * zoomIntensity;
+  scale = Math.min(Math.max(0.3, scale), 3);
+
+  updateTransform();
+});
+
+/* APPLY TRANSFORM */
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${originX}px, ${originY}px) scale(${scale})`;
+
+  updateMiniMap();
+}
+
+/* ============================
+     MINIMAP
+============================ */
+
+function updateMiniMap() {
+  const viewport = document.querySelector(".minimap-viewport");
+  if (!viewport) return;
+
+  viewport.setAttribute("x", -originX / 10);
+  viewport.setAttribute("y", -originY / 10);
+  viewport.setAttribute("width", svgWrapper.clientWidth / (scale * 10));
+  viewport.setAttribute("height", svgWrapper.clientHeight / (scale * 10));
+}
+
+</script>
+<!-- ============================
+     INIT + DATE & TIME
+============================ -->
+<script>
+
+/* ============================
+     UPDATE DATE & TIME
+============================ */
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString(currentLang === "ar" ? "ar-EG" : "en-GB");
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* ============================
+     INITIALIZATION
+============================ */
+applyLineColors();
+resetHighlight();
+updateTransform();
+applyLanguage();
+
+/* ============================
+     LANGUAGE BUTTONS
+============================ */
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  applyLanguage();
+};
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,194 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Flow Diagram</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background: #181818;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: Arial, sans-serif;
+    }
+
+    svg {
+        background: #1F1F1F;
+    }
+
+    /* مربعات */
+    .box-green { fill:#4CAF50; stroke:#2E7D32; stroke-width:1.5; rx:6; ry:6; }
+    .box-blue  { fill:#42A5F5; stroke:#1E88E5; stroke-width:1.5; rx:6; ry:6; }
+    .box-peach { fill:#FFCC80; stroke:#FB8C00; stroke-width:1.5; rx:6; ry:6; }
+
+    /* نصوص */
+    .txt       { fill:#fff; font-size:12px; text-anchor:middle; }
+    .txt-small { fill:#fff; font-size:11px; text-anchor:middle; }
+    .title     { fill:#fff; font-size:22px; font-weight:bold; text-anchor:middle; }
+    .side-label{ fill:#fff; font-size:16px; font-weight:bold; text-anchor:start; }
+
+    /* خطوط التوصيل */
+    .conn {
+        stroke:#ddd;
+        stroke-width:2;
+        fill:none;
+    }
+</style>
+</head>
+<body>
+<!-- الجزء 2: بداية الـ SVG + العنوان + التسميات الجانبية -->
+
+<svg viewBox="0 0 1400 650" width="1400" height="650">
+
+    <!-- العنوان الرئيسي -->
+    <text x="700" y="40" class="title">Building Distribution Flow Diagram</text>
+
+    <!-- التسميات الجانبية بمحاذاة هندسية دقيقة -->
+    <text x="40" y="135" class="side-label">Locations</text>
+    <text x="40" y="225" class="side-label">Lev. Reducer</text>
+    <text x="40" y="315" class="side-label">ID Lines</text>
+    <text x="40" y="455" class="side-label">ID Pumps</text>
+        <!-- الجزء 3: صف Locations -->
+
+    <!-- Center core (Slabs) -->
+    <rect x="180" y="100" width="140" height="60" class="box-green"/>
+    <text x="250" y="130" class="txt-small">Center core</text>
+    <text x="250" y="148" class="txt-small">(Slabs)</text>
+
+    <!-- Wing C -->
+    <rect x="380" y="100" width="140" height="60" class="box-green"/>
+    <text x="450" y="130" class="txt-small">Wing C</text>
+    <text x="450" y="148" class="txt-small">(SPB# 320043)</text>
+
+    <!-- CC (TC3) -->
+    <rect x="580" y="100" width="160" height="60" class="box-green"/>
+    <text x="660" y="130" class="txt-small">CC (TC3)</text>
+    <text x="660" y="148" class="txt-small">(SPB# 320050)</text>
+
+    <!-- CC (TC2) -->
+    <rect x="780" y="100" width="160" height="60" class="box-green"/>
+    <text x="860" y="130" class="txt-small">CC (TC2)</text>
+    <text x="860" y="148" class="txt-small">(SPB# 320051)</text>
+
+    <!-- Wing A -->
+    <rect x="1000" y="100" width="140" height="60" class="box-green"/>
+    <text x="1070" y="130" class="txt-small">Wing A</text>
+    <text x="1070" y="148" class="txt-small">(SPB# 320049)</text>
+
+    <!-- Wing B -->
+    <rect x="1200" y="100" width="140" height="60" class="box-green"/>
+    <text x="1270" y="130" class="txt-small">Wing B</text>
+    <text x="1270" y="148" class="txt-small">(SPB# 320048)</text>
+        <!-- الجزء 4: صف Lev. Reducers -->
+
+    <!-- L.75 -->
+    <rect x="210" y="190" width="80" height="50" class="box-blue"/>
+    <text x="250" y="220" class="txt">L.75</text>
+
+    <!-- L.61 (Wing C) -->
+    <rect x="410" y="190" width="80" height="50" class="box-blue"/>
+    <text x="450" y="220" class="txt">L.61</text>
+
+    <!-- L.73 -->
+    <rect x="610" y="190" width="80" height="50" class="box-blue"/>
+    <text x="650" y="220" class="txt">L.73</text>
+
+    <!-- L.72 -->
+    <rect x="810" y="190" width="80" height="50" class="box-blue"/>
+    <text x="850" y="220" class="txt">L.72</text>
+
+    <!-- L.62 -->
+    <rect x="1010" y="190" width="80" height="50" class="box-blue"/>
+    <text x="1050" y="220" class="txt">L.62</text>
+
+    <!-- L.61 (Wing B) -->
+    <rect x="1210" y="190" width="80" height="50" class="box-blue"/>
+    <text x="1250" y="220" class="txt">L.61</text>
+        <!-- الجزء 5: صف ID Lines -->
+
+    <!-- Line #1 -->
+    <rect x="210" y="280" width="80" height="50" class="box-blue"/>
+    <text x="250" y="310" class="txt">Line #1</text>
+
+    <!-- Line #2 -->
+    <rect x="410" y="280" width="80" height="50" class="box-blue"/>
+    <text x="450" y="310" class="txt">Line #2</text>
+
+    <!-- Line #3 -->
+    <rect x="610" y="280" width="80" height="50" class="box-blue"/>
+    <text x="650" y="310" class="txt">Line #3</text>
+
+    <!-- Line #4 -->
+    <rect x="810" y="280" width="80" height="50" class="box-blue"/>
+    <text x="850" y="310" class="txt">Line #4</text>
+
+    <!-- Line #5 -->
+    <rect x="1010" y="280" width="80" height="50" class="box-blue"/>
+    <text x="1050" y="310" class="txt">Line #5</text>
+
+    <!-- Line #6 -->
+    <rect x="1210" y="280" width="80" height="50" class="box-blue"/>
+    <text x="1250" y="310" class="txt">Line #6</text>
+        <!-- الجزء 6: صف ID Pumps -->
+
+    <!-- S.Pump (1) -->
+    <rect x="380" y="420" width="160" height="70" class="box-peach"/>
+    <text x="460" y="450" class="txt-small">S.Pump (1)</text>
+    <text x="460" y="468" class="txt-small">8800126</text>
+
+    <!-- S.Pump (2) -->
+    <rect x="580" y="420" width="160" height="70" class="box-peach"/>
+    <text x="660" y="450" class="txt-small">S.Pump (2)</text>
+    <text x="660" y="468" class="txt-small">8800121</text>
+
+    <!-- S.Pump (3) -->
+    <rect x="780" y="420" width="160" height="70" class="box-peach"/>
+    <text x="860" y="450" class="txt-small">S.Pump (3)</text>
+    <text x="860" y="468" class="txt-small">8800124</text>
+
+    <!-- S.Pump (4) -->
+    <rect x="980" y="420" width="160" height="70" class="box-peach"/>
+    <text x="1060" y="450" class="txt-small">S.Pump (4)</text>
+    <text x="1060" y="468" class="txt-small">8800127</text>
+        <!-- الجزء 7: خطوط التوصيل L-Shape -->
+
+    <!-- Locations → Reducers -->
+    <polyline class="conn" points="250,160 250,175 250,190"/>
+    <polyline class="conn" points="450,160 450,175 450,190"/>
+    <polyline class="conn" points="660,160 660,175 650,190"/>
+    <polyline class="conn" points="860,160 860,175 850,190"/>
+    <polyline class="conn" points="1070,160 1070,175 1050,190"/>
+    <polyline class="conn" points="1270,160 1270,175 1250,190"/>
+
+    <!-- Reducers → Lines -->
+    <polyline class="conn" points="250,240 250,260 250,280"/>
+    <polyline class="conn" points="450,240 450,260 450,280"/>
+    <polyline class="conn" points="650,240 650,260 650,280"/>
+    <polyline class="conn" points="850,240 850,260 850,280"/>
+    <polyline class="conn" points="1050,240 1050,260 1050,280"/>
+    <polyline class="conn" points="1250,240 1250,260 1250,280"/>
+
+    <!-- Lines → Pumps (L-Shape نظيف) -->
+
+    <!-- Line #1 & Line #2 → Pump 1 -->
+    <polyline class="conn" points="250,330 250,380 460,380 460,420"/>
+    <polyline class="conn" points="450,330 450,380 460,380 460,420"/>
+
+    <!-- Line #3 → Pump 2 -->
+    <polyline class="conn" points="650,330 650,380 660,380 660,420"/>
+
+    <!-- Line #4 & Line #5 → Pump 3 -->
+    <polyline class="conn" points="850,330 850,380 860,380 860,420"/>
+    <polyline class="conn" points="1050,330 1050,380 860,380 860,420"/>
+
+    <!-- Line #6 → Pump 4 -->
+    <polyline class="conn" points="1250,330 1250,380 1060,380 1060,420"/>
+        <!-- الجزء 8: إغلاق SVG -->
+</svg>
+
+</body>
+</html>

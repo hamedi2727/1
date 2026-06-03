@@ -1,0 +1,234 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Flow Diagram</title>
+<style>
+  body { background:#181818; font-family:Arial, sans-serif; padding:30px; }
+
+  svg {
+    width:100%;
+    height:650px;
+    background:#1F1F1F;
+    padding:20px;
+  }
+
+  /* Grid خفيف */
+  .grid-line {
+    stroke:#333;
+    stroke-width:0.5;
+  }
+
+  /* مربعات */
+  .box-green {
+    fill:#4CAF50;
+    stroke:#2E7D32;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+  .box-blue {
+    fill:#42A5F5;
+    stroke:#1E88E5;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+  .box-peach {
+    fill:#FFCC80;
+    stroke:#FB8C00;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+
+  /* نصوص */
+  .txt { fill:#fff; font-size:12px; text-anchor:middle; }
+  .txt-small { fill:#fff; font-size:11px; text-anchor:middle; }
+
+  /* خطوط الربط */
+  .line-main {
+    stroke:#E0E0E0;
+    stroke-width:2;
+  }
+
+  /* عنوان رئيسي */
+  .title {
+    fill:#FFFFFF;
+    font-size:24px;
+    font-weight:bold;
+    text-anchor:middle;
+  }
+
+  /* Legend */
+  .legend-text {
+    fill:#fff;
+    font-size:12px;
+  }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 1400 650">
+
+  <!-- عنوان رئيسي -->
+  <text x="700" y="40" class="title">Building Distribution Flow Diagram</text>
+
+  <!-- Grid خفيف -->
+  <g>
+    <!-- خطوط عمودية -->
+    <line x1="150" y1="60" x2="150" y2="620" class="grid-line"/>
+    <line x1="350" y1="60" x2="350" y2="620" class="grid-line"/>
+    <line x1="550" y1="60" x2="550" y2="620" class="grid-line"/>
+    <line x1="750" y1="60" x2="750" y2="620" class="grid-line"/>
+    <line x1="950" y1="60" x2="950" y2="620" class="grid-line"/>
+    <line x1="1150" y1="60" x2="1150" y2="620" class="grid-line"/>
+
+    <!-- خطوط أفقية -->
+    <line x1="100" y1="120" x2="1300" y2="120" class="grid-line"/>
+    <line x1="100" y1="210" x2="1300" y2="210" class="grid-line"/>
+    <line x1="100" y1="300" x2="1300" y2="300" class="grid-line"/>
+    <line x1="100" y1="420" x2="1300" y2="420" class="grid-line"/>
+  </g>
+
+  <!-- التسميات الجانبية -->
+  <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+  <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+  <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+  <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+  <!-- الخط الفاصل -->
+  <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+  <!-- الصف العلوي (أخضر) -->
+  <rect x="180" y="100" width="140" height="60" class="box-green"/>
+  <text x="250" y="125" class="txt-small">Center core</text>
+  <text x="250" y="145" class="txt-small">(Slabs)</text>
+
+  <rect x="380" y="100" width="140" height="60" class="box-green"/>
+  <text x="450" y="125" class="txt-small">Wing C</text>
+  <text x="450" y="145" class="txt-small">(SPB# 320043)</text>
+
+  <rect x="580" y="100" width="160" height="60" class="box-green"/>
+  <text x="660" y="125" class="txt-small">CC (TC3)</text>
+  <text x="660" y="145" class="txt-small">(SPB# 320050)</text>
+
+  <rect x="780" y="100" width="160" height="60" class="box-green"/>
+  <text x="860" y="125" class="txt-small">CC (TC2)</text>
+  <text x="860" y="145" class="txt-small">(SPB# 320051)</text>
+
+  <rect x="1000" y="100" width="140" height="60" class="box-green"/>
+  <text x="1070" y="125" class="txt-small">Wing A</text>
+  <text x="1070" y="145" class="txt-small">(SPB# 320049)</text>
+
+  <rect x="1200" y="100" width="140" height="60" class="box-green"/>
+  <text x="1270" y="125" class="txt-small">Wing B</text>
+  <text x="1270" y="145" class="txt-small">(SPB# 320048)</text>
+
+
+  <!-- الصف الثاني (L.xx – أزرق) -->
+  <rect x="210" y="190" width="80" height="50" class="box-blue"/>
+  <text x="250" y="215" class="txt">L.75</text>
+
+  <rect x="410" y="190" width="80" height="50" class="box-blue"/>
+  <text x="450" y="215" class="txt">L.61</text>
+
+  <rect x="610" y="190" width="80" height="50" class="box-blue"/>
+  <text x="650" y="215" class="txt">L.73</text>
+
+  <rect x="810" y="190" width="80" height="50" class="box-blue"/>
+  <text x="850" y="215" class="txt">L.72</text>
+
+  <rect x="1010" y="190" width="80" height="50" class="box-blue"/>
+  <text x="1050" y="215" class="txt">L.62</text>
+
+  <rect x="1210" y="190" width="80" height="50" class="box-blue"/>
+  <text x="1250" y="215" class="txt">L.61</text>
+
+
+  <!-- الصف الثالث (Line # – أزرق) -->
+  <rect x="210" y="280" width="80" height="50" class="box-blue"/>
+  <text x="250" y="305" class="txt">Line #1</text>
+
+  <rect x="410" y="280" width="80" height="50" class="box-blue"/>
+  <text x="450" y="305" class="txt">Line #2</text>
+
+  <rect x="610" y="280" width="80" height="50" class="box-blue"/>
+  <text x="650" y="305" class="txt">Line #3</text>
+
+  <rect x="810" y="280" width="80" height="50" class="box-blue"/>
+  <text x="850" y="305" class="txt">Line #4</text>
+
+  <rect x="1010" y="280" width="80" height="50" class="box-blue"/>
+  <text x="1050" y="305" class="txt">Line #5</text>
+
+  <rect x="1210" y="280" width="80" height="50" class="box-blue"/>
+  <text x="1250" y="305" class="txt">Line #6</text>
+
+
+  <!-- الصف السفلي (المضخات – خوخي) -->
+  <rect x="380" y="420" width="160" height="70" class="box-peach"/>
+  <text x="460" y="445" class="txt-small">S.Pump (1)</text>
+  <text x="460" y="465" class="txt-small">8800126</text>
+
+  <rect x="580" y="420" width="160" height="70" class="box-peach"/>
+  <text x="660" y="445" class="txt-small">S.Pump (2)</text>
+  <text x="660" y="465" class="txt-small">8800121</text>
+
+  <rect x="780" y="420" width="160" height="70" class="box-peach"/>
+  <text x="860" y="445" class="txt-small">S.Pump (3)</text>
+  <text x="860" y="465" class="txt-small">8800124</text>
+
+  <rect x="980" y="420" width="160" height="70" class="box-peach"/>
+  <text x="1060" y="445" class="txt-small">S.Pump (4)</text>
+  <text x="1060" y="465" class="txt-small">8800127</text>
+
+
+  <!-- خطوط الربط -->
+  <line x1="250" y1="160" x2="250" y2="190" class="line-main"/>
+  <line x1="450" y1="160" x2="450" y2="190" class="line-main"/>
+  <line x1="650" y1="160" x2="650" y2="190" class="line-main"/>
+  <line x1="850" y1="160" x2="850" y2="190" class="line-main"/>
+  <line x1="1050" y1="160" x2="1050" y2="190" class="line-main"/>
+  <line x1="1250" y1="160" x2="1250" y2="190" class="line-main"/>
+
+  <line x1="250" y1="240" x2="250" y2="280" class="line-main"/>
+  <line x1="450" y1="240" x2="450" y2="280" class="line-main"/>
+  <line x1="650" y1="240" x2="650" y2="280" class="line-main"/>
+  <line x1="850" y1="240" x2="850" y2="280" class="line-main"/>
+  <line x1="1050" y1="240" x2="1050" y2="280" class="line-main"/>
+  <line x1="1250" y1="240" x2="1250" y2="280" class="line-main"/>
+
+  <!-- Line #1 → Pump 1 -->
+  <line x1="250" y1="330" x2="250" y2="400" class="line-main"/>
+  <line x1="250" y1="400" x2="460" y2="400" class="line-main"/>
+  <line x1="460" y1="400" x2="460" y2="420" class="line-main"/>
+
+  <!-- Line #2 & #3 → Pump 2 -->
+  <line x1="450" y1="330" x2="450" y2="380" class="line-main"/>
+  <line x1="650" y1="330" x2="650" y2="380" class="line-main"/>
+  <line x1="450" y1="380" x2="650" y2="380" class="line-main"/>
+  <line x1="660" y1="380" x2="660" y2="420" class="line-main"/>
+
+  <!-- Line #4 & #5 → Pump 3 -->
+  <line x1="850" y1="330" x2="850" y2="380" class="line-main"/>
+  <line x1="1050" y1="330" x2="1050" y2="380" class="line-main"/>
+  <line x1="850" y1="380" x2="1050" y2="380" class="line-main"/>
+  <line x1="860" y1="380" x2="860" y2="420" class="line-main"/>
+
+  <!-- Line #6 → Pump 4 -->
+  <line x1="1250" y1="330" x2="1250" y2="400" class="line-main"/>
+  <line x1="1250" y1="400" x2="1060" y2="400" class="line-main"/>
+  <line x1="1060" y1="400" x2="1060" y2="420" class="line-main"/>
+
+  <!-- Legend -->
+  <rect x="100" y="500" width="20" height="20" class="box-green"/>
+  <text x="140" y="515" class="legend-text">Locations</text>
+
+  <rect x="250" y="500" width="20" height="20" class="box-blue"/>
+  <text x="290" y="515" class="legend-text">Lines / Reducers</text>
+
+  <rect x="420" y="500" width="20" height="20" class="box-peach"/>
+  <text x="460" y="515" class="legend-text">Pumps</text>
+
+</svg>
+
+</body>
+</html>

@@ -1,0 +1,435 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Diagram</title>
+<style>
+  body {
+    background:#181818;
+    font-family:Arial, sans-serif;
+    margin:0;
+    padding:0;
+    display:flex;
+  }
+
+  /* الصندوق الجانبي الثابت */
+  #sidebar {
+    width:300px;
+    height:100vh;
+    background:#1E1E1E;
+    border-left:2px solid #444;
+    padding:20px;
+    color:white;
+    overflow-y:auto;
+    box-sizing:border-box;
+  }
+
+  #sidebar h2 {
+    margin-top:0;
+    margin-bottom:10px;
+  }
+
+  svg {
+    flex:1;
+    height:100vh;
+    background:#1F1F1F;
+    padding:20px;
+    box-sizing:border-box;
+  }
+
+  /* Grid */
+  .grid-line {
+    stroke:#333;
+    stroke-width:0.5;
+  }
+
+  /* مربعات */
+  .box-green {
+    fill:#4CAF50;
+    stroke:#2E7D32;
+    stroke-width:1.8;
+    rx:6; ry:6;
+    cursor:pointer;
+  }
+  .box-blue {
+    fill:#42A5F5;
+    stroke:#1E88E5;
+    stroke-width:1.8;
+    rx:6; ry:6;
+    cursor:pointer;
+  }
+  .box-peach {
+    fill:#FFCC80;
+    stroke:#FB8C00;
+    stroke-width:1.8;
+    rx:6; ry:6;
+    cursor:pointer;
+  }
+
+  .txt { fill:#fff; font-size:12px; text-anchor:middle; }
+  .txt-small { fill:#fff; font-size:11px; text-anchor:middle; }
+
+  .line-main {
+    stroke:#E0E0E0;
+    stroke-width:2;
+  }
+
+  .title {
+    fill:#FFFFFF;
+    font-size:24px;
+    font-weight:bold;
+    text-anchor:middle;
+  }
+
+  .legend-text {
+    fill:#fff;
+    font-size:12px;
+  }
+
+  /* نافذة Modal */
+  #modal {
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    backdrop-filter:blur(3px);
+    z-index:9999;
+    justify-content:center;
+    align-items:center;
+  }
+
+  #modal-box {
+    background:#222;
+    padding:25px;
+    width:400px;
+    border-radius:10px;
+    color:white;
+    box-shadow:0 0 20px rgba(0,0,0,0.5);
+    text-align:center;
+  }
+
+  #modal button {
+    margin-top:20px;
+    padding:10px 20px;
+    background:#444;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+  }
+</style>
+</head>
+<body>
+
+<!-- الصندوق الجانبي الثابت -->
+<div id="sidebar">
+  <h2 id="sb-title">اختر عنصرًا من المخطط</h2>
+
+  <!-- المربعات الثلاثة -->
+  <div style="display:flex; gap:10px; margin-bottom:20px;">
+
+    <div onclick="openModal('secure')" style="
+      flex:1; background:#2E7D32; padding:12px 5px;
+      border-radius:6px; text-align:center; cursor:pointer;">
+      <strong style="font-size:12px;">التأمين</strong>
+    </div>
+
+    <div onclick="openModal('archive')" style="
+      flex:1; background:#0277BD; padding:12px 5px;
+      border-radius:6px; text-align:center; cursor:pointer;">
+      <strong style="font-size:12px;">الأرشيف</strong>
+    </div>
+
+    <div onclick="openModal('stats')" style="
+      flex:1; background:#6A1B9A; padding:12px 5px;
+      border-radius:6px; text-align:center; cursor:pointer;">
+      <strong style="font-size:12px;">الإحصائيات</strong>
+    </div>
+
+  </div>
+
+  <div style="background:#333; padding:10px; border-radius:6px; margin-bottom:10px;">
+    <strong>التأمين:</strong>
+    <p id="sb-secure">—</p>
+  </div>
+
+  <div style="background:#333; padding:10px; border-radius:6px; margin-bottom:10px;">
+    <strong>الأرشيف:</strong>
+    <p id="sb-archive">—</p>
+  </div>
+
+  <div style="background:#333; padding:10px; border-radius:6px; margin-bottom:10px;">
+    <strong>الإحصائيات:</strong>
+    <p id="sb-stats">—</p>
+  </div>
+
+  <h3>ملفات PDF</h3>
+  <table id="sb-pdf" style="width:100%; border-collapse:collapse;">
+    <tr>
+      <th style="text-align:right; padding:5px;">الملف</th>
+      <th style="text-align:right; padding:5px;">التاريخ</th>
+    </tr>
+  </table>
+</div>
+
+<!-- نافذة Modal -->
+<div id="modal">
+  <div id="modal-box">
+    <h2 id="modal-title">—</h2>
+    <p id="modal-content">—</p>
+    <button onclick="closeModal()">إغلاق</button>
+  </div>
+</div>
+
+<!-- المخطط الكامل -->
+<svg viewBox="0 0 1400 650">
+
+  <text x="700" y="40" class="title">Building Distribution Flow Diagram</text>
+
+  <!-- Grid خفيف -->
+  <g>
+    <line x1="150" y1="60" x2="150" y2="620" class="grid-line"/>
+    <line x1="350" y1="60" x2="350" y2="620" class="grid-line"/>
+    <line x1="550" y1="60" x2="550" y2="620" class="grid-line"/>
+    <line x1="750" y1="60" x2="750" y2="620" class="grid-line"/>
+    <line x1="950" y1="60" x2="950" y2="620" class="grid-line"/>
+    <line x1="1150" y1="60" x2="1150" y2="620" class="grid-line"/>
+
+    <line x1="100" y1="120" x2="1300" y2="120" class="grid-line"/>
+    <line x1="100" y1="210" x2="1300" y2="210" class="grid-line"/>
+    <line x1="100" y1="300" x2="1300" y2="300" class="grid-line"/>
+    <line x1="100" y1="420" x2="1300" y2="420" class="grid-line"/>
+  </g>
+
+  <!-- التسميات الجانبية -->
+  <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+  <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+  <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+  <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+  <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+  <!-- الصف العلوي (Locations – أخضر) -->
+  <rect x="180" y="100" width="140" height="60" class="box-green" onclick="openSidebar('loc1')"/>
+  <text x="250" y="125" class="txt-small">Center core</text>
+  <text x="250" y="145" class="txt-small">(Slabs)</text>
+
+  <rect x="380" y="100" width="140" height="60" class="box-green" onclick="openSidebar('loc2')"/>
+  <text x="450" y="125" class="txt-small">Wing C</text>
+  <text x="450" y="145" class="txt-small">(SPB# 320043)</text>
+
+  <rect x="580" y="100" width="160" height="60" class="box-green" onclick="openSidebar('loc3')"/>
+  <text x="660" y="125" class="txt-small">CC (TC3)</text>
+  <text x="660" y="145" class="txt-small">(SPB# 320050)</text>
+
+  <rect x="780" y="100" width="160" height="60" class="box-green" onclick="openSidebar('loc4')"/>
+  <text x="860" y="125" class="txt-small">CC (TC2)</text>
+  <text x="860" y="145" class="txt-small">(SPB# 320051)</text>
+
+  <rect x="1000" y="100" width="140" height="60" class="box-green" onclick="openSidebar('loc5')"/>
+  <text x="1070" y="125" class="txt-small">Wing A</text>
+  <text x="1070" y="145" class="txt-small">(SPB# 320049)</text>
+
+  <rect x="1200" y="100" width="140" height="60" class="box-green" onclick="openSidebar('loc6')"/>
+  <text x="1270" y="125" class="txt-small">Wing B</text>
+  <text x="1270" y="145" class="txt-small">(SPB# 320048)</text>
+
+  <!-- الصف الثاني (Lev. Reducer – L.xx – أزرق) -->
+  <rect x="210" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist75')"/>
+  <text x="250" y="215" class="txt">L.75</text>
+
+  <rect x="410" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist61')"/>
+  <text x="450" y="215" class="txt">L.61</text>
+
+  <rect x="610" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist73')"/>
+  <text x="650" y="215" class="txt">L.73</text>
+
+  <rect x="810" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist72')"/>
+  <text x="850" y="215" class="txt">L.72</text>
+
+  <rect x="1010" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist62')"/>
+  <text x="1050" y="215" class="txt">L.62</text>
+
+  <rect x="1210" y="190" width="80" height="50" class="box-blue" onclick="openSidebar('dist61')"/>
+  <text x="1250" y="215" class="txt">L.61</text>
+
+  <!-- الصف الثالث (ID Lines – Line # – أزرق) -->
+  <rect x="210" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line1')"/>
+  <text x="250" y="305" class="txt">Line #1</text>
+
+  <rect x="410" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line2')"/>
+  <text x="450" y="305" class="txt">Line #2</text>
+
+  <rect x="610" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line3')"/>
+  <text x="650" y="305" class="txt">Line #3</text>
+
+  <rect x="810" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line4')"/>
+  <text x="850" y="305" class="txt">Line #4</text>
+
+  <rect x="1010" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line5')"/>
+  <text x="1050" y="305" class="txt">Line #5</text>
+
+  <rect x="1210" y="280" width="80" height="50" class="box-blue" onclick="openSidebar('line6')"/>
+  <text x="1250" y="305" class="txt">Line #6</text>
+
+  <!-- الصف السفلي (ID Pumps – مضخات – خوخي) -->
+  <rect x="380" y="420" width="160" height="70" class="box-peach" onclick="openSidebar('pump1')"/>
+  <text x="460" y="445" class="txt-small">S.Pump (1)</text>
+  <text x="460" y="465" class="txt-small">8800126</text>
+
+  <rect x="580" y="420" width="160" height="70" class="box-peach" onclick="openSidebar('pump2')"/>
+  <text x="660" y="445" class="txt-small">S.Pump (2)</text>
+  <text x="660" y="465" class="txt-small">8800121</text>
+
+  <rect x="780" y="420" width="160" height="70" class="box-peach" onclick="openSidebar('pump3')"/>
+  <text x="860" y="445" class="txt-small">S.Pump (3)</text>
+  <text x="860" y="465" class="txt-small">8800124</text>
+
+  <rect x="980" y="420" width="160" height="70" class="box-peach" onclick="openSidebar('pump4')"/>
+  <text x="1060" y="445" class="txt-small">S.Pump (4)</text>
+  <text x="1060" y="465" class="txt-small">8800127</text>
+
+  <!-- خطوط الربط -->
+  <line x1="250" y1="160" x2="250" y2="190" class="line-main"/>
+  <line x1="450" y1="160" x2="450" y2="190" class="line-main"/>
+  <line x1="650" y1="160" x2="650" y2="190" class="line-main"/>
+  <line x1="850" y1="160" x2="850" y2="190" class="line-main"/>
+  <line x1="1050" y1="160" x2="1050" y2="190" class="line-main"/>
+  <line x1="1250" y1="160" x2="1250" y2="190" class="line-main"/>
+
+  <line x1="250" y1="240" x2="250" y2="280" class="line-main"/>
+  <line x1="450" y1="240" x2="450" y2="280" class="line-main"/>
+  <line x1="650" y1="240" x2="650" y2="280" class="line-main"/>
+  <line x1="850" y1="240" x2="850" y2="280" class="line-main"/>
+  <line x1="1050" y1="240" x2="1050" y2="280" class="line-main"/>
+  <line x1="1250" y1="240" x2="1250" y2="280" class="line-main"/>
+
+  <!-- Line #1 → Pump 1 -->
+  <line x1="250" y1="330" x2="250" y2="400" class="line-main"/>
+  <line x1="250" y1="400" x2="460" y2="400" class="line-main"/>
+  <line x1="460" y1="400" x2="460" y2="420" class="line-main"/>
+
+  <!-- Line #2 & #3 → Pump 2 -->
+  <line x1="450" y1="330" x2="450" y2="380" class="line-main"/>
+  <line x1="650" y1="330" x2="650" y2="380" class="line-main"/>
+  <line x1="450" y1="380" x2="650" y2="380" class="line-main"/>
+  <line x1="660" y1="380" x2="660" y2="420" class="line-main"/>
+
+  <!-- Line #4 & #5 → Pump 3 -->
+  <line x1="850" y1="330" x2="850" y2="380" class="line-main"/>
+  <line x1="1050" y1="330" x2="1050" y2="380" class="line-main"/>
+  <line x1="850" y1="380" x2="1050" y2="380" class="line-main"/>
+  <line x1="860" y1="380" x2="860" y2="420" class="line-main"/>
+
+  <!-- Line #6 → Pump 4 -->
+  <line x1="1250" y1="330" x2="1250" y2="400" class="line-main"/>
+  <line x1="1250" y1="400" x2="1060" y2="400" class="line-main"/>
+  <line x1="1060" y1="400" x2="1060" y2="420" class="line-main"/>
+
+  <!-- Legend -->
+  <rect x="200" y="500" width="20" height="20" class="box-green"/>
+  <text x="230" y="515" class="legend-text">Locations</text>
+
+  <rect x="320" y="500" width="20" height="20" class="box-blue"/>
+  <text x="360" y="515" class="legend-text">Lines / Reducers</text>
+
+  <rect x="460" y="500" width="20" height="20" class="box-peach"/>
+  <text x="500" y="515" class="legend-text">Pumps</text>
+
+</svg>
+
+<script>
+/* بيانات كل عنصر */
+const dataMap = {
+  /* Locations */
+  loc1:{title:"Center core (Slabs)",secure:"—",archive:"—",stats:"منطقة اللب المركزي",pdf:[]},
+  loc2:{title:"Wing C (SPB# 320043)",secure:"—",archive:"—",stats:"جناح C",pdf:[]},
+  loc3:{title:"CC (TC3) (SPB# 320050)",secure:"—",archive:"—",stats:"Core Cooling 3",pdf:[]},
+  loc4:{title:"CC (TC2) (SPB# 320051)",secure:"—",archive:"—",stats:"Core Cooling 2",pdf:[]},
+  loc5:{title:"Wing A (SPB# 320049)",secure:"—",archive:"—",stats:"جناح A",pdf:[]},
+  loc6:{title:"Wing B (SPB# 320048)",secure:"—",archive:"—",stats:"جناح B",pdf:[]},
+
+  /* Pumps */
+  pump1:{title:"S.Pump (1) — 8800126",secure:"التأمين: فعال",archive:"آخر صيانة: 2025-01-12",stats:"تشغيل: 92% — ضغط: 7.2 bar",pdf:[{name:"Pump1_Report.pdf",date:"2025-01-10"}]},
+  pump2:{title:"S.Pump (2) — 8800121",secure:"التأمين: غير مفعل",archive:"آخر صيانة: 2025-01-05",stats:"تشغيل: 88% — ضغط: 6.9 bar",pdf:[{name:"Pump2_Inspection.pdf",date:"2025-01-02"}]},
+  pump3:{title:"S.Pump (3) — 8800124",secure:"التأمين: فعال",archive:"آخر صيانة: 2025-01-20",stats:"تشغيل: 95% — ضغط: 7.5 bar",pdf:[{name:"Pump3_ReportA.pdf",date:"2025-01-18"}]},
+  pump4:{title:"S.Pump (4) — 8800127",secure:"التأمين: فعال",archive:"آخر صيانة: 2025-01-08",stats:"تشغيل: 90% — ضغط: 7.1 bar",pdf:[{name:"Pump4_Notes.pdf",date:"2025-01-07"}]},
+
+  /* Lines */
+  line1:{title:"Line #1",secure:"—",archive:"آخر تحديث: 2025-01-11",stats:"تدفق: 120 L/min",pdf:[]},
+  line2:{title:"Line #2",secure:"—",archive:"آخر تحديث: 2025-01-09",stats:"تدفق: 98 L/min",pdf:[]},
+  line3:{title:"Line #3",secure:"—",archive:"آخر تحديث: 2025-01-14",stats:"تدفق: 110 L/min",pdf:[]},
+  line4:{title:"Line #4",secure:"—",archive:"آخر تحديث: 2025-01-15",stats:"تدفق: 105 L/min",pdf:[]},
+  line5:{title:"Line #5",secure:"—",archive:"آخر تحديث: 2025-01-17",stats:"تدفق: 115 L/min",pdf:[]},
+  line6:{title:"Line #6",secure:"—",archive:"آخر تحديث: 2025-01-19",stats:"تدفق: 130 L/min",pdf:[]},
+
+  /* Distributors (L.xx) */
+  dist75:{title:"L.75 — Center core",secure:"—",archive:"آخر تحديث: 2025-01-03",stats:"مستوى: 75%",pdf:[]},
+  dist61:{title:"L.61 — Wing C / Wing B",secure:"—",archive:"آخر تحديث: 2025-01-04",stats:"مستوى: 61%",pdf:[]},
+  dist73:{title:"L.73 — CC (TC3)",secure:"—",archive:"آخر تحديث: 2025-01-06",stats:"مستوى: 73%",pdf:[]},
+  dist72:{title:"L.72 — CC (TC2)",secure:"—",archive:"آخر تحديث: 2025-01-07",stats:"مستوى: 72%",pdf:[]},
+  dist62:{title:"L.62 — Wing A",secure:"—",archive:"آخر تحديث: 2025-01-08",stats:"مستوى: 62%",pdf:[]}
+};
+
+/* تحديث محتوى الصندوق */
+function openSidebar(id){
+  const d = dataMap[id];
+  if(!d) return;
+
+  document.getElementById("sb-title").innerText = d.title;
+  document.getElementById("sb-secure").innerText = d.secure;
+  document.getElementById("sb-archive").innerText = d.archive;
+  document.getElementById("sb-stats").innerText = d.stats;
+
+  const table = document.getElementById("sb-pdf");
+  table.innerHTML = `
+    <tr>
+      <th style="text-align:right; padding:5px;">الملف</th>
+      <th style="text-align:right; padding:5px;">التاريخ</th>
+    </tr>
+  `;
+  d.pdf.forEach(p=>{
+    table.innerHTML += `
+      <tr>
+        <td style="padding:5px;">${p.name}</td>
+        <td style="padding:5px;">${p.date}</td>
+      </tr>
+    `;
+  });
+}
+
+/* فتح نافذة Modal */
+function openModal(type) {
+  const modal = document.getElementById("modal");
+  const title = document.getElementById("modal-title");
+  const content = document.getElementById("modal-content");
+
+  if (type === "secure") {
+    title.innerText = "التأمين";
+    content.innerText = "تفاصيل التأمين الخاصة بالعنصر المحدد (يمكن ربطها لاحقًا ببيانات فعلية).";
+  }
+
+  if (type === "archive") {
+    title.innerText = "الأرشيف";
+    content.innerText = "أرشيف الملفات والسجلات الخاصة بالعنصر (تقارير، صيانة، ملاحظات...).";
+  }
+
+  if (type === "stats") {
+    title.innerText = "الإحصائيات";
+    content.innerText = "الإحصائيات والبيانات التشغيلية (تشغيل، ضغط، تدفق، إنذارات...).";
+  }
+
+  modal.style.display = "flex";
+}
+
+/* إغلاق Modal */
+function closeModal() {
+  document.getElementById("modal").style.display = "none";
+}
+</script>
+
+</body>
+</html>

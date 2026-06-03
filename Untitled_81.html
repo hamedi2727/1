@@ -1,0 +1,961 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CPC - REC | Operations Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+.fixed-header {
+  direction: ltr !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: ltr !important;
+}
+
+.header-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  direction: rtl;
+}
+
+.lang-switch {
+  display:flex;
+  gap:8px;
+  direction:ltr !important;
+}
+
+.lang-switch button {
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid #1f2937;
+  background:#020617;
+  color:#e5e7eb;
+  cursor:pointer;
+  font-size:13px;
+}
+.lang-switch button.active {
+  background:#0ea5e9;
+  border-color:#38bdf8;
+}
+
+/* GRID LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container { transform-origin: center center; cursor: grab; }
+.svg-container:active { cursor: grabbing; }
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg { width:100%; height:100%; }
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* LEGEND */
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#020617;
+  border:1px solid #1f2937;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-icon { color: #f97316; font-size: 18px; }
+
+/* DOCUMENT BOX */
+.doc-box {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  box-shadow: 0 0 18px rgba(0,0,0,0.35);
+}
+.doc-box h2 {
+  margin: 0 0 15px;
+  font-size: 17px;
+  color: #e2e8f0;
+  text-align:center;
+}
+
+/* ICON BUTTONS */
+.doc-icons {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.doc-btn {
+  flex:1;
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:15px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s;
+}
+.doc-btn:hover {
+  background:#0f172a;
+  transform:translateY(-3px);
+}
+.doc-btn div {
+  font-size:26px;
+  margin-bottom:6px;
+}
+.doc-btn span {
+  font-size:13px;
+  opacity:0.85;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DATETIME BAR */
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  direction:ltr;
+}
+
+/* LINE EFFECTS */
+.line-active {
+  stroke-width: 10 !important;
+  filter: drop-shadow(0 0 6px #0ea5e9);
+  animation: pulseGlow 1.2s ease-out;
+}
+
+@keyframes pulseGlow {
+  0%   { stroke-width: 6; filter: drop-shadow(0 0 0px #0ea5e9); }
+  50%  { stroke-width: 12; filter: drop-shadow(0 0 12px #38bdf8); }
+  100% { stroke-width: 10; filter: drop-shadow(0 0 6px #0ea5e9); }
+}
+
+.flow-effect {
+  stroke-dasharray: 8;
+  animation: flowMove 1.5s linear infinite;
+}
+
+@keyframes flowMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -40; }
+}
+
+.wave-effect {
+  stroke: #38bdf8;
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0.8;
+  animation: waveMove 1.2s ease-out infinite;
+}
+
+@keyframes waveMove {
+  0% { stroke-dasharray: 0 300; opacity: 0.9; }
+  50% { stroke-dasharray: 150 300; opacity: 1; }
+  100% { stroke-dasharray: 300 300; opacity: 0; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="fixed-header">
+  
+  <div class="header-left">
+    <img src="qq.png" class="header-logo">
+    <div class="title">CPC – REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+
+</div>
+
+<!-- DATE & TIME BAR -->
+<div class="datetime-bar">
+  <span id="dateTime">--:--</span>
+</div>
+
+<!-- DASHBOARD LAYOUT -->
+<div class="dashboard">
+
+  <!-- BOX: ENGINEERING MAP -->
+  <div class="box">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <!-- SVG WRAPPER سيأتي في القسم 4 -->
+<!-- SVG WRAPPER -->
+<div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative;">
+  <div class="svg-container" id="svgContainer">
+
+    <!-- MAIN SVG -->
+    <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+      <!-- TITLE -->
+      <text x="700" y="40" fill="#fff" font-size="22" text-anchor="middle">
+        Building Distribution Flow Diagram
+      </text>
+
+      <!-- GRID LINES -->
+      <g>
+        <line x1="150" y1="60" x2="150" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="350" y1="60" x2="350" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="550" y1="60" x2="550" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="750" y1="60" x2="750" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="950" y1="60" x2="950" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="1150" y1="60" x2="1150" y2="620" stroke="#333" stroke-width="0.5"/>
+
+        <line x1="100" y1="120" x2="1300" y2="120" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="210" x2="1300" y2="210" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="300" x2="1300" y2="300" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="420" x2="1300" y2="420" stroke="#333" stroke-width="0.5"/>
+      </g>
+
+      <!-- SIDE LABELS -->
+      <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+      <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+      <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+      <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+      <!-- SEPARATOR LINE -->
+      <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+      <!-- DISTRIBUTORS (TOP ROW) -->
+      <g id="Center core 1" onclick="showDetails('Center core 1','dist')" style="cursor:pointer">
+        <rect x="180" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="250" y="125" fill="#fff" font-size="12" text-anchor="middle">Center core</text>
+        <text x="250" y="145" fill="#fff" font-size="12" text-anchor="middle">(Slabs)</text>
+      </g>
+
+      <g id="Wing C" onclick="showDetails('Wing C','dist')" style="cursor:pointer">
+        <rect x="380" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="450" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing C</text>
+        <text x="450" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320043)</text>
+      </g>
+
+      <g id="Center core 2" onclick="showDetails('Center core 2','dist')" style="cursor:pointer">
+        <rect x="580" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="660" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC3)</text>
+        <text x="660" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320050)</text>
+      </g>
+
+      <g id="Wing A" onclick="showDetails('Wing A','dist')" style="cursor:pointer">
+        <rect x="780" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="860" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC2)</text>
+        <text x="860" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320051)</text>
+      </g>
+
+      <g id="Wing B" onclick="showDetails('Wing B','dist')" style="cursor:pointer">
+        <rect x="1000" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="1070" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing A</text>
+        <text x="1070" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320049)</text>
+      </g>
+
+      <g id="Wing B 2" onclick="showDetails('Wing B','dist')" style="cursor:pointer">
+        <rect x="1200" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6"/>
+        <text x="1270" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing B</text>
+        <text x="1270" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320048)</text>
+      </g>
+
+      <!-- LINES (SECOND ROW) -->
+      <g id="L1" onclick="showDetails('L1','line')" style="cursor:pointer">
+        <rect x="210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="250" y="215" fill="#fff" font-size="12" text-anchor="middle">L.75</text>
+      </g>
+
+      <g id="L2" onclick="showDetails('L2','line')" style="cursor:pointer">
+        <rect x="410" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="450" y="215" fill="#fff" font-size="12" text-anchor="middle">L.61</text>
+      </g>
+
+      <g id="L3" onclick="showDetails('L3','line')" style="cursor:pointer">
+        <rect x="610" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="650" y="215" fill="#fff" font-size="12" text-anchor="middle">L.73</text>
+      </g>
+
+      <g id="L4" onclick="showDetails('LL4','line')" style="cursor:pointer">
+        <rect x="810" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="850" y="215" fill="#fff" font-size="12" text-anchor="middle">L.72</text>
+      </g>
+
+      <g id="L5" onclick="showDetails('L5','line')" style="cursor:pointer">
+        <rect x="1010" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="1050" y="215" fill="#fff" font-size="12" text-anchor="middle">L.62</text>
+      </g>
+
+      <g id="L6" onclick="showDetails('L6','line')" style="cursor:pointer">
+        <rect x="1210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="1250" y="215" fill="#fff" font-size="12" text-anchor="middle">L.61</text>
+      </g>
+
+      <!-- LINE NUMBERS (THIRD ROW) -->
+      <g id="Line1" onclick="showDetails('L1','line')" style="cursor:pointer">
+        <rect x="210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="250" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #1</text>
+      </g>
+
+      <g id="Line2" onclick="showDetails('L2','line')" style="cursor:pointer">
+        <rect x="410" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="450" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #2</text>
+      </g>
+
+      <g id="Line3" onclick="showDetails('L3','line')" style="cursor:pointer">
+        <rect x="610" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="650" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #3</text>
+      </g>
+
+      <g id="Line4" onclick="showDetails('L4','line')" style="cursor:pointer">
+        <rect x="810" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="850" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #4</text>
+      </g>
+
+      <g id="Line5" onclick="showDetails('L5','line')" style="cursor:pointer">
+        <rect x="1010" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="1050" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #5</text>
+      </g>
+
+      <g id="Line6" onclick="showDetails('L6','line')" style="cursor:pointer">
+        <rect x="1210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6"/>
+        <text x="1250" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #6</text>
+      </g>
+
+      <!-- PUMPS (BOTTOM ROW) -->
+      <g id="SP1" onclick="showDetails('SP1','pump')" style="cursor:pointer">
+        <rect x="380" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6"/>
+        <text x="460" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (1)</text>
+        <text x="460" y="465" fill="#000" font-size="12" text-anchor="middle">8800126</text>
+      </g>
+
+      <g id="SP2" onclick="showDetails('SP2','pump')" style="cursor:pointer">
+        <rect x="580" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6"/>
+        <text x="660" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (2)</text>
+        <text x="660" y="465" fill="#000" font-size="12" text-anchor="middle">8800121</text>
+      </g>
+
+      <g id="SP3" onclick="showDetails('SP3','pump')" style="cursor:pointer">
+        <rect x="780" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6"/>
+        <text x="860" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (3)</text>
+        <text x="860" y="465" fill="#000" font-size="12" text-anchor="middle">8800124</text>
+      </g>
+
+      <g id="SP4" onclick="showDetails('SP4','pump')" style="cursor:pointer">
+        <rect x="980" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6"/>
+        <text x="1060" y="445" fill="#000" font-size="12" text-anchor="middle">S.Pump (4)</text>
+        <text x="1060" y="465" fill="#000" font-size="12" text-anchor="middle">8800127</text>
+      </g>
+
+      <!-- CONNECTION LINES -->
+      <line x1="250" y1="160" x2="250" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="450" y1="160" x2="450" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="650" y1="160" x2="650" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="850" y1="160" x2="850" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1050" y1="160" x2="1050" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1250" y1="160" x2="1250" y2="190" stroke="#E0E0E0" stroke-width="2"/>
+
+      <line x1="250" y1="240" x2="250" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="450" y1="240" x2="450" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="650" y1="240" x2="650" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="850" y1="240" x2="850" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1050" y1="240" x2="1050" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1250" y1="240" x2="1250" y2="280" stroke="#E0E0E0" stroke-width="2"/>
+
+      <!-- Line #1 → Pump 1 -->
+      <line x1="250" y1="330" x2="250" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="250" y1="400" x2="460" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="460" y1="400" x2="460" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+      <!-- Line #2 & #3 → Pump 2 -->
+      <line x1="450" y1="330" x2="450" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="650" y1="330" x2="650" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      
+      
+      
+      
+      
+            <line x1="450" y1="380" x2="650" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="660" y1="380" x2="660" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+      <!-- Line #4 & #5 → Pump 3 -->
+      <line x1="850" y1="330" x2="850" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1050" y1="330" x2="1050" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="850" y1="380" x2="1050" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="860" y1="380" x2="860" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+      <!-- Line #6 → Pump 4 -->
+      <line x1="1250" y1="330" x2="1250" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1250" y1="400" x2="1060" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+      <line x1="1060" y1="400" x2="1060" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+    </svg>
+  </div>
+
+  <!-- MINIMAP -->
+  <div class="minimap">
+    <svg viewBox="0 0 200 120">
+      <rect x="0" y="0" width="200" height="120" fill="#0f172a"/>
+      <rect id="minimapViewport" class="minimap-viewport" x="20" y="20" width="80" height="40"/>
+    </svg>
+  </div>
+
+</div> <!-- نهاية svg-wrapper -->
+</div> <!-- نهاية صندوق المخطط الهندسي -->
+
+<!-- DETAILS BOX -->
+<div class="box" id="detailsBox">
+  <h2 id="detailName">اختر عنصرًا</h2>
+
+  <div id="detailInfo">
+    <p>—</p>
+  </div>
+
+  <!-- PDF ARCHIVE -->
+  <div class="doc-box">
+    <h2 id="pdfTitle">أرشيف ملفات PDF</h2>
+
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- MAINTENANCE PDF -->
+  <div class="doc-box">
+    <h2>ملفات الصيانة</h2>
+
+    <table class="pdf-table" id="maintenancePdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div> <!-- نهاية detailsBox -->
+
+</div> <!-- نهاية dashboard -->
+
+<script>
+
+/* =======================
+   SYSTEM DATA
+======================= */
+
+const pumps = [
+  { id: "SP1", name: "8800126" },
+  { id: "SP2", name: "8800121" },
+  { id: "SP3", name: "8800124" },
+  { id: "SP4", name: "8800127" }
+];
+
+const lines = [
+  { id: "L1", name: "L1", mode: "ACTIVE" },
+  { id: "L2", name: "L2", mode: "STANDBY" },
+  { id: "L3", name: "L3", mode: "Idle" },
+  { id: "L4", name: "L4", mode: "Ready" },
+  { id: "L5", name: "L5", mode: "ACTIVE" },
+  { id: "L6", name: "L6", mode: "STANDBY" }
+];
+
+const distributors = [
+  { id: "Wing C", name: "320043" },
+  { id: "Center core 1", name: "320050" },
+  { id: "Center core 2", name: "320051" },
+  { id: "Wing A", name: "320049" },
+  { id: "Wing B", name: "320048" }
+];
+
+/* ربط المضخة بالخط */
+const pumpToLine = {
+  SP1: "L1",
+  SP2: "L2",
+  SP3: "L3",
+  SP4: "L4"
+};
+
+/* =======================
+   PDF ARCHIVE (NEW FORMAT)
+======================= */
+
+const pdfArchive = {
+
+  SP1: {
+    archive: [
+    { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQClPiUUAyb8QIqb_9Ljw3bUAQSSno6VbZ-MM4sK5f1vDpc?e=LlusX3" },
+    { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA46cgKyTriS5hdk32dW7sLAYCN3bpIbfWSf3VvW3H39Ns?e=zsAs2K" },
+    { date: "2026-01-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA3F8se2rWXQZJFCc84zTERAUXGs_DoHHq9DmBlg7I0JXs?e=QRzPHT" },
+    { date: "2026-01-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDm4N5D3ZGBRLK6XSSSTtGcAd2nodCSodaf4uWFw8E9a4E?e=8lhle2" },
+    { date: "2026-01-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCJ49rNrOgdQqFqJbmwIbxfATvn2b_PHmagKo-3AShOC4k?e=qjVnBf" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" },
+      { date: "2026-01-18", url: "#" }
+    ]
+  },
+
+  SP2: {
+    archive: [
+    { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDFLkYmzDFxRb-NcGTs7oznAeLhapA-Qbogfc0Teu3POu4?e=REgc0k" },
+    { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAEBzG5qzA0Qb98NgqzfMkbAcLvSoIYTN84wyDjsGGUr1s?e=xCcZy4" },
+    { date: "2026-01-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDuAR-d2P3WS7to9soEF8YcAXmUw2f0hN2-Rr4M0oHhE6A?e=4gvqtD" },
+    { date: "2026-01-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCaJ2B9z_-mS4fwSBv_1K2yAXROQxEpeGQTN4kXdMLF5-c?e=xy9NzK" },
+    { date: "2026-01-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCaJ2B9z_-mS4fwSBv_1K2yAXROQxEpeGQTN4kXdMLF5-c?e=xy9NzK" }
+    ],
+    maintenance: [
+      { date: "2026-01-22", url: "#" }
+    ]
+  },
+
+  SP3: { archive: [
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDKR1RackY-QJ54eOQFnW-TAf7ss5YzK7fxgg0cJ_XCvzo?e=03IfE2" }, 
+    { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBVmvltVJN1Spapk5J455bwAcyb4HkdZ5fmV4HF69dLKyw?e=cgM2oi" },
+    { date: "2026-01-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAnFnCvoGp1SanJCVhOOmrpAe5RMtyIhyAXTr_MtTD3mGE?e=8U8Kpt" },
+    { date: "2026-01-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAVSAzHHS9QS7MyanpW00RUAWBjHyHr6Yp0aN8kPjFP8P0?e=OHfoqr" },
+    { date: "2026-01-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAiDVV1uuWpS4GDY-wZqDZJAVUucku3yDJxt2xs85km0qY?e=WcJEQG" }
+
+  ], maintenance: [] },
+  SP4: { archive: [], maintenance: [] },
+
+  L1: { archive: [], maintenance: [] },
+  L2: { archive: [], maintenance: [] },
+  L3: { archive: [], maintenance: [] },
+  L4: { archive: [], maintenance: [] },
+  L5: { archive: [], maintenance: [] },
+  L6: { archive: [], maintenance: [] },
+
+  "Wing C": { archive: [], maintenance: [] },
+  "Center core 1": { archive: [], maintenance: [] },
+  "Center core 2": { archive: [], maintenance: [] },
+  "Wing A": { archive: [], maintenance: [] },
+  "Wing B": { archive: [], maintenance: [] }
+};
+
+/* =======================
+   LANGUAGE SYSTEM
+======================= */
+
+let currentLang = "ar";
+
+const translations = {
+  ar: {
+    map: "المخطط الهندسي",
+    legend: "وسيلة الإيضاح – وضع تشغيل الخطوط",
+    active: "نشط",
+    standby: "استعداد",
+    idle: "خامل",
+    ready: "جاهز",
+    pdfArchive: "أرشيف ملفات PDF",
+    selectItem: "اختر عنصرًا",
+    pumpLabel: "المضخة",
+    lineLabel: "الخط",
+    distLabel: "الموزع",
+    type: "نوع العنصر",
+    id: "المعرف",
+    mode: "وضع التشغيل",
+    pdfDate: "التاريخ",
+    pdfFile: "الملف"
+  },
+  en: {
+    map: "Engineering Layout",
+    legend: "Legend – Line Status",
+    active: "ACTIVE",
+    standby: "STANDBY",
+    idle: "Idle",
+    ready: "Ready",
+    pdfArchive: "PDF Archive",
+    selectItem: "Select an item",
+    pumpLabel: "Pump",
+    lineLabel: "Line",
+    distLabel: "Distributor",
+    type: "Type",
+    id: "ID",
+    mode: "Mode",
+    pdfDate: "Date",
+    pdfFile: "File"
+  }
+};
+
+function applyLanguage() {
+  const t = translations[currentLang];
+
+  document.getElementById("mapTitle").textContent = t.map;
+  document.getElementById("pdfTitle").textContent = t.pdfArchive;
+  document.getElementById("pdfDateHeader").textContent = t.pdfDate;
+  document.getElementById("pdfFileHeader").textContent = t.pdfFile;
+
+  if (!selectedItem) {
+    document.getElementById("detailName").textContent = t.selectItem;
+    document.getElementById("detailInfo").innerHTML = "<p>—</p>";
+  }
+
+  document.body.dir = currentLang === "ar" ? "rtl" : "ltr";
+
+  document.getElementById("langAr").classList.toggle("active", currentLang === "ar");
+  document.getElementById("langEn").classList.toggle("active", currentLang === "en");
+}
+
+/* =======================
+   COLOR BY MODE
+======================= */
+
+function getLineColor(mode) {
+  switch (mode) {
+    case "ACTIVE": return "#22c55e";
+    case "Ready": return "#eab308";
+    case "Idle": return "#6b7280";
+     default: return "#22c55e";  
+ case "Ready ": return "#ef4444";
+  }
+}
+
+function applyLineColors() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) el.setAttribute("stroke", getLineColor(l.mode));
+  });
+}
+
+/* =======================
+   WAVE EFFECT
+======================= */
+
+function createWaveEffect(lineId) {
+  const line = document.getElementById(lineId);
+  if (!line) return;
+
+  document.querySelectorAll(`.wave-${lineId}`).forEach(w => w.remove());
+
+  const wave = line.cloneNode(true);
+  wave.removeAttribute("id");
+  wave.classList.add("wave-effect");
+  wave.classList.add(`wave-${lineId}`);
+
+  line.parentNode.appendChild(wave);
+}
+
+/* =======================
+   HIGHLIGHT
+======================= */
+
+let selectedItem = null;
+
+function resetHighlight() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) {
+      el.style.opacity = 1;
+      el.classList.remove("line-active");
+      el.classList.remove("flow-effect");
+      el.setAttribute("stroke-width", 2);
+    }
+  });
+}
+
+function highlightElement(id, type) {
+  if (type !== "line") return;
+
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  el.style.opacity = 1;
+  el.classList.add("line-active");
+  el.classList.add("flow-effect");
+
+  createWaveEffect(id);
+}
+
+/* =======================
+   SHOW DETAILS
+======================= */
+
+function showDetails(id, type) {
+  selectedItem = { id, type };
+  const t = translations[currentLang];
+
+  let title = "";
+  let extra = "";
+  let number = "";
+  let icon = "";
+
+  if (type === "pump") icon = "🟧";
+  if (type === "line") icon = "🔵";
+  if (type === "dist") icon = "🟩";
+
+  if (type === "pump") {
+    const obj = pumps.find(x => x.id === id);
+    title = `${t.pumpLabel} ${obj.id}`;
+    number = obj.name;
+    extra = `<p><strong>الرقم:</strong> ${number}</p>`;
+
+    const linkedLine = pumpToLine[id];
+    if (linkedLine) {
+      resetHighlight();
+      highlightElement(linkedLine, "line");
+    }
+  }
+
+  if (type === "line") {
+    const obj = lines.find(x => x.id === id);
+    title = `${t.lineLabel} ${obj.id}`;
+    number = obj.mode;
+    extra = `<p><strong>${t.mode}:</strong> ${number}</p>`;
+
+    resetHighlight();
+    highlightElement(id, "line");
+  }
+
+  if (type === "dist") {
+    const obj = distributors.find(x => x.id === id);
+    title = `${t.distLabel} ${obj.id}`;
+    number = obj.name;
+    extra = `<p><strong>الرقم:</strong> ${number}</p>`;
+  }
+
+  document.getElementById("detailName").innerHTML = `${icon} ${title}`;
+
+  document.getElementById("detailInfo").innerHTML = `
+    <div style="
+      background:#0f172a;
+      border:1px solid #1e293b;
+      padding:12px;
+      border-radius:10px;
+      margin-top:10px;
+      line-height:1.8;
+    ">
+      <p><strong>${t.type}:</strong> ${type}</p>
+      <p><strong>${t.id}:</strong> ${id}</p>
+      ${extra}
+    </div>
+  `;
+
+  renderPDFTable(id);
+  renderMaintenancePDF(id);
+}
+
+/* =======================
+   PDF TABLES
+======================= */
+
+function renderPDFTable(id) {
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  let files = pdfArchive[id]?.archive || [];
+
+  files = files.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function renderMaintenancePDF(id) {
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  let files = pdfArchive[id]?.maintenance || [];
+
+  files = files.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+
+let currentScale = 0.8;  
+let currentTranslate = { x: -30, y: -20 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+/* =======================
+   DATE & TIME
+======================= */
+
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString(currentLang === "ar" ? "ar-EG" : "en-GB");
+}
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* =======================
+   INIT
+======================= */
+
+applyLineColors();
+resetHighlight();
+updateTransform();
+applyLanguage();
+
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  applyLanguage();
+};
+
+</script>
+</body>
+</html>
+
+
+
+
+
+

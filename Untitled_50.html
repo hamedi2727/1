@@ -1,0 +1,825 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="gsap.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+header {
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+/* NEW LAYOUT — RIGHT | CENTER | LEFT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* GRID FIX FOR PUMPS & LINES */
+#pumpList {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+#lineList {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+/* LIST ITEMS */
+.item-card {
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.item-card:hover {
+  background: #111827;
+}
+.item-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container {
+  transform-origin: center center;
+  cursor: grab;
+}
+.svg-container:active {
+  cursor: grabbing;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-table th {
+  background: #020617;
+  font-weight: 700;
+}
+.pdf-table td {
+  background: #020617;
+}
+.pdf-icon {
+  color: #f97316;
+  font-size: 18px;
+}
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg {
+  width:100%;
+  height:100%;
+}
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  color: #e5e7eb;
+  text-align: left;
+  direction: ltr;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="title">CPC - REC | Operations Dashboard</div>
+  <img src="qq.png" class="header-logo" height="73" width="98">
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<div class="dashboard">
+
+  <!-- RIGHT COLUMN (Pumps + Lines + Distributors) -->
+  <div>
+
+    <div class="box" style="animation-delay:0.3s">
+      <h2>Concrete Pump</h2>
+      <div id="pumpList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.4s">
+      <h2>Line</h2>
+      <div id="lineList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.5s">
+      <h2>Placing Boom</h2>
+      <div id="distList"></div>
+    </div>
+
+  </div>
+
+  <!-- CENTER COLUMN (SVG MAP) -->
+  <div class="box" style="animation-delay:0.1s">
+    <h2>المخطط الهندسي</h2>
+
+    <h3 style="font-size:14px; margin:10px 0 8px;">Legend – وضع تشغيل الخطوط</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span>ACTIVE</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#ef4444; display:inline-block;"></span>
+        <span>Ready</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span>Idle</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:320px; position:relative;">
+      <div class="svg-container" id="svgContainer" style="width:100%; height:100%; transform:scale(1) translate(0px,0px);">
+
+        <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 800 260">
+
+          <!-- FILTERS -->
+          <defs>
+            <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- ARROW MARKER -->
+            <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L6,3 z" fill="#e5e7eb" />
+            </marker>
+          </defs>
+
+          <!-- ===== PUMPS ===== -->
+          <g id="P1" onclick="showDetails('P1','pump')" style="cursor:pointer">
+            <rect x="50" y="260" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="90" y="285" fill="#e5e7eb" font-size="14" text-anchor="middle">P1</text>
+          </g>
+
+          <g id="P2" onclick="showDetails('P2','pump')" style="cursor:pointer">
+            <rect x="200" y="260" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="240" y="285" fill="#e5e7eb" font-size="14" text-anchor="middle">P2</text>
+          </g>
+
+          <g id="P3" onclick="showDetails('P3','pump')" style="cursor:pointer">
+            <rect x="350" y="260" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="390" y="285" fill="#e5e7eb" font-size="14" text-anchor="middle">P3</text>
+          </g>
+
+          <g id="P4" onclick="showDetails('P4','pump')" style="cursor:pointer">
+            <rect x="500" y="260" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="540" y="285" fill="#e5e7eb" font-size="14" text-anchor="middle">P4</text>
+          </g>
+
+          <!-- ===== LINES ===== -->
+          <g id="G_L1" class="line-group" onclick="showDetails('L1','line')" style="cursor:pointer">
+            <path id="L1" d="M90 200 L90 130 L150 130 L150 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="90" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="90" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="150" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="150" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L2" class="line-group" onclick="showDetails('L2','line')" style="cursor:pointer">
+            <path id="L2" d="M240 200 L240 130 L300 130 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="240" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="240" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L3" class="line-group" onclick="showDetails('L3','line')" style="cursor:pointer">
+            <path id="L3" d="M390 200 L390 130 L450 130 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="390" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="390" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L4" class="line-group" onclick="showDetails('L4','line')" style="cursor:pointer">
+            <path id="L4" d="M540 200 L540 130 L600 130 L600 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="540" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="540" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="600" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="600" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L5" class="line-group" onclick="showDetails('L5','line')" style="cursor:pointer">
+            <path id="L5" d="M390 200 L390 150 L300 150 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="390" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="390" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L6" class="line-group" onclick="showDetails('L6','line')" style="cursor:pointer">
+            <path id="L6" d="M540 200 L540 150 L450 150 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="540" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="540" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <!-- ===== DISTRIBUTORS ===== -->
+          <g id="D1" onclick="showDetails('D1','dist')" style="cursor:pointer">
+            <circle cx="150" cy="30" r="30" fill="#f97316"/>
+            <text x="150" y="35" fill="#e5e7eb" font-size="14" text-anchor="middle">320043</text>
+          </g>
+
+          <g id="D2" onclick="showDetails('D2','dist')" style="cursor:pointer">
+            <circle cx="300" cy="30" r="30" fill="#f97316"/>
+            <text x="300" y="35" fill="#e5e7eb" font-size="14" text-anchor="middle">320050</text>
+          </g>
+
+          <g id="D3" onclick="showDetails('D3','dist')" style="cursor:pointer">
+            <circle cx="450" cy="30" r="30" fill="#f97316"/>
+            <text x="450" y="35" fill="#e5e7eb" font-size="14" text-anchor="middle">320051</text>
+          </g>
+
+          <g id="D4" onclick="showDetails('D4','dist')" style="cursor:pointer">
+            <circle cx="600" cy="30" r="30" fill="#f97316"/>
+            <text x="600" y="35" fill="#e5e7eb" font-size="14" text-anchor="middle">320049</text>
+          </g>
+
+          <g id="D5" onclick="showDetails('D5','dist')" style="cursor:pointer">
+            <circle cx="750" cy="30" r="30" fill="#f97316"/>
+            <text x="750" y="35" fill="#e5e7eb" font-size="14" text-anchor="middle">320048</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- MINIMAP -->
+      <div class="minimap">
+        <svg viewBox="0 0 800 260">
+          <rect x="50" y="250" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="200" y="250" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="350" y="250" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="500" y="250" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+
+          <path d="M90 250 L90 160 L150 130 L150 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M240 250 L240 130 L300 130 L300 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 250 L390 130 L450 130 L450 90" stroke="#6b7280" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 250 L540 130 L600 130 L600 90" stroke="#ef4444" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 250 L390 150 L300 150 L300 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 250 L540 150 L450 150 L450 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+
+          <circle cx="150" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="300" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="450" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="600" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="750" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+
+          <rect id="minimapViewport" class="minimap-viewport" x="0" y="0" width="200" height="80"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- LEFT COLUMN (DETAILS + PDF ARCHIVE) -->
+  <div class="box" id="detailsBox" style="animation-delay:0.2s">
+    <h2 id="detailName">اختر عنصرًا</h2>
+
+    <div id="detailInfo">
+      <p>—</p>
+    </div>
+
+    <h3 style="margin-top:20px">أرشيف ملفات PDF</h3>
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+<script>
+/* =======================
+   DATA (AFTER UPDATE)
+======================= */
+
+const pumps = [
+  { id: "P1", name: "P1-8800126" },
+  { id: "P2", name: "P2-8800121" },
+  { id: "P3", name: "P3-8800121" },
+  { id: "P4", name: "P4-8800127" }
+];
+
+const lines = [
+  { id: "L1", name: "01", mode: "ACTIVE" },
+  { id: "L2", name: "02", mode: "STANDBY" },
+  { id: "L3", name: "03", mode: "Idle" },
+  { id: "L4", name: "04", mode: "Ready" },
+  { id: "L5", name: "05", mode: "ACTIVE" },
+  { id: "L6", name: "06", mode: "STANDBY" }
+];
+
+const distributors = [
+  { id: "D1", name: "320043" },
+  { id: "D2", name: "320050" },
+  { id: "D3", name: "320051" },
+  { id: "D4", name: "320049" },
+  { id: "D5", name: "320048" }
+];
+
+/* =======================
+   CONNECTIONS (UPDATED)
+======================= */
+
+const pumpToLines = {
+  P1: ["L1"],
+  P2: ["L3"],
+  P3: ["L4"],
+  P4: ["L5"]
+};
+
+const lineToDist = {
+  L1: null,
+  L2: "D1",
+  L3: "D2",
+  L4: "D3",
+  L5: "D4",
+  L6: "D5"
+};
+
+/* =======================
+   PDF ARCHIVE
+======================= */
+
+const pdfArchive = {
+
+  P1: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  P2: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  P3: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  P4: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L1: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L2: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L3: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L4: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L5: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  L6: [
+    { date: "2026-01-25", url: "https://..." },
+    { date: "2026-01-24", url: "https://..." },
+    { date: "2026-01-22", url: "https://..." },
+    { date: "2026-01-21", url: "https://..." }
+  ],
+
+  D1: [],
+  D2: [],
+  D3: [],
+  D4: [],
+  D5: []
+};
+
+/* =======================
+   COLOR BY MODE
+======================= */
+
+function getLineColor(mode) {
+  switch (mode) {
+    case "ACTIVE": return "#22c55e";
+    case "STANDBY": return "#eab308";
+    case "Idle": return "#6b7280";
+    case "Ready": return "#ef4444";
+    default: return "#22c55e";
+  }
+}
+
+function applyLineColors() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) {
+      el.setAttribute("stroke", getLineColor(l.mode));
+      el.style.opacity = 1.25;
+    }
+  });
+
+  distributors.forEach(d => {
+    const el = document.getElementById(d.id);
+    if (el) el.style.opacity = 0.5;
+  });
+
+  pumps.forEach(p => {
+    const el = document.getElementById(p.id);
+    if (el) el.style.opacity = 0.9;
+  });
+}
+</script>
+<script>
+/* =======================
+   RENDER LISTS
+======================= */
+
+function renderLists() {
+  const pumpList = document.getElementById("pumpList");
+  const lineList = document.getElementById("lineList");
+  const distList = document.getElementById("distList");
+
+  pumps.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `<h3>${p.name}</h3>`;
+    card.onclick = () => showDetails(p.id, "pump");
+    pumpList.appendChild(card);
+  });
+
+  lines.forEach(l => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `<h3>${l.name} – ${l.mode}</h3>`;
+    card.onclick = () => showDetails(l.id, "line");
+    lineList.appendChild(card);
+  });
+
+  distributors.forEach(d => {
+    const card = document.createElement("div");
+    card.className = "item-card";
+    card.innerHTML = `<h3>${d.name}</h3>`;
+    card.onclick = () => showDetails(d.id, "dist");
+    distList.appendChild(card);
+  });
+}
+
+/* =======================
+   HIGHLIGHT + GSAP
+======================= */
+
+function resetHighlight() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) {
+      el.style.opacity = 0.25;
+      el.setAttribute("stroke-width", 6);
+      el.classList.remove("glow-line");
+    }
+    const group = document.getElementById("G_" + l.id);
+    if (group) {
+      gsap.to(group, { scale: 1, duration: 5.2, transformOrigin: "center" });
+    }
+  });
+
+  distributors.forEach(d => {
+    const el = document.getElementById(d.id);
+    if (el) {
+      el.style.opacity = 0.5;
+      const c = el.querySelector("circle");
+      if (c) c.setAttribute("fill", "#f97316");
+      gsap.to(el, { scale: 1, duration: 5.2, transformOrigin: "center" });
+    }
+  });
+
+  pumps.forEach(p => {
+    const el = document.getElementById(p.id);
+    if (el) {
+      const r = el.querySelector("rect");
+      if (r) r.setAttribute("fill", "#0ea5e9");
+      el.style.opacity = 1;
+      gsap.to(el, { scale: 1, duration: 5.2, transformOrigin: "center" });
+    }
+  });
+}
+
+function highlightElement(id, type) {
+  if (type === "pump") {
+    const el = document.getElementById(id);
+    const r = el.querySelector("rect");
+    r.setAttribute("fill", "#0284c7");
+    el.style.opacity = 1;
+    gsap.fromTo(el, { scale: 1 }, { scale: 1.06, duration: 0.25, transformOrigin: "center" });
+  }
+
+  if (type === "line") {
+    const el = document.getElementById(id);
+    const group = document.getElementById("G_" + id);
+    el.style.opacity = 1;
+    el.setAttribute("stroke-width", 7.5);
+    el.classList.add("glow-line");
+    gsap.fromTo(group, { scale: 1 }, { scale: 1.03, duration: 0.25, transformOrigin: "center" });
+  }
+
+  if (type === "dist") {
+    const el = document.getElementById(id);
+    el.style.opacity = 1;
+    const c = el.querySelector("circle");
+    c.setAttribute("fill", "#fb923c");
+    gsap.fromTo(el, { scale: 1 }, { scale: 1.08, duration: 0.25, transformOrigin: "center" });
+  }
+}
+
+/* =======================
+   SHOW DETAILS
+======================= */
+
+function showDetails(id, type) {
+
+  document.getElementById("detailName").textContent =
+    type === "pump" ? `المضخة ${pumps.find(x => x.id === id).name}` :
+    type === "line" ? `الخط ${lines.find(x => x.id === id).name}` :
+    `الموزع ${distributors.find(x => x.id === id).name}`;
+
+  let extraInfo = "";
+  if (type === "line") {
+    const lineObj = lines.find(x => x.id === id);
+    extraInfo = `<p>وضع التشغيل: ${lineObj.mode}</p>`;
+  }
+
+  document.getElementById("detailInfo").innerHTML = `
+    <p>نوع العنصر: ${
+      type === "pump" ? "مضخة" :
+      type === "line" ? "خط" :
+      "موزع"
+    }</p>
+    <p>المعرف: ${id}</p>
+    ${extraInfo}
+  `;
+
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id] || [];
+
+  if (!files || files.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات PDF —</td></tr>`;
+  } else {
+    files.forEach(f => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${f.date}</td>
+        <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+      `;
+      tableBody.appendChild(tr);
+    });
+  }
+
+  resetHighlight();
+
+  if (type === "pump") {
+    highlightElement(id, "pump");
+
+    const relatedLines = pumpToLines[id] || [];
+    relatedLines.forEach(lid => {
+      highlightElement(lid, "line");
+      const distId = lineToDist[lid];
+      if (distId) highlightElement(distId, "dist");
+    });
+  }
+
+  if (type === "line") {
+    highlightElement(id, "line");
+    const distId = lineToDist[id];
+    if (distId) highlightElement(distId, "dist");
+  }
+
+  if (type === "dist") {
+    highlightElement(id, "dist");
+    Object.entries(lineToDist).forEach(([lid, did]) => {
+      if (did === id) {
+        highlightElement(lid, "line");
+      }
+    });
+  }
+}
+</script>
+<script>
+/* =======================
+   ZOOM + PAN + MINIMAP
+======================= */
+
+let currentScale = 1;
+let currentTranslate = { x: 0, y: 0 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+const minimapViewport = document.getElementById("minimapViewport");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+  updateMinimapViewport();
+}
+
+function updateMinimapViewport() {
+  const viewW = 800 / currentScale;
+  const viewH = 260 / currentScale;
+
+  const offsetX = -currentTranslate.x * (800 / svgWrapper.clientWidth) / currentScale;
+  const offsetY = -currentTranslate.y * (260 / svgWrapper.clientHeight) / currentScale;
+
+  minimapViewport.setAttribute("width", viewW);
+  minimapViewport.setAttribute("height", viewH);
+  minimapViewport.setAttribute("x", offsetX);
+  minimapViewport.setAttribute("y", offsetY);
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  const newScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  currentScale = newScale;
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+/* =======================
+   INIT
+======================= */
+
+renderLists();
+applyLineColors();
+resetHighlight();
+updateTransform();
+
+function updateDateTime() {
+  const now = new Date();
+  const options = {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  };
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString("en-GB", options);
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+</script>
+
+</body>
+</html>
+
+
+

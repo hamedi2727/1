@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Engineering Flow Diagram</title>
+
+<style>
+  body { background:#181818; font-family:Arial, sans-serif; padding:30px; }
+
+  svg {
+    width:100%;
+    height:650px;
+    background:#1F1F1F;
+    padding:20px;
+  }
+
+  .grid-line {
+    stroke:#333;
+    stroke-width:0.5;
+  }
+
+  .box-green {
+    fill:#4CAF50;
+    stroke:#2E7D32;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+  .box-blue {
+    fill:#42A5F5;
+    stroke:#1E88E5;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+  .box-peach {
+    fill:#FFCC80;
+    stroke:#FB8C00;
+    stroke-width:1.8;
+    rx:6; ry:6;
+  }
+
+  .txt { fill:#fff; font-size:12px; text-anchor:middle; }
+  .txt-small { fill:#fff; font-size:11px; text-anchor:middle; }
+
+  .line-main {
+    stroke:#E0E0E0;
+    stroke-width:2;
+  }
+
+  .title {
+    fill:#FFFFFF;
+    font-size:24px;
+    font-weight:bold;
+    text-anchor:middle;
+  }
+
+  .legend-text {
+    fill:#fff;
+    font-size:12px;
+  }
+
+  /* Highlight */
+  .highlight {
+    stroke:#FFEB3B !important;
+    stroke-width:4 !important;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="detailsBox" style="
+  position:absolute;
+  top:20px;
+  right:20px;
+  width:260px;
+  background:#222;
+  color:#fff;
+  padding:15px;
+  border-radius:8px;
+  font-size:14px;
+  display:none;
+  border:1px solid #555;
+"></div>
+
+<svg viewBox="0 0 1400 650">
+  <!-- عنوان رئيسي -->
+  <text x="700" y="40" class="title">Building Distribution Flow Diagram</text>
+
+  <!-- Grid -->
+  <g>
+    <line x1="150" y1="60" x2="150" y2="620" class="grid-line"/>
+    <line x1="350" y1="60" x2="350" y2="620" class="grid-line"/>
+    <line x1="550" y1="60" x2="550" y2="620" class="grid-line"/>
+    <line x1="750" y1="60" x2="750" y2="620" class="grid-line"/>
+    <line x1="950" y1="60" x2="950" y2="620" class="grid-line"/>
+    <line x1="1150" y1="60" x2="1150" y2="620" class="grid-line"/>
+
+    <line x1="100" y1="120" x2="1300" y2="120" class="grid-line"/>
+    <line x1="100" y1="210" x2="1300" y2="210" class="grid-line"/>
+    <line x1="100" y1="300" x2="1300" y2="300" class="grid-line"/>
+    <line x1="100" y1="420" x2="1300" y2="420" class="grid-line"/>
+  </g>
+
+  <!-- التسميات الجانبية -->
+  <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+  <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+  <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+  <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+  <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+  <!-- ========================= -->
+  <!--        الموزعات          -->
+  <!-- ========================= -->
+
+  <g id="Center core (Slabs)" class="dist" onclick="showDetails('Center core (Slabs)','dist')">
+    <rect x="180" y="100" width="140" height="60" class="box-green"/>
+    <text x="250" y="125" class="txt-small">Center core</text>
+    <text x="250" y="145" class="txt-small">(Slabs)</text>
+  </g>
+
+  <g id="Wing C" class="dist" onclick="showDetails('Wing C','dist')">
+    <rect x="380" y="100" width="140" height="60" class="box-green"/>
+    <text x="450" y="125" class="txt-small">Wing C</text>
+    <text x="450" y="145" class="txt-small">(SPB# 320043)</text>
+  </g>
+
+  <g id="CC (TC3)" class="dist" onclick="showDetails('CC (TC3)','dist')">
+    <rect x="580" y="100" width="160" height="60" class="box-green"/>
+    <text x="660" y="125" class="txt-small">CC (TC3)</text>
+    <text x="660" y="145" class="txt-small">(SPB# 320050)</text>
+  </g>
+
+  <g id="CC (TC2)" class="dist" onclick="showDetails('CC (TC2)','dist')">
+    <rect x="780" y="100" width="160" height="60" class="box-green"/>
+    <text x="860" y="125" class="txt-small">CC (TC2)</text>
+    <text x="860" y="145" class="txt-small">(SPB# 320051)</text>
+  </g>
+
+  <g id="Wing A" class="dist" onclick="showDetails('Wing A','dist')">
+    <rect x="1000" y="100" width="140" height="60" class="box-green"/>
+    <text x="1070" y="125" class="txt-small">Wing A</text>
+    <text x="1070" y="145" class="txt-small">(SPB# 320049)</text>
+  </g>
+
+  <g id="Wing B" class="dist" onclick="showDetails('Wing B','dist')">
+    <rect x="1200" y="100" width="140" height="60" class="box-green"/>
+    <text x="1270" y="125" class="txt-small">Wing B</text>
+    <text x="1270" y="145" class="txt-small">(SPB# 320048)</text>
+  </g>
+
+  <!-- ========================= -->
+  <!--     تحويلات الخطوط L.xx  -->
+  <!-- ========================= -->
+
+  <g id="L.75" class="reducer" onclick="showDetails('L.75','reducer')">
+    <rect x="210" y="190" width="80" height="50" class="box-blue"/>
+    <text x="250" y="215" class="txt">L.75</text>
+  </g>
+
+  <g id="L.61_A" class="reducer" onclick="showDetails('L.61_A','reducer')">
+    <rect x="410" y="190" width="80" height="50" class="box-blue"/>
+    <text x="450" y="215" class="txt">L.61</text>
+  </g>
+
+  <g id="L.73" class="reducer" onclick="showDetails('L.73','reducer')">
+    <rect x="610" y="190" width="80" height="50" class="box-blue"/>
+    <text x="650" y="215" class="txt">L.73</text>
+  </g>
+
+  <g id="L.72" class="reducer" onclick="showDetails('L.72','reducer')">
+    <rect x="810" y="190" width="80" height="50" class="box-blue"/>
+    <text x="850" y="215" class="txt">L.72</text>
+  </g>
+
+  <g id="L.62" class="reducer" onclick="showDetails('L.62','reducer')">
+    <rect x="1010" y="190" width="80" height="50" class="box-blue"/>
+    <text x="1050" y="215" class="txt">L.62</text>
+  </g>
+
+  <g id="L.61_B" class="reducer" onclick="showDetails('L.61_B','reducer')">
+    <rect x="1210" y="190" width="80" height="50" class="box-blue"/>
+    <text x="1250" y="215" class="txt">L.61</text>
+  </g>
+
+  <!-- ========================= -->
+  <!--       خطوط التشغيل        -->
+  <!-- ========================= -->
+
+  <g id="Line1" class="line" onclick="showDetails('Line1','line')">
+    <rect x="210" y="280" width="80" height="50" class="box-blue"/>
+    <text x="250" y="305" class="txt">Line #1</text>
+  </g>
+
+  <g id="Line2" class="line" onclick="showDetails('Line2','line')">
+    <rect x="410" y="280" width="80" height="50" class="box-blue"/>
+    <text x="450" y="305" class="txt">Line #2</text>
+  </g>
+
+  <g id="Line3" class="line" onclick="showDetails('Line3','line')">
+    <rect x="610" y="280" width="80" height="50" class="box-blue"/>
+    <text x="650" y="305" class="txt">Line #3</text>
+  </g>
+
+  <g id="Line4" class="line" onclick="showDetails('Line4','line')">
+    <rect x="810" y="280" width="80" height="50" class="box-blue"/>
+    <text x="850" y="305" class="txt">Line #4</text>
+  </g>
+
+  <g id="Line5" class="line" onclick="showDetails('Line5','line')">
+    <rect x="1010" y="280" width="80" height="50" class="box-blue"/>
+    <text x="1050" y="305" class="txt">Line #5</text>
+  </g>
+
+  <g id="Line6" class="line" onclick="showDetails('Line6','line')">
+    <rect x="1210" y="280" width="80" height="50" class="box-blue"/>
+    <text x="1250" y="305" class="txt">Line #6</text>
+  </g>
+
+  <!-- ========================= -->
+  <!--          المضخات          -->
+  <!-- ========================= -->
+
+  <g id="SP1" class="pump" onclick="showDetails('SP1','pump')">
+    <rect x="380" y="420" width="160" height="70" class="box-peach"/>
+    <text x="460" y="445" class="txt-small">S.Pump (1)</text>
+    <text x="460" y="465" class="txt-small">8800126</text>
+  </g>
+
+  <g id="SP2" class="pump" onclick="showDetails('SP2','pump')">
+    <rect x="580" y="420" width="160" height="70" class="box-peach"/>
+    <text x="660" y="445" class="txt-small">S.Pump (2)</text>
+    <text x="660" y="465" class="txt-small">8800121</text>
+  </g>
+
+  <g id="SP3" class="pump" onclick="showDetails('SP3','pump')">
+    <rect x="780" y="420" width="160" height="70" class="box-peach"/>
+    <text x="860" y="445" class="txt-small">S.Pump (3)</text>
+    <text x="860" y="465" class="txt-small">8800124</text>
+  </g>
+
+  <g id="SP4" class="pump" onclick="showDetails('SP4','pump')">
+    <rect x="980" y="420" width="160" height="70" class="box-peach"/>
+    <text x="1060" y="445" class="txt-small">S.Pump (4)</text>
+    <text x="1060" y="465" class="txt-small">8800127</text>
+  </g>
+  <!-- خطوط الربط -->
+  <line x1="250" y1="160" x2="250" y2="190" class="line-main"/>
+  <line x1="450" y1="160" x2="450" y2="190" class="line-main"/>
+  <line x1="650" y1="160" x2="650" y2="190" class="line-main"/>
+  <line x1="850" y1="160" x2="850" y2="190" class="line-main"/>
+  <line x1="1050" y1="160" x2="1050" y2="190" class="line-main"/>
+  <line x1="1250" y1="160" x2="1250" y2="190" class="line-main"/>
+
+  <line x1="250" y1="240" x2="250" y2="280" class="line-main"/>
+  <line x1="450" y1="240" x2="450" y2="280" class="line-main"/>
+  <line x1="650" y1="240" x2="650" y2="280" class="line-main"/>
+  <line x1="850" y1="240" x2="850" y2="280" class="line-main"/>
+  <line x1="1050" y1="240" x2="1050" y2="280" class="line-main"/>
+  <line x1="1250" y1="240" x2="1250" y2="280" class="line-main"/>
+
+  <!-- Line #1 → Pump 1 -->
+  <line x1="250" y1="330" x2="250" y2="400" class="line-main"/>
+  <line x1="250" y1="400" x2="460" y2="400" class="line-main"/>
+  <line x1="460" y1="400" x2="460" y2="420" class="line-main"/>
+
+  <!-- Line #2 & #3 → Pump 2 -->
+  <line x1="450" y1="330" x2="450" y2="380" class="line-main"/>
+  <line x1="650" y1="330" x2="650" y2="380" class="line-main"/>
+  <line x1="450" y1="380" x2="650" y2="380" class="line-main"/>
+  <line x1="660" y1="380" x2="660" y2="420" class="line-main"/>
+
+  <!-- Line #4 & #5 → Pump 3 -->
+  <line x1="850" y1="330" x2="850" y2="380" class="line-main"/>
+  <line x1="1050" y1="330" x2="1050" y2="380" class="line-main"/>
+  <line x1="850" y1="380" x2="1050" y2="380" class="line-main"/>
+  <line x1="860" y1="380" x2="860" y2="420" class="line-main"/>
+
+  <!-- Line #6 → Pump 4 -->
+  <line x1="1250" y1="330" x2="1250" y2="400" class="line-main"/>
+  <line x1="1250" y1="400" x2="1060" y2="400" class="line-main"/>
+  <line x1="1060" y1="400" x2="1060" y2="420" class="line-main"/>
+
+  <!-- Legend -->
+  <rect x="100" y="500" width="20" height="20" class="box-green"/>
+  <text x="140" y="515" class="legend-text">Locations</text>
+
+  <rect x="250" y="500" width="20" height="20" class="box-blue"/>
+  <text x="290" y="515" class="legend-text">Lines / Reducers</text>
+
+  <rect x="420" y="500" width="20" height="20" class="box-peach"/>
+  <text x="460" y="515" class="legend-text">Pumps</text>
+
+</svg>
+
+<!-- ========================= -->
+<!--       JavaScript          -->
+<!-- ========================= -->
+
+<script>
+
+const mapping = {
+
+  /* الموزعات → تحويلات الخطوط */
+  reducers: {
+    "Center core (Slabs)": "L.75",
+    "Wing C": "L.61_A",
+    "CC (TC3)": "L.73",
+    "CC (TC2)": "L.72",
+    "Wing A": "L.62",
+    "Wing B": "L.61_B"
+  },
+
+  /* تحويلات الخطوط → خطوط التشغيل */
+  reducerToLine: {
+    "L.75": "Line1",
+    "L.61_A": "Line2",
+    "L.73": "Line3",
+    "L.72": "Line4",
+    "L.62": "Line5",
+    "L.61_B": "Line6"
+  },
+
+  /* خطوط التشغيل → المضخات */
+  lineToPump: {
+    "Line1": "SP1",
+    "Line2": "SP2",
+    "Line3": "SP2",
+    "Line4": "SP3",
+    "Line5": "SP3",
+    "Line6": "SP4"
+  }
+};
+
+/* إزالة الهايلايت */
+function clearHighlight() {
+  document.querySelectorAll(".highlight").forEach(el => {
+    el.classList.remove("highlight");
+  });
+}
+
+/* إضافة هايلايت */
+function highlight(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.add("highlight");
+}
+
+/* عرض التفاصيل */
+function showDetails(id, type) {
+
+  clearHighlight();
+
+  let html = `<b>Type:</b> ${type}<br><b>ID:</b> ${id}<br><hr style="border:0;border-top:1px solid #555;">`;
+
+  if (type === "dist") {
+
+    const reducer = mapping.reducers[id];
+    const line = mapping.reducerToLine[reducer];
+    const pump = mapping.lineToPump[line];
+
+    highlight(id);
+    highlight(reducer);
+    highlight(line);
+    highlight(pump);
+
+    html += `
+      <b>Reducer:</b> ${reducer}<br>
+      <b>Line:</b> ${line}<br>
+      <b>Pump:</b> ${pump}<br>
+    `;
+  }
+
+  else if (type === "reducer") {
+
+    const line = mapping.reducerToLine[id];
+    const pump = mapping.lineToPump[line];
+
+    highlight(id);
+    highlight(line);
+    highlight(pump);
+
+    html += `
+      <b>Line:</b> ${line}<br>
+      <b>Pump:</b> ${pump}<br>
+    `;
+  }
+
+  else if (type === "line") {
+
+    const pump = mapping.lineToPump[id];
+
+    highlight(id);
+    highlight(pump);
+
+    html += `
+      <b>Pump:</b> ${pump}<br>
+    `;
+  }
+
+  else if (type === "pump") {
+
+    highlight(id);
+
+    html += `<b>Connected Lines:</b><br>`;
+
+    for (const line in mapping.lineToPump) {
+      if (mapping.lineToPump[line] === id) {
+        html += `- ${line}<br>`;
+        highlight(line);
+      }
+    }
+  }
+
+  document.getElementById("detailsBox").innerHTML = html;
+  document.getElementById("detailsBox").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>

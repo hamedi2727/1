@@ -1,0 +1,348 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPCEC – Pump | Line Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="gsap.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+header {
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+/* LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container {
+  transform-origin: center center;
+  cursor: grab;
+}
+.svg-container:active {
+  cursor: grabbing;
+}
+
+/* SVG */
+svg {
+  background: transparent;
+}
+
+/* LIST ITEMS */
+.item-card {
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.item-card:hover {
+  background: #111827;
+}
+.item-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #e5e7eb;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-table th {
+  background: #020617;
+  font-weight: 700;
+}
+.pdf-table td {
+  background: #020617;
+}
+.pdf-icon {
+  color: #f97316;
+  font-size: 18px;
+}
+
+/* LEGEND */
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#020617;
+  border:1px solid #1f2937;
+}
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg {
+  width:100%;
+  height:100%;
+}
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* GLOW FILTER */
+.glow-line {
+  filter: url(#glowFilter);
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="title">CPCEC – Pump | Line Dashboard</div>
+</header>
+
+<div class="dashboard">
+
+  <!-- SVG COLUMN -->
+  <div class="box" style="animation-delay:0.1s">
+    <h2>المخطط الهندسي</h2>
+
+    <!-- LEGEND -->
+    <h3 style="font-size:14px; margin:10px 0 8px;">Legend – وضع تشغيل الخطوط</h3>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span>ACTIVE</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span>STANDBY</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span>Idle</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#ef4444; display:inline-block;"></span>
+        <span>Ready</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:320px; position:relative;">
+      <div class="svg-container" id="svgContainer" style="width:100%; height:100%; transform:scale(1) translate(0px,0px);">
+        <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 800 260">
+
+          <!-- FILTERS -->
+          <defs>
+            <filter id="glowFilter" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+
+            <!-- ARROW MARKER -->
+            <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L6,3 z" fill="#e5e7eb" />
+            </marker>
+          </defs>
+
+          <!-- ===== PUMPS ===== -->
+          <g id="P1" onclick="showDetails('P1','pump')" style="cursor:pointer">
+            <rect x="50" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="90" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P1</text>
+          </g>
+
+          <g id="P2" onclick="showDetails('P2','pump')" style="cursor:pointer">
+            <rect x="200" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="240" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P2</text>
+          </g>
+
+          <g id="P3" onclick="showDetails('P3','pump')" style="cursor:pointer">
+            <rect x="350" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="390" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P3</text>
+          </g>
+
+          <g id="P4" onclick="showDetails('P4','pump')" style="cursor:pointer">
+            <rect x="500" y="200" width="80" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="540" y="225" fill="#e5e7eb" font-size="14" text-anchor="middle">P4</text>
+          </g>
+
+          <!-- ===== LINES ===== -->
+          <g id="G_L1" class="line-group" onclick="showDetails('L1','line')" style="cursor:pointer">
+            <path id="L1" d="M90 200 L90 130 L150 130 L150 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="90" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="90" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="150" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="150" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L2" class="line-group" onclick="showDetails('L2','line')" style="cursor:pointer">
+            <path id="L2" d="M240 200 L240 130 L300 130 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="240" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="240" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L3" class="line-group" onclick="showDetails('L3','line')" style="cursor:pointer">
+            <path id="L3" d="M390 200 L390 130 L450 130 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="390" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="390" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L4" class="line-group" onclick="showDetails('L4','line')" style="cursor:pointer">
+            <path id="L4" d="M540 200 L540 130 L600 130 L600 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="540" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="540" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="600" cy="130" r="3" fill="#e5e7eb"/>
+            <circle cx="600" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L5" class="line-group" onclick="showDetails('L5','line')" style="cursor:pointer">
+            <path id="L5" d="M390 200 L390 150 L300 150 L300 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="390" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="390" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="300" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <g id="G_L6" class="line-group" onclick="showDetails('L6','line')" style="cursor:pointer">
+            <path id="L6" d="M540 200 L540 150 L450 150 L450 90" stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+            <circle cx="540" cy="200" r="3" fill="#e5e7eb"/>
+            <circle cx="540" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="150" r="3" fill="#e5e7eb"/>
+            <circle cx="450" cy="90" r="3" fill="#e5e7eb"/>
+          </g>
+
+          <!-- ===== DISTRIBUTORS ===== -->
+          <g id="D1" onclick="showDetails('D1','dist')" style="cursor:pointer">
+            <circle cx="150" cy="70" r="20" fill="#f97316"/>
+            <text x="150" y="75" fill="#e5e7eb" font-size="14" text-anchor="middle">D1</text>
+          </g>
+
+          <g id="D2" onclick="showDetails('D2','dist')" style="cursor:pointer">
+            <circle cx="300" cy="70" r="20" fill="#f97316"/>
+            <text x="300" y="75" fill="#e5e7eb" font-size="14" text-anchor="middle">D2</text>
+          </g>
+
+          <g id="D3" onclick="showDetails('D3','dist')" style="cursor:pointer">
+            <circle cx="450" cy="70" r="20" fill="#f97316"/>
+            <text x="450" y="75" fill="#e5e7eb" font-size="14" text-anchor="middle">D3</text>
+          </g>
+
+          <g id="D4" onclick="showDetails('D4','dist')" style="cursor:pointer">
+            <circle cx="600" cy="70" r="20" fill="#f97316"/>
+            <text x="600" y="75" fill="#e5e7eb" font-size="14" text-anchor="middle">D4</text>
+          </g>
+
+          <g id="D5" onclick="showDetails('D5','dist')" style="cursor:pointer">
+            <circle cx="750" cy="70" r="20" fill="#f97316"/>
+            <text x="750" y="75" fill="#e5e7eb" font-size="14" text-anchor="middle">D5</text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- MINIMAP -->
+      <div class="minimap">
+        <svg viewBox="0 0 800 260">
+          <rect x="50" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="200" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="350" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+          <rect x="500" y="200" width="80" height="40" fill="#0ea5e9" rx="8" opacity="0.5"/>
+
+          <path d="M90 200 L90 130 L150 130 L150 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M240 200 L240 130 L300 130 L300 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 200 L390 130 L450 130 L450 90" stroke="#6b7280" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 200 L540 130 L600 130 L600 90" stroke="#ef4444" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M390 200 L390 150 L300 150 L300 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M540 200 L540 150 L450 150 L450 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+
+          <circle cx="150" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="300" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="450" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="600" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="750" cy="70" r="16" fill="#f97316" opacity="0.5"/>
+
+          <rect id="minimapViewport" class="minimap-viewport" x="0" y="0" width="200" height="80"/>
+        </svg>
+      </div>
+    </div>
+ 

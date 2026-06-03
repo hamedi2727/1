@@ -1,0 +1,652 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CPC - REC | Operations Dashboard</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+/* ============================
+   LAYOUT
+============================ */
+
+.dashboard {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ============================
+   LEFT PANEL (SVG AREA)
+============================ */
+
+.left-panel {
+  flex: 3;
+  position: relative;
+  background: #0f172a;
+  border-left: 3px solid #1e293b;
+  overflow: hidden;
+}
+
+#svgWrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+
+#svgContainer {
+  width: 1600px;
+  height: 900px;
+  transform-origin: top left;
+  transition: transform 0.1s linear;
+}
+
+/* ============================
+   RIGHT PANEL (DETAILS)
+============================ */
+
+.box {
+  flex: 1;
+  background: #1e293b;
+  padding: 20px;
+  border-right: 3px solid #0f172a;
+  overflow-y: auto;
+}
+
+.box h2 {
+  margin: 0 0 15px 0;
+  font-size: 20px;
+  color: #fff;
+}
+
+#detailInfo p {
+  margin: 6px 0;
+}
+
+/* ============================
+   PDF TABLES
+============================ */
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border-bottom: 1px solid #334155;
+  text-align: center;
+}
+
+.pdf-icon {
+  font-size: 20px;
+  text-decoration: none;
+  color: #38bdf8;
+}
+
+/* ============================
+   MINIMAP
+============================ */
+
+.minimap {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 220px;
+  height: 140px;
+  background: #0f172a;
+  border: 2px solid #1e293b;
+  border-radius: 10px;
+  padding: 5px;
+  cursor: crosshair;
+}
+
+.minimap svg {
+  width: 100%;
+  height: 100%;
+}
+
+.minimap-viewport {
+  fill: rgba(255,255,255,0.15);
+  stroke: #38bdf8;
+  stroke-width: 2;
+  pointer-events: none;
+}
+
+/* ============================
+   LINE STATUS ICON (●)
+============================ */
+
+.line-status {
+  font-size: 18px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
+/* ============================
+   LEGEND
+============================ */
+
+.legend-box {
+  fill: #0f172a;
+  stroke: #1e293b;
+  rx: 10;
+}
+
+.legend-text {
+  fill: #fff;
+  font-size: 14px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="dashboard">
+
+<!-- ============================
+     LEFT PANEL (SVG AREA)
+============================ -->
+<div class="left-panel">
+
+  <div id="svgWrapper">
+    <div id="svgContainer">
+
+      <svg id="mainSvg" width="1600" height="900">
+
+        <!-- ============================
+             LEGEND (وسيلة الإيضاح)
+        ============================= -->
+        <g transform="translate(1250, 20)">
+          <rect class="legend-box" x="0" y="0" width="230" height="120"/>
+
+          <circle cx="20" cy="35" r="8" fill="#22c55e"/>
+          <text x="40" y="40" class="legend-text">نشط (ACTIVE)</text>
+
+          <circle cx="20" cy="70" r="8" fill="#eab308"/>
+          <text x="40" y="75" class="legend-text">مستعد (STANDBY)</text>
+
+          <circle cx="20" cy="105" r="8" fill="#6b7280"/>
+          <text x="40" y="110" class="legend-text">خامل (IDLE)</text>
+        </g>
+
+        <!-- ============================
+             خطوط التغذية (L1 – L6)
+             مع حالة الخط داخل المستطيل (●)
+        ============================= -->
+
+        <!-- L1 -->
+        <rect id="L1" x="200" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="260" y="235" fill="#fff" font-size="18" text-anchor="middle">L.75</text>
+        <text id="status-L1" class="line-status" x="310" y="235">●</text>
+
+        <!-- L2 -->
+        <rect id="L2" x="400" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="460" y="235" fill="#fff" font-size="18" text-anchor="middle">L.76</text>
+        <text id="status-L2" class="line-status" x="510" y="235">●</text>
+
+        <!-- L3 -->
+        <rect id="L3" x="600" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="660" y="235" fill="#fff" font-size="18" text-anchor="middle">L.77</text>
+        <text id="status-L3" class="line-status" x="710" y="235">●</text>
+
+        <!-- L4 -->
+        <rect id="L4" x="800" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="860" y="235" fill="#fff" font-size="18" text-anchor="middle">L.78</text>
+        <text id="status-L4" class="line-status" x="910" y="235">●</text>
+
+        <!-- L5 -->
+        <rect id="L5" x="1000" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="1060" y="235" fill="#fff" font-size="18" text-anchor="middle">L.79</text>
+        <text id="status-L5" class="line-status" x="1110" y="235">●</text>
+
+        <!-- L6 -->
+        <rect id="L6" x="1200" y="200" width="120" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="1260" y="235" fill="#fff" font-size="18" text-anchor="middle">L.80</text>
+        <text id="status-L6" class="line-status" x="1310" y="235">●</text>
+        <!-- ============================
+             المضخات (SP1 – SP4)
+        ============================= -->
+
+        <!-- SP1 -->
+        <circle id="SP1" cx="260" cy="380" r="35"
+                fill="#0f172a" stroke="#1e293b" stroke-width="3"/>
+        <text x="260" y="385" fill="#fff" font-size="18" text-anchor="middle">SP1</text>
+
+        <!-- SP2 -->
+        <circle id="SP2" cx="460" cy="380" r="35"
+                fill="#0f172a" stroke="#1e293b" stroke-width="3"/>
+        <text x="460" y="385" fill="#fff" font-size="18" text-anchor="middle">SP2</text>
+
+        <!-- SP3 -->
+        <circle id="SP3" cx="860" cy="380" r="35"
+                fill="#0f172a" stroke="#1e293b" stroke-width="3"/>
+        <text x="860" y="385" fill="#fff" font-size="18" text-anchor="middle">SP3</text>
+
+        <!-- SP4 -->
+        <circle id="SP4" cx="1060" cy="380" r="35"
+                fill="#0f172a" stroke="#1e293b" stroke-width="3"/>
+        <text x="1060" y="385" fill="#fff" font-size="18" text-anchor="middle">SP4</text>
+
+
+        <!-- ============================
+             الموزعات (Distributors)
+        ============================= -->
+
+        <!-- Wing C -->
+        <rect id="Wing C" x="200" y="520" width="140" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="270" y="555" fill="#fff" font-size="18" text-anchor="middle">Wing C</text>
+
+        <!-- Center core 1 -->
+        <rect id="Center core 1" x="450" y="520" width="160" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="530" y="555" fill="#fff" font-size="18" text-anchor="middle">Center core 1</text>
+
+        <!-- Center core 2 -->
+        <rect id="Center core 2" x="700" y="520" width="160" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="780" y="555" fill="#fff" font-size="18" text-anchor="middle">Center core 2</text>
+
+        <!-- Wing A -->
+        <rect id="Wing A" x="950" y="520" width="140" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="1020" y="555" fill="#fff" font-size="18" text-anchor="middle">Wing A</text>
+
+        <!-- Wing B -->
+        <rect id="Wing B" x="1200" y="520" width="140" height="60"
+              fill="#0f172a" stroke="#1e293b" stroke-width="2" rx="8"/>
+        <text x="1270" y="555" fill="#fff" font-size="18" text-anchor="middle">Wing B</text>
+
+
+        <!-- ============================
+             الخطوط الواصلة بين العناصر
+        ============================= -->
+
+        <!-- L1 → SP1 -->
+        <line x1="260" y1="260" x2="260" y2="345"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- L2 → SP2 -->
+        <line x1="460" y1="260" x2="460" y2="345"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- L3 → SP3 -->
+        <line x1="660" y1="260" x2="860" y2="345"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- L4 → SP4 -->
+        <line x1="860" y1="260" x2="1060" y2="345"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- SP1 → Wing C -->
+        <line x1="260" y1="415" x2="260" y2="520"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- SP2 → Center core 1 -->
+        <line x1="460" y1="415" x2="530" y2="520"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- SP3 → Center core 2 -->
+        <line x1="860" y1="415" x2="780" y2="520"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- SP4 → Wing A -->
+        <line x1="1060" y1="415" x2="1020" y2="520"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+        <!-- SP4 → Wing B -->
+        <line x1="1060" y1="415" x2="1270" y2="520"
+              stroke="#E0E0E0" stroke-width="2"/>
+
+      </svg>
+    </div>
+  </div>
+
+  <!-- ============================
+       MINIMAP
+  ============================= -->
+  <div class="minimap">
+    <svg viewBox="0 0 200 120">
+      <rect x="0" y="0" width="200" height="120" fill="#0f172a"/>
+      <rect id="minimapViewport" class="minimap-viewport"
+            x="20" y="20" width="80" height="40"/>
+    </svg>
+  </div>
+
+</div> <!-- نهاية left-panel -->
+<!-- ============================
+     RIGHT PANEL (DETAILS BOX)
+============================ -->
+<div class="box" id="detailsBox">
+
+  <h2 id="detailName">اختر عنصرًا</h2>
+
+  <div id="detailInfo">
+    <p>—</p>
+  </div>
+
+  <!-- ============================
+       PDF ARCHIVE TABLE
+  ============================= -->
+  <div class="doc-box">
+    <h2 id="pdfTitle">أرشيف ملفات PDF</h2>
+
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <!-- ============================
+       MAINTENANCE PDF TABLE
+  ============================= -->
+  <div class="doc-box" style="margin-top: 25px;">
+    <h2>ملفات الصيانة</h2>
+
+    <table class="pdf-table" id="maintenancePdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+</div> <!-- نهاية detailsBox -->
+
+</div> <!-- نهاية dashboard -->
+<script>
+
+/* =======================
+   SYSTEM DATA
+======================= */
+
+const lines = [
+  { id: "L1", name: "L.75", mode: "ACTIVE" },
+  { id: "L2", name: "L.76", mode: "STANDBY" },
+  { id: "L3", name: "L.77", mode: "Idle" },
+  { id: "L4", name: "L.78", mode: "ACTIVE" },
+  { id: "L5", name: "L.79", mode: "STANDBY" },
+  { id: "L6", name: "L.80", mode: "Idle" }
+];
+
+const pumps = [
+  { id: "SP1", name: "8800126" },
+  { id: "SP2", name: "8800121" },
+  { id: "SP3", name: "8800124" },
+  { id: "SP4", name: "8800127" }
+];
+
+const distributors = [
+  { id: "Wing C", name: "320043" },
+  { id: "Center core 1", name: "320050" },
+  { id: "Center core 2", name: "320051" },
+  { id: "Wing A", name: "320049" },
+  { id: "Wing B", name: "320048" }
+];
+
+/* ربط المضخات بالخطوط */
+const pumpToLine = {
+  SP1: "L1",
+  SP2: "L2",
+  SP3: "L3",
+  SP4: "L4"
+};
+
+/* =======================
+   PDF ARCHIVE
+======================= */
+
+const pdfArchive = {
+  L1: { archive: [], maintenance: [] },
+  L2: { archive: [], maintenance: [] },
+  L3: { archive: [], maintenance: [] },
+  L4: { archive: [], maintenance: [] },
+  L5: { archive: [], maintenance: [] },
+  L6: { archive: [], maintenance: [] },
+
+  SP1: { archive: [], maintenance: [] },
+  SP2: { archive: [], maintenance: [] },
+  SP3: { archive: [], maintenance: [] },
+  SP4: { archive: [], maintenance: [] },
+
+  "Wing C": { archive: [], maintenance: [] },
+  "Center core 1": { archive: [], maintenance: [] },
+  "Center core 2": { archive: [], maintenance: [] },
+  "Wing A": { archive: [], maintenance: [] },
+  "Wing B": { archive: [], maintenance: [] }
+};
+
+/* =======================
+   LINE COLORS
+======================= */
+
+function getLineColor(mode) {
+  switch (mode) {
+    case "ACTIVE": return "#22c55e";   // أخضر
+    case "STANDBY": return "#eab308"; // أصفر
+    case "Idle": return "#6b7280";    // رمادي
+    default: return "#22c55e";
+  }
+}
+
+/* تلوين الخطوط */
+function applyLineColors() {
+  lines.forEach(l => {
+    const el = document.getElementById(l.id);
+    if (el) el.setAttribute("stroke", getLineColor(l.mode));
+  });
+}
+
+/* =======================
+   STATUS ICON (●)
+======================= */
+
+function applyStatusIcons() {
+  lines.forEach(l => {
+    const icon = document.getElementById(`status-${l.id}`);
+    if (icon) icon.setAttribute("fill", getLineColor(l.mode));
+  });
+}
+
+/* =======================
+   DETAILS BOX
+======================= */
+
+let selectedItem = null;
+
+function showDetails(id, type) {
+  selectedItem = { id, type };
+
+  document.getElementById("detailName").textContent = id;
+
+  const info = document.getElementById("detailInfo");
+
+  if (type === "line") {
+    const obj = lines.find(x => x.id === id);
+    info.innerHTML = `
+      <p><strong>النوع:</strong> خط تغذية</p>
+      <p><strong>الاسم:</strong> ${obj.name}</p>
+      <p><strong>الوضع:</strong> ${obj.mode}</p>
+    `;
+  }
+
+  if (type === "pump") {
+    const obj = pumps.find(x => x.id === id);
+    info.innerHTML = `
+      <p><strong>النوع:</strong> مضخة</p>
+      <p><strong>الرقم:</strong> ${obj.name}</p>
+    `;
+  }
+
+  if (type === "dist") {
+    const obj = distributors.find(x => x.id === id);
+    info.innerHTML = `
+      <p><strong>النوع:</strong> موزع</p>
+      <p><strong>الرقم:</strong> ${obj.name}</p>
+    `;
+  }
+
+  renderPDFTable(id);
+  renderMaintenancePDF(id);
+}
+
+/* =======================
+   PDF TABLES
+======================= */
+
+function renderPDFTable(id) {
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.archive || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function renderMaintenancePDF(id) {
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.maintenance || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+
+let currentScale = 0.8;
+let currentTranslate = { x: -30, y: -20 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+
+  updateMinimapViewport();
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+/* =======================
+   MINIMAP INTERACTION
+======================= */
+
+const minimap = document.querySelector(".minimap");
+const minimapViewport = document.getElementById("minimapViewport");
+
+function updateMinimapViewport() {
+  const scaleFactor = 0.12;
+
+  minimapViewport.setAttribute("width", 200 * (1 / currentScale) * scaleFactor);
+  minimapViewport.setAttribute("height", 120 * (1 / currentScale) * scaleFactor);
+
+  minimapViewport.setAttribute("x", (-currentTranslate.x * scaleFactor));
+  minimapViewport.setAttribute("y", (-currentTranslate.y * scaleFactor));
+}
+
+minimap.addEventListener("click", (e) => {
+  const rect = minimap.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+
+  const scaleFactor = 0.12;
+
+  currentTranslate.x = -(clickX / scaleFactor) + (svgWrapper.clientWidth / 2);
+  currentTranslate.y = -(clickY / scaleFactor) + (svgWrapper.clientHeight / 2);
+
+  updateTransform();
+});
+
+/* =======================
+   INIT
+======================= */
+
+applyLineColors();
+applyStatusIcons();
+updateTransform();
+
+</script>
+</body>
+</html>
+
+

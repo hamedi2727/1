@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Hierarchical Lines Diagram</title>
+<style>
+  body { background:#111; color:#eee; font-family:Arial; }
+  svg { width:100%; height:820px; background:#181818; border:1px solid #444; }
+
+  .unit { fill:#222; stroke:#00bcd4; stroke-width:2; rx:6; ry:6; }
+
+  .pump { fill:#2b1f0f; stroke:#ff9800; stroke-width:2; rx:6; ry:6; }
+
+  .label { fill:#fff; font-size:13px; text-anchor:middle; }
+  .small-label { fill:#fff; font-size:11px; text-anchor:middle; }
+
+  .line { stroke-width:4; }
+
+  .active { stroke:#00ff00; }
+  .standby { stroke:#ff9800; }
+  .idle { stroke:#bdbdbd; }
+
+  .circle-active { fill:#00ff00; }
+  .circle-standby { fill:#ff9800; }
+  .circle-idle { fill:#bdbdbd; }
+
+  .circle-text { fill:#000; font-size:9px; text-anchor:middle; font-weight:bold; }
+</style>
+</head>
+<body>
+
+<svg viewBox="0 0 1500 820">
+
+  <!-- الصف العلوي: الأجنحة + الكور مع الموزعات الصغيرة -->
+
+  <!-- Wing C + D5 -->
+  <rect x="80" y="40" width="220" height="70" class="unit" />
+  <text x="190" y="65" class="label">Wing C - 320043</text>
+  <rect x="162" y="78" width="55" height="28"
+        style="fill:#223344;stroke:#8bc34a;stroke-width:2;rx:6;ry:6;
+               filter: drop-shadow(0 0 4px #0f0);" />
+  <text x="189" y="97" class="small-label">D5</text>
+
+  <!-- Core 1 + D1 -->
+  <rect x="340" y="40" width="220" height="70" class="unit" />
+  <text x="450" y="65" class="label">Core 1 - 320051</text>
+  <rect x="422" y="78" width="55" height="28"
+        style="fill:#223344;stroke:#8bc34a;stroke-width:2;rx:6;ry:6;
+               filter: drop-shadow(0 0 4px #0f0);" />
+  <text x="449" y="97" class="small-label">D1</text>
+
+  <!-- Core 2 + D2 -->
+  <rect x="600" y="40" width="220" height="70" class="unit" />
+  <text x="710" y="65" class="label">Core 2 - 320050</text>
+  <rect x="682" y="78" width="55" height="28"
+        style="fill:#223344;stroke:#8bc34a;stroke-width:2;rx:6;ry:6;
+               filter: drop-shadow(0 0 4px #0f0);" />
+  <text x="709" y="97" class="small-label">D2</text>
+
+  <!-- Wing A + D3 -->
+  <rect x="860" y="40" width="220" height="70" class="unit" />
+  <text x="970" y="65" class="label">Wing A - 320049</text>
+  <rect x="942" y="78" width="55" height="28"
+        style="fill:#223344;stroke:#8bc34a;stroke-width:2;rx:6;ry:6;
+               filter: drop-shadow(0 0 4px #0f0);" />
+  <text x="969" y="97" class="small-label">D3</text>
+
+  <!-- Wing B + D4 -->
+  <rect x="1120" y="40" width="220" height="70" class="unit" />
+  <text x="1230" y="65" class="label">Wing B - 320048</text>
+  <rect x="1202" y="78" width="55" height="28"
+        style="fill:#223344;stroke:#8bc34a;stroke-width:2;rx:6;ry:6;
+               filter: drop-shadow(0 0 4px #0f0);" />
+  <text x="1229" y="97" class="small-label">D4</text>
+
+  <!-- Line 1 مستقل -->
+  <text x="140" y="170" class="small-label">Line 1 (No Distributor)</text>
+
+  <!-- التحويلات فوق الخطوط + الخطوط نازلة مستقلة -->
+
+  <!-- Line 1 - T75 -->
+  <line x1="140" y1="190" x2="140" y2="360" class="line active" />
+  <circle cx="140" cy="210" r="7" class="circle-active" />
+  <text x="140" y="213" class="circle-text">T75</text>
+
+  <!-- Line 2 - T61 -->
+  <line x1="190" y1="110" x2="190" y2="360" class="line idle" />
+  <circle cx="190" cy="150" r="7" class="circle-idle" />
+  <text x="190" y="153" class="circle-text">T61</text>
+
+  <!-- Line 4 - T72 -->
+  <line x1="450" y1="110" x2="450" y2="360" class="line standby" />
+  <circle cx="450" cy="150" r="7" class="circle-standby" />
+  <text x="450" y="153" class="circle-text">T72</text>
+
+  <!-- Line 3 - T73 -->
+  <line x1="710" y1="110" x2="710" y2="360" class="line standby" />
+  <circle cx="710" cy="150" r="7" class="circle-standby" />
+  <text x="710" y="153" class="circle-text">T73</text>
+
+  <!-- Line 5 - T62 -->
+  <line x1="970" y1="110" x2="970" y2="360" class="line standby" />
+  <circle cx="970" cy="150" r="7" class="circle-standby" />
+  <text x="970" y="153" class="circle-text">T62</text>
+
+  <!-- Line 6 - T61 -->
+  <line x1="1230" y1="110" x2="1230" y2="360" class="line active" />
+  <circle cx="1230" cy="150" r="7" class="circle-active" />
+  <text x="1230" y="153" class="circle-text">T61</text>
+
+  <!-- نهاية الخطوط بدون رأس مشترك -->
+  <text x="750" y="390" class="small-label">Downstream to Pumping Area (Dynamic Assignment)</text>
+
+  <!-- المضخات -->
+  <rect x="260" y="460" width="200" height="60" class="pump" />
+  <text x="360" y="495" class="label">SP1‑8800126</text>
+
+  <rect x="500" y="460" width="200" height="60" class="pump" />
+  <text x="600" y="495" class="label">SP2‑8800121</text>
+
+  <rect x="740" y="460" width="200" height="60" class="pump" />
+  <text x="840" y="495" class="label">SP3‑8800124</text>
+
+  <rect x="980" y="460" width="200" height="60" class="pump" />
+  <text x="1080" y="495" class="label">SP4‑8800127</text>
+
+</svg>
+
+</body>
+</html>

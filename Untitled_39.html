@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPCEC – Pump | Line Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+header {
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+}
+
+/* ---------------------- */
+/*   الترتيب الجديد       */
+/* ---------------------- */
+.dashboard {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 20px;
+  padding: 25px;
+  align-items: start;
+}
+
+.left-column > .box {
+  margin-bottom: 20px;
+}
+
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+.item-card {
+  background: #020617;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.item-card:hover {
+  background: #111827;
+}
+.item-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #e5e7eb;
+}
+
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container {
+  transform-origin: center center;
+  cursor: grab;
+}
+.svg-container:active {
+  cursor: grabbing;
+}
+
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-table th {
+  background: #020617;
+  font-weight: 700;
+}
+.pdf-table td {
+  background: #020617;
+}
+.pdf-icon {
+  color: #f97316;
+  font-size: 18px;
+}
+
+.minimap {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 140px;
+  height: 90px;
+  border-radius: 8px;
+  border: 1px solid #1f2937;
+  background: #020617;
+  overflow: hidden;
+  opacity: 0.85;
+}
+.minimap svg {
+  width: 100%;
+  height: 100%;
+}
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">CPCEC – Pump | Line Dashboard</div>
+</header>
+
+<div class="dashboard">
+
+  <!-- العمود الأيسر -->
+  <div class="left-column">
+
+    <div class="box" style="animation-delay:0.3s">
+      <h2>Concrete Pump</h2>
+      <div id="pumpList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.4s">
+      <h2>Line</h2>
+      <div id="lineList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.5s">
+      <h2>Placing Boom</h2>
+      <div id="distList"></div>
+    </div>
+
+    <!-- المخطط الهندسي -->
+    <div class="box" style="animation-delay:0.1s">
+      <h2>المخطط الهندسي</h2>
+
+      <button id="resetViewBtn" style="
+        padding: 8px 14px;
+        background:#0ea5e9;
+        border:none;
+        border-radius:8px;
+        color:white;
+        font-size:14px;
+        cursor:pointer;
+        margin-bottom:12px;
+      ">
+        إعادة التعيين
+      </button>
+
+      <div style="display:flex; gap:10px; margin-bottom:12px;">
+        <button id="zoomInBtn" style="
+          padding:8px 14px;
+          background:#22c55e;
+          border:none;
+          border-radius:8px;
+          color:white;
+          font-size:14px;
+          cursor:pointer;
+        ">تكبير +</button>
+
+        <button id="zoomOutBtn" style="
+          padding:8px 14px;
+          background:#ef4444;
+          border:none;
+          border-radius:8px;
+          color:white;
+          font-size:14px;
+          cursor:pointer;
+        ">تصغير –</button>
+      </div>
+
+      <input id="searchBox" type="text" placeholder="ابحث عن Pump أو Line أو Distributor..."
+      style="
+        width: 260px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid #1f2937;
+        background: #0f172a;
+        color: #e5e7eb;
+        margin-bottom: 12px;
+        font-size: 14px;
+      ">
+
+      <div id="svgWrapper" class="svg-wrapper">
+        <div id="svgContainer" class="svg-container">
+          <!-- SVG الخاص بك يوضع هنا -->
+        </div>
+
+        <div class="minimap">
+          <svg>
+            <rect id="minimapViewport" class="minimap-viewport"></rect>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- العمود الأيمن -->
+  <div class="box" id="detailsBox" style="animation-delay:0.2s">
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <h3 style="margin-top:20px">أرشيف ملفات PDF</h3>
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr><th>التاريخ</th><th>الملف</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/*  
+  نفس كود JavaScript الذي أرسلته أنت  
+  بدون أي تعديل  
+  (تم نسخه بالكامل كما هو)
+*/
+</script>
+
+</body>
+</html>

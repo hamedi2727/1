@@ -1,0 +1,541 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+.fixed-header {
+  direction: ltr !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: ltr !important;
+}
+
+.header-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  direction: rtl;
+}
+
+.lang-switch {
+  display:flex;
+  gap:8px;
+  direction:ltr !important;
+}
+
+.lang-switch button {
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid #1f2937;
+  background:#020617;
+  color:#e5e7eb;
+  cursor:pointer;
+  font-size:13px;
+}
+.lang-switch button.active {
+  background:#0ea5e9;
+  border-color:#38bdf8;
+}
+
+/* GRID LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container { transform-origin: center center; cursor: grab; }
+.svg-container:active { cursor: grabbing; }
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg { width:100%; height:100%; }
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* LEGEND */
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#020617;
+  border:1px solid #1f2937;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-icon { color: #f97316; font-size: 18px; }
+
+/* DOCUMENT BOX */
+.doc-box {
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  border: 1px solid #334155;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 20px;
+  box-shadow: 0 0 18px rgba(0,0,0,0.35);
+}
+.doc-box h2 {
+  margin: 0 0 15px;
+  font-size: 17px;
+  color: #e2e8f0;
+  text-align:center;
+}
+
+/* ICON BUTTONS */
+.doc-icons {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.doc-btn {
+  flex:1;
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:15px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s;
+}
+.doc-btn:hover {
+  background:#0f172a;
+  transform:translateY(-3px);
+}
+.doc-btn div {
+  font-size:26px;
+  margin-bottom:6px;
+}
+.doc-btn span {
+  font-size:13px;
+  opacity:0.85;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* DATETIME BAR */
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  direction:ltr;
+}
+
+/* LINE EFFECTS */
+.line-active {
+  stroke-width: 10 !important;
+  filter: drop-shadow(0 0 6px #0ea5e9);
+  animation: pulseGlow 1.2s ease-out;
+}
+
+@keyframes pulseGlow {
+  0%   { stroke-width: 6; filter: drop-shadow(0 0 0px #0ea5e9); }
+  50%  { stroke-width: 12; filter: drop-shadow(0 0 12px #38bdf8); }
+  100% { stroke-width: 10; filter: drop-shadow(0 0 6px #0ea5e9); }
+}
+
+.flow-effect {
+  stroke-dasharray: 8;
+  animation: flowMove 1.5s linear infinite;
+}
+
+@keyframes flowMove {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -40; }
+}
+
+.wave-effect {
+  stroke: #38bdf8;
+  stroke-width: 10;
+  stroke-linecap: round;
+  opacity: 0;
+  animation: waveMove 1.2s ease-out forwards;
+}
+
+@keyframes waveMove {
+  0% { stroke-dasharray: 0 300; opacity: 0.9; }
+  50% { stroke-dasharray: 150 300; opacity: 1; }
+  100% { stroke-dasharray: 300 300; opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<!-- START DASHBOARD -->
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">استعداد</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#ef4444; display:inline-block;"></span>
+        <span id="legendReady">جاهز</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative;">
+      <div class="svg-container" id="svgContainer">
+
+        <!-- SVG -->
+        <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 800 260">
+
+          <defs>
+            <marker id="arrowHead" markerWidth="8" markerHeight="8" refX="4" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L6,3 z" fill="#e5e7eb" />
+            </marker>
+          </defs>
+
+          <!-- TOOLTIP -->
+          <foreignObject id="tooltipBox" x="0" y="0" width="160" height="60" style="display:none;">
+            <div xmlns="http://www.w3.org/1999/xhtml"
+                 style="background:#0f172a; border:1px solid #38bdf8; border-radius:8px;
+                        padding:6px 10px; font-size:12px; color:#e5e7eb;
+                        box-shadow:0 0 10px #38bdf8; opacity:0.95;">
+              <div id="tooltipContent"></div>
+            </div>
+          </foreignObject>
+
+          <!-- PUMPS -->
+          <g id="SP1" onclick="showDetails('SP1','pump')" style="cursor:pointer">
+            <rect x="50" y="200" width="120" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="110" y="225" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle">
+              SP1 - 8800126
+            </text>
+          </g>
+
+          <g id="SP2" onclick="showDetails('SP2','pump')" style="cursor:pointer">
+            <rect x="200" y="200" width="120" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="260" y="225" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle">
+              SP2 - 8800127
+            </text>
+          </g>
+
+          <g id="SP3" onclick="showDetails('SP3','pump')" style="cursor:pointer">
+            <rect x="350" y="200" width="120" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="410" y="225" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle">
+              SP3 - 8800128
+            </text>
+          </g>
+
+          <g id="SP4" onclick="showDetails('SP4','pump')" style="cursor:pointer">
+            <rect x="500" y="200" width="120" height="40" fill="#0ea5e9" rx="8"/>
+            <text x="560" y="225" fill="#ffffff" font-size="13" font-weight="600" text-anchor="middle">
+              SP4 - 8800129
+            </text>
+          </g>
+
+          <!-- LINES -->
+          <g onclick="showDetails('L1','line')" style="cursor:pointer">
+            <path id="L1" d="M110 200 L110 130 L170 130 L170 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L2','line')" style="cursor:pointer">
+            <path id="L2" d="M260 200 L260 130 L320 130 L320 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L3','line')" style="cursor:pointer">
+            <path id="L3" d="M410 200 L410 130 L470 130 L470 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L4','line')" style="cursor:pointer">
+            <path id="L4" d="M560 200 L560 130 L620 130 L620 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L5','line')" style="cursor:pointer">
+            <path id="L5" d="M410 200 L410 150 L320 150 L320 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <g onclick="showDetails('L6','line')" style="cursor:pointer">
+            <path id="L6" d="M560 200 L560 150 L470 150 L470 90"
+                  stroke-width="6" fill="none" marker-end="url(#arrowHead)"/>
+          </g>
+
+          <!-- DISTRIBUTORS -->
+          <g id="SPB1" onclick="showDetails('SPB1','dist')" style="cursor:pointer">
+            <circle cx="170" cy="40" r="30" fill="#f97316"/>
+            <text x="170" y="45" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">
+              SPB1 - 320043
+            </text>
+          </g>
+
+          <g id="SPB2" onclick="showDetails('SPB2','dist')" style="cursor:pointer">
+            <circle cx="320" cy="40" r="30" fill="#f97316"/>
+            <text x="320" y="45" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">
+              SPB2 - 320050
+            </text>
+          </g>
+
+          <g id="SPB3" onclick="showDetails('SPB3','dist')" style="cursor:pointer">
+            <circle cx="470" cy="40" r="30" fill="#f97316"/>
+            <text x="470" y="45" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">
+              SPB3 - 320051
+            </text>
+          </g>
+
+          <g id="SPB4" onclick="showDetails('SPB4','dist')" style="cursor:pointer">
+            <circle cx="620" cy="40" r="30" fill="#f97316"/>
+            <text x="620" y="45" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">
+              SPB4 - 320049
+            </text>
+          </g>
+
+          <g id="SPB5" onclick="showDetails('SPB5','dist')" style="cursor:pointer">
+            <circle cx="770" cy="40" r="30" fill="#f97316"/>
+            <text x="770" y="45" fill="#ffffff" font-size="12" font-weight="600" text-anchor="middle">
+              SPB5 - 320048
+            </text>
+          </g>
+
+        </svg>
+      </div>
+
+      <!-- MINIMAP -->
+      <div class="minimap">
+        <svg viewBox="0 0 800 260">
+
+          <rect x="50" y="200" width="120" height="40" fill="#0ea5e9" opacity="0.5"/>
+          <rect x="200" y="200" width="120" height="40" fill="#0ea5e9" opacity="0.5"/>
+          <rect x="350" y="200" width="120" height="40" fill="#0ea5e9" opacity="0.5"/>
+          <rect x="500" y="200" width="120" height="40" fill="#0ea5e9" opacity="0.5"/>
+
+          <path d="M110 200 L110 130 L170 130 L170 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M260 200 L260 130 L320 130 L320 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+           
+           <path d="M410 200 L410 130 L470 130 L470 90" stroke="#6b7280" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M560 200 L560 130 L620 130 L620 90" stroke="#ef4444" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M410 200 L410 150 L320 150 L320 90" stroke="#22c55e" stroke-width="4" fill="none" opacity="0.5"/>
+          <path d="M560 200 L560 150 L470 150 L470 90" stroke="#eab308" stroke-width="4" fill="none" opacity="0.5"/>
+
+          <circle cx="170" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="320" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="470" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="620" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+          <circle cx="770" cy="40" r="16" fill="#f97316" opacity="0.5"/>
+
+          <rect id="minimapViewport" class="minimap-viewport" x="0" y="0" width="200" height="80"/>
+        </svg>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: DETAILS BOX (يمتد على صفّين) -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1 / span 2; overflow-y:auto;">
+
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <div class="doc-box">
+      <h2>الكتلوج – التأمين – المواصفات</h2>
+
+      <div class="doc-icons">
+        <div class="doc-btn">
+          <div>🔒</div>
+          <span>التأمين</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📘</div>
+          <span>الكتلوج</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📑</div>
+          <span>المواصفات</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 id="pdfTitle" style="margin-top:20px">أرشيف ملفات PDF</h3>
+
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+    <!-- MAINTENANCE BOX -->
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>الصيانة</h2>
+
+      <div class="doc-icons">
+        <div class="doc-btn">
+          <div>🛠️</div>
+          <span>سجل الصيانة</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📅</div>
+          <span>الجدولة</span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📂</div>
+          <span>ملفات الصيانة</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAINTENANCE PDF TABLE -->
+    <h3 style="margin-top:20px">ملفات PDF الخاصة بالصيانة</h3>
+
+    <table class="pdf-table" id="maintenancePdfTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- REPORT BOX -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>تقرير التشغيل</h2>
+    <p style="opacity:0.7; font-size:14px;">— لا يوجد تقرير —</p>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+
+<!-- JAVASCRIPT -->
+<script>
+/* (هنا ضع نفس كود JavaScript الكامل الذي أرسلته لك سابقًا بدون تغيير) */
+</script>
+
+</body>
+</html>
+

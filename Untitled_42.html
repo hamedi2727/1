@@ -1,0 +1,359 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPCEC – Premium Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<style>
+/* ------------------------------------------------ */
+/*                 GLOBAL STYLE                     */
+/* ------------------------------------------------ */
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #0b0f19;
+  color: #e5e7eb;
+  overflow-x: hidden;
+}
+
+header {
+  background: #0d1220;
+  padding: 18px 30px;
+  border-bottom: 1px solid rgba(0, 150, 255, 0.15);
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.15);
+}
+
+header .title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #4cc9ff;
+  text-shadow: 0 0 8px rgba(0, 150, 255, 0.6);
+}
+
+/* ------------------------------------------------ */
+/*                 GRID LAYOUT                      */
+/* ------------------------------------------------ */
+.dashboard {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 25px;
+  padding: 25px;
+}
+
+/* ------------------------------------------------ */
+/*                 BOX STYLE                        */
+/* ------------------------------------------------ */
+.box {
+  background: rgba(13, 18, 32, 0.85);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid rgba(0, 150, 255, 0.15);
+  box-shadow: 0 0 20px rgba(0, 150, 255, 0.12);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #4cc9ff;
+  text-shadow: 0 0 6px rgba(0, 150, 255, 0.5);
+}
+
+/* ------------------------------------------------ */
+/*                 ITEM CARDS                       */
+/* ------------------------------------------------ */
+.item-card {
+  background: rgba(15, 20, 35, 0.9);
+  border: 1px solid rgba(0, 150, 255, 0.15);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.item-card:hover {
+  background: rgba(20, 30, 50, 0.95);
+  transform: translateX(-4px);
+  box-shadow: 0 0 12px rgba(0, 150, 255, 0.25);
+}
+
+.item-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #e5e7eb;
+}
+
+/* حالة العنصر */
+.status-bar {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  border-radius: 0 12px 12px 0;
+}
+
+.status-ACTIVE { background: #22c55e; }
+.status-STANDBY { background: #eab308; }
+.status-Idle { background: #6b7280; }
+.status-Ready { background: #ef4444; }
+
+/* ------------------------------------------------ */
+/*                 SVG AREA                         */
+/* ------------------------------------------------ */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 150, 255, 0.2);
+  background: #0d1220;
+  box-shadow: 0 0 25px rgba(0, 150, 255, 0.15);
+}
+
+.svg-container {
+  transform-origin: center center;
+  cursor: grab;
+}
+
+.svg-container:active {
+  cursor: grabbing;
+}
+
+/* خلفية Grid هندسية */
+.svg-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,150,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,150,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------ */
+/*                 MINIMAP                          */
+/* ------------------------------------------------ */
+.minimap {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 150px;
+  height: 100px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,150,255,0.25);
+  background: rgba(13,18,32,0.85);
+  overflow: hidden;
+  box-shadow: 0 0 12px rgba(0,150,255,0.25);
+}
+
+.minimap-viewport {
+  fill: none;
+  stroke: #4cc9ff;
+  stroke-width: 2;
+}
+
+/* ------------------------------------------------ */
+/*                 PDF TABLE                        */
+/* ------------------------------------------------ */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid rgba(0,150,255,0.15);
+  text-align: center;
+}
+
+.pdf-table th {
+  background: rgba(0,150,255,0.15);
+  color: #4cc9ff;
+}
+
+.pdf-table td {
+  background: rgba(13,18,32,0.7);
+}
+
+.pdf-icon {
+  color: #f97316;
+  font-size: 18px;
+}
+
+/* ------------------------------------------------ */
+/*                 ANIMATION                        */
+/* ------------------------------------------------ */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title">CPCEC – Premium Dashboard</div>
+</header>
+
+<div class="dashboard">
+
+  <!-- RIGHT COLUMN -->
+  <div class="right-column">
+
+    <div class="box" style="animation-delay:0.2s">
+      <h2>Concrete Pump</h2>
+      <div id="pumpList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.3s">
+      <h2>Line</h2>
+      <div id="lineList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.4s">
+      <h2>Placing Boom</h2>
+      <div id="distList"></div>
+    </div>
+
+    <div class="box" style="animation-delay:0.1s">
+      <h2>المخطط الهندسي</h2>
+
+      <button id="resetViewBtn">إعادة التعيين</button>
+
+      <div style="display:flex; gap:10px; margin:12px 0;">
+        <button id="zoomInBtn">تكبير +</button>
+        <button id="zoomOutBtn">تصغير –</button>
+      </div>
+
+      <input id="searchBox" type="text" placeholder="ابحث عن Pump أو Line أو Distributor..." style="
+        width: 260px;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(0,150,255,0.25);
+        background: rgba(13,18,32,0.8);
+        color: #e5e7eb;
+        margin-bottom: 12px;
+      ">
+
+      <div id="svgWrapper" class="svg-wrapper">
+        <div id="svgContainer" class="svg-container">
+
+          <!-- SVG شبكة أنابيب تجريبية -->
+          <svg width="1200" height="800">
+            <line id="L1" x1="100" y1="200" x2="500" y2="200" stroke="#4cc9ff" stroke-width="8"/>
+            <line id="L2" x1="500" y1="200" x2="500" y2="500" stroke="#4cc9ff" stroke-width="8"/>
+            <line id="L3" x1="500" y1="500" x2="900" y2="500" stroke="#4cc9ff" stroke-width="8"/>
+
+            <circle id="P1" cx="100" cy="200" r="18" fill="#22c55e"/>
+            <circle id="P2" cx="900" cy="500" r="18" fill="#ef4444"/>
+
+            <rect id="D1" x="480" y="480" width="40" height="40" fill="#eab308"/>
+          </svg>
+
+        </div>
+
+        <div class="minimap">
+          <svg>
+            <rect id="minimapViewport" class="minimap-viewport"></rect>
+          </svg>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- LEFT COLUMN -->
+  <div class="box" id="detailsBox" style="animation-delay:0.5s">
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <h3 style="margin-top:20px">أرشيف ملفات PDF</h3>
+    <table class="pdf-table" id="pdfTable">
+      <thead>
+        <tr><th>التاريخ</th><th>الملف</th></tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/* ------------------------------------------------ */
+/*   كود JavaScript الأساسي (Zoom + Pan + Search)  */
+/* ------------------------------------------------ */
+
+let currentScale = 1;
+let currentTranslate = { x: 0, y: 0 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgWrapper = document.getElementById("svgWrapper");
+const svgContainer = document.getElementById("svgContainer");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+document.getElementById("resetViewBtn").addEventListener("click", () => {
+  currentScale = 1;
+  currentTranslate = { x: 0, y: 0 };
+  updateTransform();
+});
+
+document.getElementById("zoomInBtn").addEventListener("click", () => {
+  currentScale = Math.min(2.5, currentScale + 0.15);
+  updateTransform();
+});
+
+document.getElementById("zoomOutBtn").addEventListener("click", () => {
+  currentScale = Math.max(0.7, currentScale - 0.15);
+  updateTransform();
+});
+</script>
+
+</body>
+</html>
+
