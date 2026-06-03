@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style50.css">
+
+</head>
+<body>
+
+<!-- ============================
+     HEADER + LANGUAGE
+============================ -->
+<header>
+  <div id="dateTime"></div>
+
+  <div class="lang-switch">
+    <button id="langEn" class="active">EN</button>
+    <button id="langAr">AR</button>
+  </div>
+</header>
+
+<!-- ============================
+     MAIN LAYOUT
+============================ -->
+<div class="container">
+
+  <!-- ============================
+       LEFT SIDE (SVG MAP)
+  ============================ -->
+  <div class="left-panel">
+    <h2 id="mapTitle">Schematic System of Operations</h2>
+
+    <div id="svgWrapper">
+      <div id="svgContainer">
+        <!-- SVG CONTENT HERE -->
+      </div>
+    </div>
+
+    <div class="legend">
+      <span id="legendActive">Active</span>
+      <span id="legendStandby">Ready</span>
+      <span id="legendIdle">Idle</span>
+    </div>
+  </div>
+
+  <!-- ============================
+       RIGHT SIDE (DETAILS + BOXES)
+  ============================ -->
+  <div class="right-panel">
+
+    <!-- DETAILS BOX -->
+    <div class="details-box">
+      <h2 id="detailName">Select Item</h2>
+      <div id="detailInfo"></div>
+    </div>
+
+    <!-- ============================
+         DOCUMENTS BOX
+    ============================ -->
+    <div class="doc-box">
+      <h2>Documents</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn" id="btnInsuranceFile">
+          <div>📝</div>
+          <span>Insurance</span>
+        </div>
+
+        <div class="doc-btn" id="btnSpecsFile">
+          <div>📑</div>
+          <span>Specifications</span>
+        </div>
+
+        <div class="doc-btn" id="btnManualFile">
+          <div>📁</div>
+          <span>Manual</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================
+         MAINTENANCE BOX
+    ============================ -->
+    <div class="doc-box">
+      <h2>Maintenances</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn" id="btnInspectionFile" onclick="showArchive()">
+          <div>📘</div>
+          <span>Inspections</span>
+        </div>
+
+        <div class="doc-btn" id="btnRepairArchive" onclick="openRepairArchive()">
+          <div>🛠️</div>
+          <span>Repairs</span>
+        </div>
+
+        <div class="doc-btn" id="btnMaintenanceFiles" onclick="showMaintenance()">
+          <div>🔧</div>
+          <span>Maintenance Files</span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================
+         REPORTS BOX
+    ============================ -->
+    <div class="doc-box">
+      <h2>Reports</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn" id="btnLineReports" onclick="openLineReports()">
+          <div>📊</div>
+          <span>Line Reports</span>
+        </div>
+
+        <div class="doc-btn" id="btnMatching" onclick="openMatching()">
+          <div>✔️</div>
+          <span>Matching</span>
+        </div>
+
+        <div class="doc-btn" id="btnDocuments" onclick="openDocuments()">
+          <div>📂</div>
+          <span>Documents</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================
+     POPUP WINDOW
+============================ -->
+<div id="popupOverlay"></div>
+
+<div id="popupWindow">
+  <h2 id="popupTitle"></h2>
+  <div id="popupContent"></div>
+
+  <button onclick="closePopup()" class="popup-close-btn">Close</button>
+</div>
+
+<!-- ============================
+     JS FILES (NEW STRUCTURE)
+============================ -->
+<script src="core.js"></script>
+<script src="popup.js"></script>
+<script src="pdf.js"></script>
+<script src="dashboard.js"></script>
+
+</body>
+</html>

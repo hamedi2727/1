@@ -1,0 +1,306 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPCEC – Pump Station Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #f5f5f5;
+  color: #333;
+}
+
+/* HEADER */
+header {
+  background: #ffffff;
+  padding: 15px 25px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+header .title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+header nav a {
+  margin-left: 20px;
+  color: #555;
+  text-decoration: none;
+}
+
+/* LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #2c3e50;
+}
+
+/* SVG */
+svg line {
+  stroke: #888;
+  stroke-width: 4;
+}
+svg circle {
+  fill: #3498db;
+  cursor: pointer;
+}
+svg circle.warning {
+  fill: #f1c40f;
+}
+svg circle.stopped {
+  fill: #e74c3c;
+}
+
+/* DETAILS */
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+.detail-label {
+  opacity: 0.7;
+}
+
+/* PUMP CARDS */
+.pump-card {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.pump-card:hover {
+  background: #f0f0f0;
+}
+.pump-card h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #2c3e50;
+}
+.status {
+  font-weight: 700;
+}
+.green { color: #27ae60; }
+.yellow { color: #f1c40f; }
+.red { color: #e74c3c; }
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="title">CPCEC – Pump Station Dashboard</div>
+  <nav>
+    <a href="#">الرئيسية</a>
+    <a href="#">المخطط</a>
+    <a href="#">البيانات</a>
+  </nav>
+</header>
+
+<div class="dashboard">
+
+  <!-- SVG COLUMN -->
+  <div class="box" style="animation-delay:0.1s">
+    <h2>المخطط الهندسي</h2>
+    <svg width="100%" height="260">
+      <line x1="40" y1="130" x2="360" y2="130"></line>
+
+      <circle cx="120" cy="130" r="12" data-id="P1"></circle>
+      <circle cx="200" cy="130" r="12" data-id="P2" class="warning"></circle>
+      <circle cx="280" cy="130" r="12" data-id="P3" class="stopped"></circle>
+    </svg>
+  </div>
+
+  <!-- DETAILS COLUMN -->
+  <div class="box" id="detailsBox" style="animation-delay:0.2s">
+    <h2 id="detailName">اختر مضخة</h2>
+
+    <div class="detail-row">
+      <span class="detail-label">التدفق:</span>
+      <span id="detailFlow">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">الضغط:</span>
+      <span id="detailPressure">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">الحرارة:</span>
+      <span id="detailTemp">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">الذبذبة:</span>
+      <span id="detailVibration">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">الفولت:</span>
+      <span id="detailVoltage">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">الأمبير:</span>
+      <span id="detailCurrent">—</span>
+    </div>
+
+    <div class="detail-row">
+      <span class="detail-label">آخر تحديث:</span>
+      <span id="detailUpdate">—</span>
+    </div>
+
+    <p id="detailNote" style="margin-top:15px; opacity:0.8">—</p>
+  </div>
+
+  <!-- PUMP LIST COLUMN -->
+  <div class="box" style="animation-delay:0.3s">
+    <h2>قائمة المضخات</h2>
+    <div id="pumpList"></div>
+  </div>
+
+</div>
+
+<script>
+// =======================
+// SCADA DATA (Editable)
+// =======================
+const pumps = [
+  {
+    id: "P1",
+    name: "Pump 01",
+    status: "running",
+    readings: {
+      flow: 120,
+      pressure: 8.0,
+      temp: 42,
+      vibration: 1.2,
+      voltage: 400,
+      current: 32
+    },
+    lastUpdate: "2026-01-19 14:05",
+    note: "تشغيل مستقر"
+  },
+  {
+    id: "P2",
+    name: "Pump 02",
+    status: "warning",
+    readings: {
+      flow: 95,
+      pressure: 6.2,
+      temp: 55,
+      vibration: 2.1,
+      voltage: 398,
+      current: 40
+    },
+    lastUpdate: "2026-01-19 14:02",
+    note: "ارتفاع بسيط في الحرارة"
+  },
+  {
+    id: "P3",
+    name: "Pump 03",
+    status: "stopped",
+    readings: {
+      flow: 0,
+      pressure: 0,
+      temp: 38,
+      vibration: 0,
+      voltage: 0,
+      current: 0
+    },
+    lastUpdate: "2026-01-19 13:50",
+    note: "متوقفة للصيانة"
+  }
+];
+
+// =======================
+// Populate Pump List
+// =======================
+const pumpList = document.getElementById("pumpList");
+
+pumps.forEach(p => {
+  const card = document.createElement("div");
+  card.className = "pump-card";
+  card.setAttribute("data-id", p.id);
+
+  card.innerHTML = `
+    <h3>${p.name}</h3>
+    <p>Status: <span class="status ${
+      p.status === "running" ? "green" :
+      p.status === "warning" ? "yellow" : "red"
+    }">${p.status}</span></p>
+    <p>Flow: ${p.readings.flow}</p>
+    <p>Pressure: ${p.readings.pressure}</p>
+    <p>Temp: ${p.readings.temp}</p>
+  `;
+
+  pumpList.appendChild(card);
+});
+
+// =======================
+// Update Details Panel
+// =======================
+function showDetails(id) {
+  const p = pumps.find(x => x.id === id);
+  if (!p) return;
+
+  document.getElementById("detailName").textContent = p.name;
+  document.getElementById("detailFlow").textContent = p.readings.flow;
+  document.getElementById("detailPressure").textContent = p.readings.pressure;
+  document.getElementById("detailTemp").textContent = p.readings.temp;
+  document.getElementById("detailVibration").textContent = p.readings.vibration;
+  document.getElementById("detailVoltage").textContent = p.readings.voltage;
+  document.getElementById("detailCurrent").textContent = p.readings.current;
+  document.getElementById("detailUpdate").textContent = p.lastUpdate;
+  document.getElementById("detailNote").textContent = p.note;
+}
+
+// =======================
+// Click Events (SVG + Cards)
+// =======================
+document.querySelectorAll("circle").forEach(c => {
+  c.addEventListener("click", () => showDetails(c.dataset.id));
+});
+
+document.querySelectorAll(".pump-card").forEach(card => {
+  card.addEventListener("click", () => showDetails(card.dataset.id));
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+﻿
+
+let currentLang = "ar";
+let selectedItem = null;
+
+/* =======================
+   PDF ARCHIVE
+======================= */
+
+const pdfArchive = {
+
+  
+  SP1: {
+    archive: [
+        { date: "2026-05-19", url: "" },      
+        { date: "2026-05-18", url: "" },    
+        { date: "2026-05-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBaIT7GMEVVS4JopN1pprNcAUW4eVMr-Gx8OWcD-NA-9yo?e=kVeode" },     
+        { date: "2026-05-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCs2UUKeECGTqGM9uDLtTOWAUSki4POeMLc1bInlGzZZIk?e=CUClK1" },    
+        { date: "2026-05-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCWR8Q99q0eS7ZhV7V0tCvPATM8Z0xxd5b3VvEq1ZXDhvc?e=sXYRPZ" },      
+    
+        { date: "2026-05-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAVLK0ClDdJR6BD6xwQ4J61AfjZoU1J3NsYhvy__hNGVxs?e=oxNhQB" },    
+        { date: "2026-05-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAX6QVliCFbS7Of9a7SWPziAUcvDQE4VrqvMvUA_xpsvIg?e=g96wrC" },    
+        { date: "2026-05-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBK-VeW7Bz7T7gBortld2HBAe6SHSIXVC5b70cWjNwOd6g?e=g14Hjc" },    
+        { date: "2026-05-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCIKtg-N-kaR7EH-rgDBBtyAUxVBJkno9kNxsXaDhLsCqY?e=Cp2UDC" },   
+        { date: "2026-05-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDBamHVFp3FTIKDiFnw6xRnAWwucNR5WArXf95KlCgwbQg?e=RfbK9k" },    
+        { date: "2026-05-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAw4rE7lahmT4Vt2TLRhPaTAUayUHh4o7tE0ndKTT_g0FY?e=2dqXjB" }, 
+        { date: "2026-05-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYqT_Au4seQb2gJW7p5WazAXFKfiVa7P7zJ7kTRZD98io?e=N7Harh" },    
+   
+        { date: "2026-05-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBm3hgYbb8cQ4cbNcnlWkg5ARETn6w61p5NRUVhinxlERo?e=o2eMni" },    
+        { date: "2026-05-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCpvj5MIvu8Ta1ivoOiAa7vAZSw1ckuUBVAjjUnhJaitcM?e=CLNU8y" },
+  	    { date: "2026-05-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBCG7yxbw3OTL8FTkVQtn2GAXzRm3oCeHUQ0uE9kMtxcJk?e=7oYhfG" }, 
+		{ date: "2026-05-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCafjS-uzgYTpeLyS1KNOnsATIIFkHhhOzWIGycpjxezO8?e=waBNyo" },    
+    
+    
+		{ date: "2026-04-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQ9zxKBPHKSL70WeRgQD2nAUWLcO1Jz9nkzHyaX7GsegM?e=sKcXTl" },    
+	    { date: "2026-04-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQ9zxKBPHKSL70WeRgQD2nASxbVbK8qDfVY3FQHQBBjEI?e=BiTGcq" },    
+	    { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBGJdwJYctpRqMMdVdgd45KAcAXRhMW-pJNgOlKXiudQaI?e=areNng" },
+        { date: "2026-04-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDusetmOZ6mSK4og8LItdQ0AUf_ONh1un-ZRVPj5zSFZf4?e=RH3qq6" },     
+        { date: "2026-04-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCa7vZayNqtQ7HhCWWBaGqBARyqRi2OH_z66KpEOPCslZg?e=YTJFPS" }, 
+        { date: "2026-04-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAZC1sDsChnT7gs5TnQgMoEAZaolaS1HmuBDyU6MdVfGCk?e=5h87IZ" }, 
+        { date: "2026-04-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCmBqCoWoQ7SotUWxGBET5eAR2GINbBUsYfNnYPoIW49aM?e=JVPKOq" }, 
+        { date: "2026-04-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBL5P_qyf3nRIj53BC5gV2lAcvy8fLfrIA7NbwUQY5sGcc?e=QMIwXg" }, 
+        { date: "2026-04-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCpibCMFHhgQJDdILaRVpToAcbMUTs43YP0iGT2TAxtaFA?e=1K3AdD" }, 
+        { date: "2026-04-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB7ENLFSNlxSryHdo39PM_VARW3-VFL1qXbRgKEqFYKklc?e=WKbjCn" }, 
+        { date: "2026-04-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYYbvYU_XtS6mYqyOpHHCqAZzqboAKZ3EtXF0T03t0Yh8?e=UzPIAm" }, 
+        { date: "2026-04-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB6f9vgLLtrQrwF624bj9HrAerjTjWrYDu5gohOQ2JPoGk?e=fAhhmT" }, 
+        { date: "2026-04-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBgiYkPLAOUSb1pGgbVvaIBAUie2UQ0xLeDRoJGd_ZlfdI?e=TpcCXo" }, 
+        { date: "2026-04-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC4cEAqQqgpT5HgAlXSfeLrAXTdS5LDl3XlpAUeertNzAM?e=MABw22" }, 
+        { date: "2026-04-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQADK4D0KBxGQ5Omjf3_PGzrAYBenR-Yd06BTVZOgZ9CXV8?e=gHwqx2" }, 
+        { date: "2026-04-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAcmmnaGyziToBGuoXmXLDhAW2SOZ2vsb6yDhc2J3VjuAg?e=5GJyx5" }, 
+        { date: "2026-04-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDzmtFUgkAiS5tI4WeJYpnzARQZzOs7CWwaLk9DffcB23o?e=vA3Ifr" }, 
+        { date: "2026-04-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDPywxMSZujQ7Sgov2k0a6rAcF-_72X2ml8E4sCIJ-47nE?e=8njaMA" }, 
+        { date: "2026-04-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCrTreGMOnLT5RGUUyZ-oC3Af0EDu4lOA2q1c_McnaatDc?e=TmgucL" }, 
+        { date: "2026-04-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBXAfELZ8x8TIgBVmDDjeaPAcULhZ7ysWxvV_N5TS6_trA?e=CftfGc" }, 
+        { date: "2026-04-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAgyBEfPu9zQ5Ne3MYKaL60AUnqNE4UOmtDzU-s-RXMmh0?e=M61XsP" }, 
+        { date: "2026-04-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCx1pFzl_R9S6JlvpU3jKciAR0BgPzeIydsUYkwfOTWREM?e=9RUhqb" }, 
+        { date: "2026-04-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDmRMLE6E6IT7v0aqUrrihVAT1bn7VPaY66OAtj04oJ-dE?e=bnD31g" }, 
+        { date: "2026-04-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAQrCH2FA13QoIuhsuI3R5BAWjmHUDR-50Bfbl7_6BHmhQ?e=oxOrCv" }, 
+       { date: "2026-03-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBsJJqwPpRgSKE_i6El-lZtAdt4xerqvYwe0ie458TTikE?e=Pcwy5T" }, 
+       { date: "2026-03-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAA99tvSP8rSqLmTEqsV2EPAXMANSJqWP4_-4sHpDLq8Zk?e=fpMwcz" }, 
+       { date: "2026-03-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAsQo-JeyyrQbmMXPew_S7eAXCvNOvO4XGtVi1QJT4LTug?e=g7UrFQ" },
+       { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD2zmE6wiMLQIq8-SUxbmdCARZ1pqePH8YscYYsqGRoHEE?e=HNngL4" },
+       { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBR4zvbprC7SbuJr11J0nk9AUIZ5T_EdeV2Potjo-uYDfY?e=j602kR" },  
+       { date: "2026-03-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD_gmKwhwa9RrmkOrFxBOemATE6nKkvIyu3JopRfLZqy-8?e=ph1G8R" },   
+       { date: "2026-03-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCLLQUraj-OToMWKeHuPyDjAZF0oYNN3nSvc-XnFgncGgU?e=YonYzG" },   
+       { date: "2026-03-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC51PzJdpmWQqT1FiFmhAzcAW8m1BCMYZAPYBcOi2rataU?e=Gzf2RT" },  
+
+       { date: "2026-03-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAW0QyOHL8kTpM7hoJk4Ih5AavOJ2nL-DpDizqSXcGdsGU?e=5Gtdie" },  
+       { date: "2026-03-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAdt7Y9xwljSILt0zIcnNDlAS39-QZbwLI38n2uCZA4J1k?e=aWuQrJ" },   
+       { date: "2026-03-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNUsFU1zxqQKt6-0oYfZLOAfvYzSWpUE1rYYQbsYTmJ8U?e=c3gWOd" },   
+       { date: "2026-03-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDnlmWPOmAkTbtArOax2R40AVtrt8BIK2RMIFqKTR_rwOc?e=a75XLu" },  
+       { date: "2026-03-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDbdEt7Q9ATSKOj-TfArxy6AevB2HsEyQEE1p2pt6pE3Lk?e=78Rt9H" },     
+       { date: "2026-03-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBSQsumlczhQ7YuGibOwRROAfMwcwQyzfuc2TUEOvbgVBU?e=PTqMQs" },  
+       { date: "2026-03-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCGG17EQNIDSbW7uRFuqE4wAQNf5DiYoIv8_4OJoDkPy98?e=xlcooW" },
+    
+       { date: "2026-03-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAkwUMjkRYnSLx5JnSVHwX-AWep8YxLecIcpMzafTkPzOU?e=RQfFAS" },
+       { date: "2026-03-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZ_bduKNeOSrPV9q1gxL9BAThmvcqGRYSw5iYHSkQmAas?e=tiUA9x" },
+       { date: "2026-03-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDBDUH01cJoQZcNpVGQ6wIiATnlHEFeICeCIi4AitPWyPQ?e=09hufZ" },
+       { date: "2026-03-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBvWWTWSygyR7-jUrAJXfokAW1x49BokKlJ2CmPDI3DJYo?e=Fk5Z0X" },
+       { date: "2026-03-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQByxlH9GFNjQLWO2g5R-LAhAWs1dNi-2cPm6t-q_fc5hPE?e=N9MHEB" },
+       { date: "2026-03-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD8z92omXfqTZ7T15qk3u8WARKwMgPK4MdB3jzIa3WMSWU?e=tZxNzk" },
+       { date: "2026-03-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCKw3op1LK5T4soCs_bnPkmAfp_Czd1xuQwZg1JhVrSPBs?e=w4Wpwh" },
+       { date: "2026-03-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB-6yHlZF6iRoykHQyD91rBAV4hzsIzREJbo4q8Pwk9MS8?e=jrawOI" },
+    
+      { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCy1PEMob29T4STbQsTEmAXAfaCfMXPNeEBasD5e1OK28I?e=badk4L" },
+      { date: "2026-02-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDEff0TbadtSK01uyrIuAJ1AWacBQu3cP7Ty1TKNrSG4pg?e=K7hdUf" },
+      { date: "2026-02-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDbF_1pQPd8QIDTXOB0hQq6AeTAebihHP65-xU1cUoZupg?e=DI3H0A" },
+      { date: "2026-02-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCEIWhs8G6lT72cLmretqIHARUgBDBzRAGr-I3nHHiHCQc?e=RYDX4M" },
+   
+      { date: "2026-02-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC_51bcfpw3R5pcsgU0MXqcAX_DR_9VJKUqMNKZ605CftI?e=W2MgPA" },
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCChRXUvFiiTIUnNJbkb4RXAThFcf9qglmozOBx3Qgq5ts?e=YflWYs" },
+      { date: "2026-02-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDWSMOVxxYpT7A4sWRXLsjlAZaZHfBWpY-P9tfIno3uJO0?e=Mb2DIz" },
+      { date: "2026-02-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB7xbwhPNP4SrSKz-tn8bknAXZX_nXQJBF3hcHn6ZidzNk?e=R6H15b" },
+      { date: "2026-02-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCaEsxWgkgERY1rmVzVBsabARJfPZV1ET-C5lqsL048OaE?e=guTcxa" },
+               
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA6LugmyBXfTo5MxtrSvK5CAYKQXz68VXY151RgK-m-VqE?e=JhV9mV" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAPYn9EUsZZQqtH8mq7k7bZAceSNU7RFw_FT874iytrZhI?e=8CzHpX" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCacfMAOWGiRIXo94JkEpC7AY9eYLWadkH0S4N_wqTXAXk?e=0QzTEu" },       
+
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCxvjZ2oBC3QYooDD4_LG8LAfoAmtiznIhMumseQLcQcDc?e=J60yRc" },    
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA3M3pyCuu1S5xdHqBQ-I3pAUtb7ahsWkYhXawoGzpUIZQ?e=Pv5j9Z" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCF3uiPfPJjQq3gcTwH7dbXAePAwWF7d8douejNtt4becY?e=UEXjFD" },
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAkyC5F_QTbT5nLjwx5I5DhAeQvBXbuRay2i49ScGVJq98?e=eTUS3r" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAAQM99M4GZQZrGDjS5_kErARISFXXtfVRzSbYbirNOPUo?e=SFA1ce" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNuobURN_RS5kvMuBkeFCpAd02dZEGH6L822QL7P7sQb0?e=ZAqecC" },
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYB_AIMocNQ7nocvyoqDzWAYPaM-FNtRmiJtPPTCpGW7M?e=hsq2Fq" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBh_aFD1nqGSL3TL9au1by0ATAMtLRIvSz4zenNKs201w8?e=Sboh7X" },
+      { date: "2026-01-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA46cgKyTriS5hdk32dW7sLAYCN3bpIbfWSf3VvW3H39Ns?e=zsAs2K" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQClPiUUAyb8QIqb_9Ljw3bUAQSSno6VbZ-MM4sK5f1vDpc?e=LlusX3" }
+    ],
+    maintenance: [
+      { date: "2026-04-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBxEoUUYklRR6y5uPQzcgJpAVANeSCm09LG2JuTQk5JUp0?e=btbBwu" },  
+      { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBjpBGOxdWwQa2fD829atWgAUJA6prPBiXI5AU2k9Tfkvo?e=V7TfKN" },  
+    
+    { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDr9YDVMyefQ4LtvHBaGvHeARSYu2VQkMy1mGt4RylOs7g?e=cTcNld" },
+    { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZBA6vOStCRIT3bk71XV7CAcSc2WpunZuGzgiRXxYpYbk?e=OTE5p2" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGsqTeXFLZQqNbbSUSzsS2AQFwjgYyBYr87-3Va7kyQiE?e=eDujzA",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800126.pdf"
+  },
+
+  SP2: {
+    archive: [
+        { date: "2026-05-19", url: "" },      
+        { date: "2026-05-18", url: "" },    
+        { date: "2026-05-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAlcySwSJdKTLaAsfKoRjtIAa1YMx9_lqhISRV-oP26Xac?e=qhRNGW" },     
+        { date: "2026-05-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD9Z_ulOBTNSoRfYPbfLEFUATZcpsovffLYXs_yz9-XBWk?e=c8MAT3" },    
+        { date: "2026-05-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBmtdym9b59Trir9t4PI1PxAU3yYy15Kqpzm3B1LcFWO1o?e=gtoJ7H" },       
+        { date: "2026-05-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB4DRdMiRp0SrvDFnua2Je3AbK3iu4kwZrNLCnWwgbkPTY?e=pm7iIb" },    
+        { date: "2026-05-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCABBeMe2BbTavOavWNDeyOAT8ORASnB4tcBqDkQagRLiM?e=ZwTofs" },    
+        { date: "2026-05-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDvgW0RgABUTJVQBRUjQjDVAXv0EVMT3Gy-NNtnbHHvB9s?e=fGdkSI" },    
+        { date: "2026-05-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCLeikp4-32T5tYm9PjG28YAUKz6_2kN41b1aim3Em8RsM?e=84soBX" },   
+        { date: "2026-05-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBSBF3Hx-ztS5SwPj5ewstsAfbLVWJUkKiwVQJqufFy8fs?e=C5mDVf" },    
+        { date: "2026-05-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA5e1zcJ2kXSLT4H63xaV1vAY97QBOKdS0SJ52MMw7dRnM?e=f0R6FS" }, 
+        { date: "2026-05-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQADjxY-ZZV4T4Kh-_WPba5uAR5n400v_0K3zz-yd2ltPf4?e=nERyNn" },    
+    
+        { date: "2026-05-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDKWy6U_0XxQIB896LyIB_SARgh55aMIykHUdxP9grLxF0?e=VADt3K" },
+        { date: "2026-05-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBunwXLqwtkQLWRXZ8dp4IXAc55CHyKkZtEe0tg_HpPStk?e=rBO8en" },
+  	    { date: "2026-05-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB8ksxt-R5HT4U59zkqPMn7Ab0dt87XFfOzQSIlf4k2MSk?e=88c9eL" }, 
+		{ date: "2026-05-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKnC79zHBoTqkvzb19okDPATLXzeXci_YuFJnt8veG0mY?e=sy4S88" },    
+    
+    
+		{ date: "2026-04-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAZn5SuD_BRQbzq-3mRJDrkAQEe7N3e_W8lqunXwwmhqak?e=YkzwoZ" },    
+	    { date: "2026-04-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAnwrtM3x7ZRLN4JfTsk0k4AUaEHvoQ55PCIy05Ya9jJKo?e=KGkF99" },    
+	    { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBD4Wd1qR2RTovwJhUus6FhARz2SV7Awa_cNtvv62TLglA?e=JvZiTm" },
+        { date: "2026-04-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBVtIlik6KXRb9mF7MsObgQAfUx0KDGgVowoJ8Z6IP8zoc?e=GIBcip" },      
+        { date: "2026-04-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDjgi7w2UAgT52zk_6707moAWI9ezFQPYlL8OYzF_LxGQg?e=c92VFt" }, 
+        { date: "2026-04-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBGHOXyHUjnSb72GLgCRHQdAa9aD8tBkgK8hhmgBtDAN1U?e=bjvp5e" }, 
+        { date: "2026-04-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDMpavyw0pwQ7jgHSYe92NrAamSYYaAABRwFeh9Uxm0wCg?e=HzBntt" }, 
+        { date: "2026-04-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQcutc_utdSZ5_Gt2q9jr7ARdhp9JG2bT8TQG5kQucmmc?e=L80XwP" }, 
+        { date: "2026-04-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAn_gd3lwVNR5D_x-tWwv1-AXl0XS0l6_PttqE7ecLl7M0?e=GLbQFX" }, 
+        { date: "2026-04-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCMOeLyR_4ATL4i8zgRwCv6ATYKdCTSdADxAB2kBgeGFGs?e=aCM9lh" }, 
+        { date: "2026-04-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBCH33FrUEsT5sEmxLYW4F1AY1MD59NVYU_jqPOxZK5mSs?e=3dnOWU" }, 
+        { date: "2026-04-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA9tBA6GupWSoZJzBBEh_1dAU2zXBbnTP5ATSUlbJ4CEnk?e=LJSowd" }, 
+        { date: "2026-04-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB8Qecd2XgETItPxhENfV8hATY656eN8OJbkIuKc5y0iQo?e=sZKMcT" }, 
+        { date: "2026-04-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDiQUO1Wxj2TrGzvtGw3UwxAeIWtcH25Mur2b5CcKMTmVE?e=zCn5fL" }, 
+        { date: "2026-04-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBJdovlMwq9T4RZdvonYx45AV0MLoqnSWsQ-AfLnpVSzSQ?e=dZhArq" }, 
+        { date: "2026-04-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBPGLEQ_YkWTISI_WFAHCbcAdOAS2Bi6eb3qF72TTvcwh8?e=1NznSK" }, 
+        { date: "2026-04-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCVW5J3DQr6SJEpe7IS39qmASNkoSi8moiby6pQ1lLMsHg?e=tBK0IT" }, 
+        { date: "2026-04-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC7pDma2AM8TbBVGhvhH0nNAaewFFoYssfM-Mv5plbkgSE?e=Vikwvz" }, 
+        { date: "2026-04-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB4ttC98NhSSKzi3sSvA3cgAU3foL3eQrt-1-ofn3aHXnY?e=rYNNe6" }, 
+        { date: "2026-04-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAyrde6Y9N_TZYC6uYl0kt5AQjpT77yitymp3tGBMJuYdg?e=NnXyxT" }, 
+        { date: "2026-04-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAxJcozfuABTJlFgGLlNiYfASnyk7hsFMediaiUw3IytmU?e=gD9PyA" }, 
+        { date: "2026-04-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCra52Jl9o5S70vZn1wPKKGAUlXg8AaPn1jwruoc_KII1I?e=jneD4F" }, 
+        { date: "2026-04-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDZYA_SS9skRbl13PAVcoVzAcY_T-EmgdJv72UJJPJfLa0?e=fEgwm2" }, 
+        { date: "2026-04-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBk0AgUvN-ESZQi2ENAlX0SAeigt6hdowtC9JireEFyEG0?e=VKH7BB	" }, 
+
+       { date: "2026-03-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZm8hYpTaMTZbkNc0UmFIxARBYW_BwquvlsF2MXYZWPrk?e=WJVOGC" }, 
+       { date: "2026-03-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDOh6V5yHt0QJZqYSO8ymhuAZXe8dT5r6C0F-Db77e05Zs?e=mrn1da" }, 
+       { date: "2026-03-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAnPTJePUDBTrvGIfdpZgFMATrnzfV2Lq1hxk3ff2_p6lo?e=n4mSpQ" },
+       { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAq46vs8CmOQLulcWHBfK0tAa_y0IqbTq4RxZlgj_LDTIk?e=caD3Wa" },
+       { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQ-O1HNQpOSKErt_FHQd4hARoOrUkdc8qB_guJ7vaGaqY?e=aqaZki" },  
+       { date: "2026-03-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYUMAn4uxySKkmhXYZUcKmAciNYQvocL2iNtJ46cP65r4?e=2fmcOr" },   
+       { date: "2026-03-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAFdIi7nlzmRriSuiPIUIQDAcXcJRkjFuAbAaQZfJrhzPc?e=OKXirk" },   
+       { date: "2026-03-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDiCk_0aRXcTbumgCk1TgAiASm1crbKWKHruAKKlnyAkks?e=FTzz7h" },  
+       { date: "2026-03-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBFPfCbLIJhRYTzXlrXsU_IAemBSChEDmYVAe4yQmj4y7w?e=8B0Xzu" },  
+       { date: "2026-03-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCAZn3sjlCBTKlD0MMBVCmVAd2pmVaXH0-nOT4_AgwVfbU?e=ggcADo" },   
+       { date: "2026-03-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBAZru5brY8RL23To1vFGZjAX8ZfSlXz_GFABn6w4Jx5n0?e=C73qlc" },   
+       { date: "2026-03-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCctCzDKlCnSbPqSQ-8FftAAa9gu8jhTtHO0-FXjDUH4vc?e=mtaRRO" },  
+       { date: "2026-03-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAwigwN6JXEQL_vrpF5PCwBATYav-bK6wDF85USoXxedvQ?e=NIofhM" },     
+       { date: "2026-03-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQACp_bssmBVSYlM_3hcqx1pAT2h0pSr7FJodc1kWio5VKs?e=HsMV5c" },  
+       { date: "2026-03-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAHBxqdKiCdTozXcPDGXisBAd5Zz37RhW4GUlvKIFCkbRQ?e=MfI4Yd" },
+
+       { date: "2026-03-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDuMAcw0THORLuoA1oKj7rHAdGii5nwgfBmXwUjVdYQXWw?e=FCdns7" },
+       { date: "2026-03-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDfUr19GqmITZIdLx2YmPGLAXlySF7BO0kewoAUvKyZw8c?e=gb0Enp" },
+       { date: "2026-03-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBi3WG_oDtEQacm10G9uO8iAaYGPu_1zSRaTtgjO2jA-P4?e=uJbAJy" },
+       { date: "2026-03-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBGkESGF2W-Rp9sH5_tNomUAY9xyYDSXLJ4qxFuNhz1BXQ?e=RiSjhR" },
+       { date: "2026-03-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD-xt4F8w37RZP_IRw4nd4vARQPwYxyzqNhOiLar9Xs1LU?e=sh1acA" },
+       { date: "2026-03-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC3yqjBZGd3TqykVQjnf3XHAWXH1OtM98u0bNnNTb4LC70?e=N6Lj3u" },
+       { date: "2026-03-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBs6JKWkfxvR51H4eAo9844AXwLkbDtsnd1V85tlIoLghM?e=sGSTiU" },
+       { date: "2026-03-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDauD3A9A-GT6c0DeHdsCZUAWJZQXW_3cDBjk2Q7NcdMlI?e=JD9lU5" },
+    
+      { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA9rbZyhqdKSbjnXB-mJfvwAe7FLCAqcQTR8lW-drTz-oQ?e=gNlwC8" },
+      { date: "2026-02-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAHX_IsqAtMSIGjwZb0NUejAR-aVPG6RsmYfK2Q-5f-PcM?e=Y2cwrg" },
+    
+      { date: "2026-02-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBRSEHq9i8tSLuyrrLvyWLTAfVsrDfv8CQ1_ZSsWb9ICB4?e=2As9wd" },
+      { date: "2026-02-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCcM2BMo35fQ7ea68nrPx-tAWDKGgw86sUvWSZG072h0AQ?e=DhK3Fe" },
+    
+      { date: "2026-02-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCk3lJdRRdhRa61Cr-_n53GAdyOVZ_dyUgxMDPNRq4ae9Q?e=jgkBeW" },
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBVCHMh0dH8SI-M1A9C9HhVAaIHibOic_tRt5v9NvueyXA?e=QWuseM" },
+      { date: "2026-02-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBfaRLhPXZOQIBvdV4jjYzqAYkVzJDu8AdalO7hwLYysU8?e=nxVcbG" },
+      { date: "2026-02-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAf2_feWbMqR6Yj3fagTGSuAWbq6hZpIz4-bPQa-VHITQI?e=xWc1GT" },
+      { date: "2026-02-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQByvjC4wTyMSqNSRzKA1ERqAZ5wd49m7e8Y_p2sFEEJNtU?e=cysW1q" },
+      
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBEFjLgEfQOR4pdBB0_D2ieAaIFxuD1Cx2Wuw3MZMMeyKw?e=6yZuqL" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCq2H7-xl4iQIiDfkDgikTqAZPX9GiI9agcPx2f7af5Nm8?e=Kgo1Nv" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDAMitPwqhYRZpmNZuCGNCyASRlEKKKefyprk9cwQThPwo?e=56SU1M" },       
+   
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDidSqkmS8VRJJtGnlWz149AS0Q-owbZvPVu3EpJ9mGYLE?e=l8Lt1s" },       
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB97Ed1DOegRI1mdRBxDqBzAW4csqrSXuoztIhk_r0fvpU?e=lM4UYb" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBPCsDzE2Y9Ro73UANTV9UMAdOkp2VtotwffjMTo_QYL0g?e=8jBsUV" },   
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQABP_spG1gSRpd658j21J5qAWz74Mexx-ftPAPI2qNu9gM?e=qd5Vrk" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZtZi5ylsZQ79MsH5-3lMuAczrsAB7Mi2JvKDtAFyC5W8?e=JIng1q" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBd1Hxv9v5vSKYT_intqFvgAcb7t-rKduuFhwhTQE5AxOc?e=vQwy8n" },
+      { date: "2026-01-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD9bPv-Wuj2RLPQo4oIi3SGARERKrkPWqjT_N-KelgaSI0?e=1RW0UP" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBEx1L6HumUTb6SRgSVsm_AAcDw_YITHZ_qsEsXJge9e5o?e=gKfvhj" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDFLkYmzDFxRb-NcGTs7oznAeLhapA-Qbogfc0Teu3POu4?e=REgc0k" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAEBzG5qzA0Qb98NgqzfMkbAcLvSoIYTN84wyDjsGGUr1s?e=xCcZy4" }
+    ],
+    maintenance: [
+      { date: "2026-04-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC1kC9L2em3SKVu0Ll5E72GAT6bMPgCuKREUmJWsAcD9gM?e=GGFj1v" },  
+      { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDn8ya2Lo9WTILCaAV2llNKAYsd4tioL4sgZP1V0OY_FUA?e=jb9Hgf" },  
+    
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCdeN95G4bARbvQAUN8Q_jIAbO6_DRR3ZJ4zcz6Jcm6hYM?e=blIDO7" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB31r_GR5_USqGxmcjfP_JDAZI43PORW_M7SvZ567n5IfE?e=DwoyJ5" },
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChG7dWhdGHRa_3Pbzw6TDHAbmnhZwUbUbIAEilmT819UA?e=6mwkoZ" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGsqTeXFLZQqNbbSUSzsS2AQFwjgYyBYr87-3Va7kyQiE?e=eDujzA",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800121.pdf"
+  },
+
+  SP3: {
+      archive: [
+      
+        { date: "2026-05-19", url: "" },      
+        { date: "2026-05-18", url: "" },    
+        { date: "2026-05-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAptJTE_C4IRaQYnlqlL0S_AXvAgpT2g8_GoqhiWwPtxDA?e=3H871q" },     
+        { date: "2026-05-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAXqx6CizPhQZ0Ud09eE_fYAWqlqsPvcT0bEseuwEbd6aA?e=gzMyad" },    
+        { date: "2026-05-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAn3CO68Y68QJyKDO8urfLcAevHAphMbZ9Rv7E2Qg7G6oc?e=Y8jpDR" },   
+        { date: "2026-05-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDAnij_CbKgQZXx6PHqjTdEATbFIr86UXPxuM9E1aL1_YI?e=mAyBlN" },    
+        { date: "2026-05-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDKgeQS6q6hSbs0SiArIOeiAXxl0XsM6kzZFkoxKXAsKV0?e=BWhECR" },    
+        { date: "2026-05-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD9Kn1UUYd8SJZOGHzCZimxAWm0jGL5tCDIwzRgOsUCGuA?e=QWegYp" },    
+        { date: "2026-05-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDkrAcryKcQQrnz4FEJ3N0-AVwDJlAkcemS0ue3-MvlHi4?e=gfkBiS" },   
+        { date: "2026-05-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDUFTVVVFSlS6zjHP56roLTAZDfCv5TrE7jGsy4CZFg0A8?e=icnfDo" },    
+        { date: "2026-05-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBTgz0fDaDURKmvslzR4EgyATyZvPsa-U5Etm2Yeocbrxk?e=ICIgyD" }, 
+        { date: "2026-05-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAA2Hfj_mzrSYhOQu2vUXz9AWQMsPCO0J6IdqNAQHXohpE?e=ejZzkd" },    
+     
+        { date: "2026-05-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAiJWIgZpqsQbth1dTKztdYAcdYhsKb4CX_etw1KXuqH7A?e=Q570Eq" },
+        { date: "2026-05-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAq6hsus_gWS5GlL6EgG4rsAR0DIq9hEqxvllOBYqThjNU?e=55nc6L" },
+  	    { date: "2026-05-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCK5VFXL_hHQZEELJowqmm3ATxToZuQTsfyRetH0Y5cEDc?e=8bNbKd" }, 
+		{ date: "2026-05-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDhT1_Rm-TBQphXTdIFnrLkAd9lCeXyiEAf4LeFmt5CKVs?e=udr9lE" },    
+    
+     
+		{ date: "2026-04-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDoCFseHnEeRLTjpv4B9gX0Adm2_D9A2Ww5hy9Wc0wNuGI?e=894c4w" },    
+	    { date: "2026-04-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB3CgqFPqPMR6pyY0FXqe14ASkCPBUHY-g7W7gEYQuMQwE?e=e9q86L" },    
+	    { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB9cLCHY4v3RKXan_w0gei5Ae0Q6w20YYr79Mg-YSUeDYI?e=wGDfFR" },
+        { date: "2026-04-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCScGh2K7ylToWp_O0pic5_ATyy_tBxvA3WtZXj1Zf3Cjw?e=d1KWHl" },        
+        { date: "2026-04-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDiBP2Jn7AmTLWAIJzpRD1OAZtS_yivktlMT0EUHWpgie4?e=o7RDZE" }, 
+        { date: "2026-04-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCT1Au300p6TaMr3PXnOLyrAQZ365nZ-zmVpse4Wvo0jrg?e=L15kdg" }, 
+        { date: "2026-04-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAilPFIAC6fRZ1itiYnBSkOAZV_Y-lsteJ6PsIA338zB0E?e=WX1gIJ" }, 
+        { date: "2026-04-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCqxt2soreSTq2kH8oW9wtLASJfnbNpAFAc9WXOK2yGj-4?e=xmCAvO" }, 
+        { date: "2026-04-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBj4TJNWzlpRJ0VrSaIFXI7AcTi8BTBiz2A1llZ0DiHZ3E?e=5QpebX" }, 
+        { date: "2026-04-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQALhigpCNjqRJDt6l7EXSRTARQbouMJgHIcg_Qxs8CZQVE?e=B5f7gj" }, 
+        { date: "2026-04-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAfG2mwmvhaRaqNJQjzSylZAeT7U2xNk7Uty0vdCRYcH6Q?e=ZJUDnN" }, 
+        { date: "2026-04-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC1PjC43nTeQoyj2Zl1XZdRAQlvEQJhAPyUGsyVilSAdQc?e=1iDshO" }, 
+        { date: "2026-04-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCHuEc-rNP6QaSsa9S2BsLyAcL7Jvw5a4mLBhBOJWU-Wck?e=9uCwY6" }, 
+        { date: "2026-04-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBwUqHcQlq5T5S4Y7fVxMJJAVMGlekzIV1PB2rc4t8iAZI?e=caTogp" }, 
+        { date: "2026-04-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC3CHuBvwHhRq5L3OZESdFbAZMYy5p2I39FTHsMvmkEe84?e=9kmz0E" }, 
+        { date: "2026-04-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA-sbVPUWfHSIQRObquEABCAbFfSkJY9BidLr6d5VbflJE?e=DaxzmO" }, 
+        { date: "2026-04-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDnLznMC8T1QrDIwCVrQI9gARhs-VtaIeULhHs2l-hHMJs?e=VmdfMf" }, 
+        { date: "2026-04-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBJtEvfbM1LT47tDSPA39pnAeDJZo3F4pKo0ee7LVA2MRo?e=psCgWX" }, 
+        { date: "2026-04-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYnoZ-8_QMSZ4TbRcuf3xMAZw7FsYsDTVpLXMxdgxzScQ?e=cb67Q0" }, 
+        { date: "2026-04-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCmskrTvz_kS6qVDsGuffctAcoKpbl02MSC-pmzO0F2CCo?e=2j7kaQ" }, 
+        { date: "2026-04-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAjTw4i7UgORL-dWSyKZa2eARLFDBe_a93EEXFcm-i1ty0?e=ruqEZB" }, 
+        { date: "2026-04-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAcGx-H6FeZQYFYdjTqaAwuAebXZj4pop_SmwgHsYV4LSc?e=n6jerY" }, 
+        { date: "2026-04-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBahjRTdlR9SIqq1EvDDVPFAXeZqS8iv03z7bcLAPO9SP4?e=sbKRtE" }, 
+        { date: "2026-04-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCjROHmHg1UT4qdyRG3hoQoAVEuOFy-k5b1JlDsTqmoTvA?e=ZqASxt" }, 
+
+       { date: "2026-03-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBMV5IUyoHeRbnQ7B9cJdzIAcw7L7fqSeNMMNs42ezeVvs?e=fJ42Ng" }, 
+       { date: "2026-03-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB18F5HXmO-QIyJTRca_fUNAeqraCitYoPXQ0UJb8xmk5E?e=2LKYxo" }, 
+       { date: "2026-03-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChkE5RwTc6QrIyPi-98EzKAS1tBDMjtmLjd7V5f2y2vVE?e=5SNYjV" },
+       { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCpKhAtU0ytQYe_ULK81P01AVHFP2s0GagL7hGpBgHHHBI?e=Gd6xWi" },
+       { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA05T1r7nI5QbhXYp-f1t9YAe46e9dkbDdzZP8qnvi-KwA?e=POkykS" },  
+       { date: "2026-03-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB1rMe-2mTPSIzUDVl4mHgFAegZrnxZzMMz_uXhoAvqh9Y?e=3fGnh2" },   
+       { date: "2026-03-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDAuOfvUDQXRIh6OQHGK4zaAWnUFGIMJxgoYwgHossq2bU?e=XVeuhB" },   
+       { date: "2026-03-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC31Da91AzORJgoxsNT6tCiAb3sqvxShxhy_nHgFw3AJbU?e=jp5PK8" },  
+
+     
+       { date: "2026-03-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDehevjsX1oTpkY_TXpcZYWAaJPJ6dOCq2yCiW1hFx1j7U?e=SxUH8d" },  
+       { date: "2026-03-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBef6L9lOgoS6QALOuW9nSEAQcPWsqwr0bdMaHrhwhbMpg?e=3ZwBbb" },   
+       { date: "2026-03-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC9yBVLBOnsRaKIYrPI-OewAUOV2oBHhdBBexQtwRma5f8?e=d2EvgV" },   
+       { date: "2026-03-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDOZx7sQv5pRIO1RPUzTNDRAX8k5nWxtXUxHwJBrB5k13E?e=dUGiuB" },  
+       { date: "2026-03-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDVNpuz-jOMQJbvvf-xnKqUAdYlgf8DKmS8wFPbqNHVV-k?e=fO9Rij" },     
+       { date: "2026-03-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAlbSutn2KtRbVQ7nOthltTAeP5HFNhd6-sLf7I0MqeI2Q?e=7ntAlL" },  
+       { date: "2026-03-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCB8fNbzfy-RJqZG1BMe5KJAXbJyG8KwJTbZsd5dZ-euMU?e=fCjx8Y" },
+
+       { date: "2026-03-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB0tNz855JxSIOE3sC74JxoAYE6pb30pEi9_6KV3IPqGCI?e=Bp6ybc" },
+       { date: "2026-03-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBgHZ0uvFA3SLUU58nfIu_IAWBtuTi9bp04VVOSfIlFCUg?e=z5HmZI" },
+       { date: "2026-03-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAkOCb0sL3oSr4vettighM5AYy2l5rXjkNNI3uzcwfS_Vk?e=7DQuBo" },
+       { date: "2026-03-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB8Vm0XEyN_QaL2RdT0JHhaASF5EmpZAQuxvZfxEHsZKWQ?e=e0tg9K" },
+       { date: "2026-03-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQALZHshDnJbQpOXRag-tR1fAW3vicxPnkUkq-mzGHPNR7o?e=p9Z0kL" },
+       { date: "2026-03-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQATZKFPEsBEQqJEoPVk6W-wAeXiZkk_TRUqNOcd0kaNfgQ?e=FYkRDj" },
+       { date: "2026-03-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCzRHV9lXo-SYXtWsjLuoWeAY-7Rx4Tq0J2Bk1eATbMGqQ?e=sE8W7f" },
+       { date: "2026-03-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCP9USNsKUPT5saASrmqKl2Ae2MDmmzEZiQFA7VH1NULPQ?e=h2s2Ww" },    
+       { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBucd4dz2aoSatTqU6MhfJxAWOZoDe1l6o5d5dc_s3WxtQ?e=5YNOdU" },
+       { date: "2026-02-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDSzfVbh9FCR4hv_dx4Y8s5Aa-x6WSjiTrpZN0pDR-FFB0?e=JtnPH1" },
+      
+       { date: "2026-02-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCRMXH2lNVDRor6O9dmd_xIAXZaWZVOmxH2fFRHmfR1uJU?e=rgYP0f" },
+       { date: "2026-02-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBEZpEHWYi1RodLjznFhWMfAV4vu36kIBT0d7lYIqKM-4Y?e=ChMbvR" },
+      
+      { date: "2026-02-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDwWNANzFhyTr_DxUK5D1CUAa4a9dq47aFArbe8zUJOhmo?e=RJOWii" },
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCmGF2JVfp6TL9fesJd5IvDAW3s5Qyxoj9ISlb7PO9kbfY?e=ZGkwyV" },
+      { date: "2026-02-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCCI4Zmjn7zRIWidnIbHKlVAWo8bmhhwsfNb2vIjHMmCEU?e=KMrazv" },
+      { date: "2026-02-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDj6p5zGVFoQI0PNEZAmpfIAajFfw9I8KGYtBuEYbzOkhM?e=tWj6mE" },
+      { date: "2026-02-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAuawtzE6ikQYB95MdyfmndARfmQSd2D_ZxQaH1DBuj2HE?e=OwjkGG" },
+      
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAPvtaxAmbgQauykFf_bKz4ASQWXnldzN7WdswqFdYxCMw?e=viyEnq" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAzMavjngG9SLhTz6DZ0A8BAbFSfdXC_EpucfnDFFWTPPQ?e=hBdNPT" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQARooH119XWQ6fcRZkJht4NAVN2kuRZfcrMI8NBPeKfuUQ?e=qvztVj" },       
+
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAvEvpkr2dsRKJXwH3gCNgzAcHGw5JVskQJYDOPdDRMUvk?e=roebwO" },         
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC2D4QCcTzURbD2igynTBJuAU5cYro39BsRJ_AoNRW1-LY?e=t5tKt7" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBjBSk47nipTqSMUCcq6vNwAV6l0LewtjLZ-cZhTOzxl1I?e=Gl7ZLl" },         
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCUWj-rC6f2R4rb6Bq22JiHAWzo2hnag76qUfm1lzbE68M?e=XPrxQP" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCZAHngp7aoQ6W8qtehYZ8IAbD5MP1adE7NaIwBAJ3x3mk?e=iXaTa1" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD0DTovVeGmQZR50B2hdfr7ARGlpWJDA8QQUUOixs3xdVw?e=a7Y7Xg" },   
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKjbx42NNdSrd0GxJtw4myARji0keycCyuDGRgX6a0MCE?e=zS5ti7" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNGwrqQaoJSJdq6ep1VdDVAWFR0PTvXa1xuHLuxhD1ef4?e=q7q05O" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDKR1RackY-QJ54eOQFnW-TAf7ss5YzK7fxgg0cJ_XCvzo?e=03IfE2" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBVmvltVJN1Spapk5J455bwAcyb4HkdZ5fmV4HF69dLKyw?e=cgM2oi" }
+    ],
+    maintenance: [
+      { date: "2026-04-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBqA3c-zShGTqHrvBhUNeGoAZzgSv02bt9ZbGZg5_Fv7f8?e=H8f1yg" },  
+      { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBa4e36ZyewQ5mylyK966RvAVY-ZApxDBAbo3ll-KhwTY8?e=B08WBb" },  
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB6DHmH8TkgQJysj9xvGXwnAbHoDjqbCqGHcLXUPR2BDLA?e=YnBTA6" },
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDqnbdxeZCGS7wdUHR_0vrdAan6lmltHG1i3TFov0KK6c8?e=mrvA2p" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGsqTeXFLZQqNbbSUSzsS2AQFwjgYyBYr87-3Va7kyQiE?e=eDujzA",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800124.pdf"
+  },
+
+  SP4: {
+    archive: [
+        { date: "2026-05-19", url: "" },      
+        { date: "2026-05-18", url: "" },    
+        { date: "2026-05-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAhHPkwJNoJQaoK5mk4mZ1uAbKoJkr3yz-2JXL8NYhLws0?e=AJcs4M" },     
+        { date: "2026-05-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAvKzE-0TNtSYvFokBjl9GIATbtyrSiVF7ZxViY3uUzmJE?e=r4knIc" },    
+        { date: "2026-05-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBTb03QEn5ITYBiAKA7faLZAdPK_tGKL1SvNe5TIvim5mk?e=fJ74xv" },      
+        { date: "2026-05-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCONjW-_9K6RI-moPvrjgPtAbJCJHL_-oE5arF_lFyNSzE?e=slQS91" },    
+        { date: "2026-05-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAgNJLopUBJTbjDMhbZ0ohPAYsUCg2NVASzqu6_Cmg_luY?e=WxnQX9" },    
+        { date: "2026-05-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAveMDRI9scT6vXqU1wncMHAaDNmeXrwODQ9FAJZxZPyQs?e=pWph7R" },    
+        { date: "2026-05-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB39EyLZUmTQr2dFnfI2OFyASo66UW1U_M_L4MSt-IVPeY?e=64sq31" },   
+        { date: "2026-05-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCmo_xEfDSbQpz5vRCj37qNAUAcvPBeGBifCb2MmWMN9wk?e=uhRbcg" },    
+        { date: "2026-05-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBHQUj91JswQKhfdUDlbjWlAWsNxya0LaSA7ytvm1aLEyc?e=Sf2a4p" }, 
+        { date: "2026-05-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA1zIqHbSwBTa5ZVLPGTR3tAYU2Gn1F7ygYwnkhDx3Hwco?e=duj1Mg" },     
+        { date: "2026-05-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCSPuq8JwPbT4ba-AVpGdwFASOYrvRIkC3JVdLpWIIb0bY?e=vNH3mX" },    
+        { date: "2026-05-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBtWKswOwoJT5tKMal3nNUmAf66nvvAJmZVawIaiX80SIQ?e=cZOdhW" },
+        { date: "REPORT (8800127) 04-05-2026", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCtVymPSBirQqrP8PAduon3AbRRkw_uPnBFQzgDz-vN26I?e=CmaAX3" },       
+  	    { date: "2026-05-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKDQnwI92aRoSzCAyYahtQAVDwGJPAqIcJzZClB2781Yc?e=HMLbei" }, 
+		{ date: "2026-05-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAhXpdzDjXtS5QT53vulqAiASqeVVK4OnkoiJVT5tqk-QA?e=4y0V54" },    
+		{ date: "REPORT (8800127) 30-04-2026", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDhSzmE0iAuT5RuT91l5e_oAQnV5V8gWLRxEtf69z3OxAA?e=LvawLx" },    
+		{ date: "2026-04-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAU8bnNojTZTq_7wFiNMbkSAWi4pRQ9Ym1IT-YtVrgHwt0?e=roKpLF" },    
+	    { date: "2026-04-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBFI0kynvvgSqLVkTmhVSutAfy0eRy4_fu_3iIcfQh6Rkg?e=j9SDVO" },    
+	    { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCT-rZSrGPnQZ-WYp-5Fil-AcfcF0QMvanwv8qcmbXp8w4?e=9cvmwE" },
+        { date: "2026-04-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD2dYN6Q3K5Qb_tJCTmWNbCAZZJTmEQJevDNJB7yaLUizo?e=UWRtwr" },      
+        { date: "2026-04-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDDTRXJyRm9RqAsXbctX3TbAXbDQy0PkOJXQtIVDgXsgGc?e=ulhPSq" }, 
+        { date: "2026-04-22", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAzrtpRs_FHSqo9Mh4Jk5fdAcZVp9AYZaHi8lC9SYt_10I?e=EfGwut" }, 
+        { date: "2026-04-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQByyBjKGAXCRq4yA72_BjIkAXa46Hj4pu6XjBAjlcQc8dM?e=56gDUB" }, 
+        { date: "2026-04-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDdtZd3wrTCR64fV23qfUGqATBeL7LetUOpqKaLcM373UA?e=ocnqYH" }, 
+        { date: "2026-04-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQATmZHblbpvQZLfrj9f89VGAc4Gl2Cy7uKCM45Wps7Fhb4?e=yJeZTg" }, 
+        { date: "2026-04-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC1TwNPH8BTRIOOu1oq3afiAWwr9tijuN_mmLvVAvsVPfU?e=iF6qt7" }, 
+        { date: "2026-04-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA2FPJIB-oUTZV4lPXBGPYbAQFUZE4B1OcAXI-cnv0EOFo?e=CRem7M" }, 
+        { date: "2026-04-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDjrMFcyaVPQ6_lesuXR_30AfWphvKqxnzjlKEYQqno2yc?e=xxpqJB" }, 
+        { date: "2026-04-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDenNwxdbLBQZwl1_FIPg3dAciUvEZFqD9zSmDVanLAHbg?e=dbGZEq" }, 
+        { date: "2026-04-13", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBM8KF5fQLPTb7mYyuv455FARnvgBmwgRaZYhltxJ4cunk?e=hFjryR" }, 
+        { date: "2026-04-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBmr1_TzQxXToRRJgmZ08MyAXy54_xijdbBKf52ecoNHHw?e=sxUEIk" }, 
+        { date: "2026-04-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAj68EB9ofZSLQmm34kgX1pAWQBnKudY5a3tD_GiwOo3Rc?e=vNWlgA" }, 
+        { date: "2026-04-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC7MZoQo3knQIV03gqyboSEAZg_r-NDbFisR-TSxr13IrY?e=8wDYcc" }, 
+        { date: "2026-04-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCIJS7hSUFeRppJy2fFJ1MgAXR_YTTiNrYHUiKHO-t4swo?e=1kromB" }, 
+        { date: "2026-04-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBw4eGq6igQRasq7F-JSqiLASnol1EHTusmHanDDz1oQP8?e=Ezw3yw" }, 
+        { date: "2026-04-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCk0EpSSegfRrf3VrH_TXa3ATPHqwkx3Uqax-pPaPzElYY?e=vvv8xI" }, 
+        { date: "2026-04-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD_Nf24HuLCSL_Bz6G9QOMQASzvYRLIKb7kc7WO_OzDQ-o?e=5y3dk1" }, 
+        { date: "2026-04-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBvHGBQVnoBS7YXNvHxGLMWAfMmRYXaLHwkzVGeM-jBNgQ?e=k8ychd" }, 
+        { date: "2026-04-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBCo3DkOOEESpZW3_HpGNomAVTQtbrUtd_ueNOMNu-N3oU?e=mitLpX" }, 
+        { date: "2026-04-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKuXGO7S-6Qq2Ei53_Ebt1AZ_kRT5z1Mj8di2R7I7JiFk?e=AJgAkX" }, 
+
+       { date: "2026-03-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCt9WjXBHZ9R4j7tFaZirWqAY9Oaq1Uo5KW2DS4y250E6s?e=23asDb" }, 
+       { date: "2026-03-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB5VXzavA-sT4KfOyQQBpr8AXev40HPcSM_tSVvLFTGseg?e=Qn9aMv" }, 
+       { date: "2026-03-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAxMVKdntW8QIjoAgnvT2IxARaISIG7hMwwNah2L6C-2p0?e=UILYb0" },
+       { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCtu_lUR31BQr03ipWhbQJDAaIyssnKAzKCo8kkmi6dM9c?e=LzRhbA" },
+       { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAASkavwxUSRakwsDe3xPW8AZfaqCEb0lCwFaWs0_-78_o?e=EGyYcg" },  
+       { date: "2026-03-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB8OS3QS_spSIeKPwwWC1DUAUMepxi_BE2J7ZuS7aB7A6o?e=cZoAQA" },   
+       { date: "2026-03-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDdPz3v8D3IQbmZeIpYk0PpASSwqm2ucVzMkTtRe7GpWCI?e=n6tPv3" },   
+       { date: "2026-03-18", url: "" },  
+
+    
+       { date: "2026-03-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDcvW6kAq5WQKVpjkco4qcHAdJfai_JC2jW6ptagDmpL-4?e=oYviwY" },  
+       { date: "2026-03-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDI8gBAFz26S5K5fv1stwcjAfEkl8aC12RYfc65J9zs_V4?e=GoZIAM" },   
+       { date: "2026-03-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDtsAXOLTVSQYwW71hV2BHfAeXp6gXIlb0qyNKNT7b5GCM?e=eNEgyK" },   
+       { date: "2026-03-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCJWmzPdaFASIkunqxOvHULAbvosFxoCcS3uz7F9KFdhE0?e=XGoDvl" },  
+       { date: "2026-03-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC-DhFhe7BhT4NGd4Q5NoGxAQo2VEOzseqaT2HN_G1X5l8?e=qEPhODv" },     
+       { date: "2026-03-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCIgc-3VjucR6qF52FHrgp9ARS6d-PQmRJG6SliKjK9bng?e=vfpije" },  
+       { date: "2026-03-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDvhCYzhXTpTqSPtuw_PjkgAW1ow9N5t5lSXkgI-784T_g?e=dfRnMo" },
+
+    
+       { date: "2026-03-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDoNRkJtk42SYmlF14wNpuoARx6BlQQRVfIJH2GUOa6IUg?e=RDG9iC" },
+       { date: "2026-03-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBdforVKbkjTYvYjarY4hwcAaQhHUvS9RfCySB-8xEV9XM?e=KE7dPG" },
+       { date: "2026-03-06", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCEazGzx1NfT4r2MPrGszvDAcJFMLJXo9vDcPAPsfKxxB8?e=8DpFhD" },
+       { date: "2026-03-05", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBD2Db0WOM9QKrviQtjyW54ASd3hEVmlM0ayJdF1CADY20?e=khERRA" },
+       { date: "2026-03-04", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDxtjebb7hCSbjsdiVTMbpxAVDk4Rfo4p5zajWDmorm_5o?e=cXpajQ" },
+       { date: "2026-03-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCVVkcej4I6SrxTjskjwnZDAeB65DG4rv0B9g_5BuTDfYA?e=gbmPms" },
+       { date: "2026-03-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD3Pug85ZkCT5H2sJOoBDcyAfKF7zo5JkxdEzHnumnY2Dc?e=p9NykK" },
+       { date: "2026-03-01", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCfjAAVErPjRZZJvhGL9CORATonGbGWMF2nEg22_bdlKu8?e=AuxYKq" }, 
+      { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBGMRKw1uL0TbCXcK-W-_RdAfqDS0CbD8NcZclZYe55PHY?e=z8drql" },
+      { date: "2026-02-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDFhxB_Kkp3S5hM0DtMKtSIAcpmSFayr_PX3t_hITJ0O8c?e=7CcO6Y" }, 
+      { date: "2026-02-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAl7EdkScB6QJE7r3jqLVoOAfsDey2Rpn1MAZJNa4HGbe0?e=eNySah" },
+      { date: "2026-02-24", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQASd-_lCpGORpRSfLUFEFYzAfJHn3Qxa-HZhDfkvb7xIl0?e=iNrWhW" }, 
+      { date: "2026-02-23", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCt1PqEyhBDSpqwmWTQ-d9iAbOpiCDQPYPgR9OgaXZkhfw?e=Q7kS03" },
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBARXZasKllSaXvaGX_xKmcAfz0pluVXnBe9BRW3KBOgGc?e=BLB4ys" },
+      { date: "2026-02-19", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBS33HY6Z8lRrrCZHo4GgObAQdStGyhLLLpH67hgYVqCts?e=z9Q6IG" },
+      { date: "2026-02-18", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQALoQC9tAOlRIGrMneHlVgLAWVvLOjIkZfLMdzmvbCmT2U?e=9usoyJ" },
+      { date: "2026-02-17", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB8Mele8cmqS77v8o-wtJQ4AW12QGXq2_x6pGy9NcsEKZ4?e=Khsh2l" },       
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBdkZqJkWM3QLXAlIO15IXHARHUWaWOTc2Icdcm3R61aVw?e=JrjOyh" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD-vQLipeP4TYwqEB95hgLsAT2zj0Nnr0ECnXZT5aUjhmk?e=IbcChQ" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDZFjQa9zWbSZl0u21os4R8AaSpVTVYBVv1kipchEyPUKY?e=VhjIxb" },         
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDRv-x9rJunT40hVEkipWoNAY1CWsVAwhuleml5RIzKDCY?e=FylYE1" },        
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDJ-7waG5p1TrosFT9HCQPCAa2a99VPDKEFeO99oDU5EPg?e=BGHrhG" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAwpBUW4Y24R7GzDcMeCf3FAbD0zhhJ4sjwk0HNXJ7Lv2c?e=lRdSG9" },   
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCGGsMBEN_QTJonlqjtj3BoAfcb6zrIpjvMXWXnpGWJw0M?e=lPMwsZ" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGvUDTahYkR6zKxQZ8WTywAS7fZ26CO7YFNVoe3IBEg1E?e=qrv8tc" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCroUT4_XkHS4S7gPjF0dnuARbN7dElHOIedCZjgX_dJl0?e=eTVYN6" },   
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB0PycAqh3vRp7UC1515PIAAUJZ638nUvHtoMKi_XZuIL4?e=OJQzOS" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB7wtNDDuvERK7o2gvEkFaCAVcNaJt2QjdDR2__wKZP2JY?e=9Yby4R" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBjnIHwx6RFSp-J74__UqQZATRcN6Xl7caABR2j155HvQk?e=8B3Pzq" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCTtYajvDLHS5dJYttuXjJHAbqqaAomWlFglzmSIkyZ39c?e=XdChkK" }
+    ],
+    maintenance: [
+      { date: "2026-04-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAMnuk4ZuK4QKbgQX3fgLsAASOgZfWJrSCfl2NEIbd9gZA?e=WQ7VpM" },  
+      { date: "2026-03-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD-L0QehQ0zTJMe5uJ1TcjXAR70X1g5wt3ZNWCb28Yh8JI?e=L4oDX4" },  
+      { date: "2026-02-21", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDc72mcHe0ETZV7a91ND5gxASH9amWWav8rZhSZk9J8WrU?e=iF1BkF" },
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQClWgRxyGb-RIJ5auiu3yVlAbRO8S8hE4yJQkSVTDBfZXA?e=2EROta" },
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChG7dWhdGHRa_3Pbzw6TDHAbmnhZwUbUbIAEilmT819UA?e=6mwkoZ" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGsqTeXFLZQqNbbSUSzsS2AQFwjgYyBYr87-3Va7kyQiE?e=eDujzA",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800127.pdf"
+  },
+
+  L1: {
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L2: {
+  
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L3: {
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L4: {
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "", url: "" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L5: {
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L6: {
+    archive: [
+      { date: "", url: "" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" },
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+ 
+    "Wing C": {
+    archive: [],
+    maintenance: [
+     { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCCRmX3bJZ1S4CxR0N3OeOdAfZnASZAkXz0qTSLKP8ksOI?e=8kWFez" },      
+     { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDOa4kAmyZiTYbEiDp3SG0tARi-zWOwJ824yDNdKCy1pc0?e=8W2Yy9" },   
+     { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAy4bRq4MSZQ4eTC8dcDbXOAYh-mDO4OJynRkNXPZe4qLc?e=x1YjsB" }, 
+     { date: "2026-01-27", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB1McF-R2HDSL_RESu-ygHnAX0CnpSY89_WpV_wm89Qlaw?e=hDrziY" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHn1VgRuqGRKm63sHTU7w_AcqMnbxHqCbD314_XF3Ue8Y?e=ucdWVO",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/320043.pdf"
+  },
+
+  "CC (TC3)": {
+    archive: [],
+    maintenance: [
+     { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDFMHd5cd5kRJ0CfxoDjcH7AWttU3S6jNC1PxYDSLQoc5Q?e=xhZRQK" },      
+     { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBM2MeBbUpjQqbCBc2NuZmQAdAJUpGEk95RspXz3BtoA8Q?e=jkr4MO" },     
+     { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDLkLfDhFbTS54uLRTBgdjgARqKkc9_x1f0ANWyRC588Do?e=bPu2WW" },
+     { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAx7fv1iGINQ4KC0SU92VaqAU3_nFtn05tTt-Zg7PE_l88?e=sWe65C" }
+
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHn1VgRuqGRKm63sHTU7w_AcqMnbxHqCbD314_XF3Ue8Y?e=ucdWVO",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/320050.pdf"
+  },
+
+  "CC (TC2)": {
+    archive: [],
+    maintenance: [
+     { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBdXHIJFGAyQ4-pyTIHgvBGAS5kDpgm5Ct-N1ml_hgeUcU?e=hyqIfl" },      
+     { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBhIMGO_EpsTYTV8AfWs9dGAXGDQuKi-TJUPZyLEi2hSvA?e=t0vrsb" },     
+     { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDABjFs-wReQIc9t7SYxYa9AaHSvyB2SsvhVawYCaTKfNw?e=fD8U0u" },
+     { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDZVPZ11OAeQ7HdjD3CrzD5AW3EwhNbH1Y57NQMNL0YMfw?e=weTj3c" }
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHn1VgRuqGRKm63sHTU7w_AcqMnbxHqCbD314_XF3Ue8Y?e=ucdWVO",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/320051.pdf"
+  },
+
+  "Wing A": {
+    archive: [],
+    maintenance: [
+     { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCvFBzkC8DGSKYBkAI_M4vdAT5Mv7cfKT7VvFZDveWmXp8?e=vuyikf" },      
+     { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD5yhkCsjjhSolHlcHx7A4VAUsaHyvLnmzkZNlWn-IuLFk?e=hJ4f3M" },     
+     { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCw29W-l5LlR6bTUWjv4iW4AUxnupJED6mpiwShX_Z7wnY?e=tBK09g" },
+     { date: "2026-01-27", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBafIgnZqyPS6DS4YLpxopgAYKkGqT2OVsFLPb7Z88ANMM?e=D8eYGa" }
+    ],
+    catalog: [""],
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHn1VgRuqGRKm63sHTU7w_AcqMnbxHqCbD314_XF3Ue8Y?e=ucdWVO",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/320049.pdf"
+  },
+
+  "Wing B": {
+    archive: [],
+    maintenance: [
+   { date: "2026-04-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBeQhALyVBIQac34wV--wLOAU_wc1YjDjHjp1UBqyF6atw?e=lVaDfO" },      
+   { date: "2026-03-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAFexsU7NcuT6lx2GqfhWLTAboQhgKbGKRx5iOA11Ob5qE?e=3DazPF" },     
+   { date: "2026-02-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHrb0-ApSlRK46djpUXjWxAURtRen9lMCCb1ApDGtm2QQ?e=slAc6S" },
+   { date: "2026-01-27", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBd7YMuh1pZQYqPpvjHTPkEAYTaGUfj8WzeyoygyjT1Lzw?e=UO1dPO" }
+    ],
+    catalog: "",
+    specs: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHn1VgRuqGRKm63sHTU7w_AcqMnbxHqCbD314_XF3Ue8Y?e=ucdWVO",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/320048.pdf"
+  }
+
+};
+

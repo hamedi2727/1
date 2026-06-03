@@ -1,0 +1,1557 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style50.css">
+</head>
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr">العربية</button>
+    <button id="langEn"  class="active">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">جاهز</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative; background-color: #1a1a1a; border-radius: 8px;">
+  <div class="svg-container" id="svgContainer">
+    <!-- SVG المحدث بلون المصبة المتوافق مع المضخات -->
+    <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+      <!-- عنوان -->
+     
+
+      <!-- GRID -->
+      <g>
+        <line x1="150" y1="60" x2="150" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="350" y1="60" x2="350" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="550" y1="60" x2="550" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="750" y1="60" x2="750" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="950" y1="60" x2="950" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="1150" y1="60" x2="1150" y2="620" stroke="#333" stroke-width="0.5"/>
+
+        <line x1="100" y1="120" x2="1300" y2="120" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="210" x2="1300" y2="210" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="300" x2="1300" y2="300" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="420" x2="1300" y2="420" stroke="#333" stroke-width="0.5"/>
+        
+        
+      </g>
+<!-- خطوط الربط -->
+
+
+
+  <!-- ✅ كل التوصيلات -->
+  <path d="M 250 280 L 250 240 L 250 190" stroke="#eab308 "   stroke-width="1"/>   <!-- Line1 → L.88 1 -->
+  <path d="M 450 280 L 450 240 L 450 190"  stroke="#eab308 "stroke-width="1"/>   <!-- Line2 → L.71 -->
+<!--  <path d="M 650 280 L 650 240 L 650 190" stroke="#eab308 " stroke-width="2"/>   <!-- Line3 → L.88 -->
+<!--  <path d="M 850 280 L 850 240 L 850 190" stroke="#eab308 " stroke-width="1" />   <!-- Line4 → L.88 -->
+<!--   <path d="M 1050 280 L 1050 240 L 1050 190" stroke="#eab308 "  stroke-width="1"/> <!-- Line5 → L.71 -->
+<!--    <path d="M 1250 280 L 1250 240 L 1250 190" stroke="#eab308 " stroke-width="1"/> <!-- Line5 → L.71 -->
+ 
+<path d="M 250 190 L 250 130" fill="none" stroke="#eab308 " stroke-width="1" /><!--   1-->
+<path d="M 450 190 L 450 130" fill="none" stroke="#eab308 "   stroke-width="1" />
+<!--  <path d="M 650 190 L 650 130" fill="none"stroke="#eab308" stroke-width="2"/>  
+<!--  <path d="M 850 190 L 850 130" fill="none" stroke="#eab308" stroke-width="2"/>  -->
+<!-- <path d="M 1050 190 L 1050 130" fill="none" stroke="#eab308 "stroke-width="1"/>
+<path d="M 1250 190 L 1250 130" fill="none" stroke="#eab308 "stroke-width="1"/>
+
+
+
+ 
+<!-- Pump 4 → Line 5 class="flow-line" 22c55e -->
+<path d="M 850 420 
+        L 850 380 
+        L 1060 380 
+        L 1060 160"
+      stroke="#eab308 "
+      stroke-width="1"
+      fill="none "
+      
+/>
+
+<path d="M 1080 420 
+        L 1080 380 
+        L 1250 380 
+        L 1250 160"
+      stroke="#eab308 "
+      stroke-width="1"
+      fill="none "
+      
+/>
+
+
+        <!-- خطوط الربط -->
+      <g stroke="#E0E0E0" stroke-width="1">
+     
+
+
+<!-- Pump 1 → Line 3 -->
+<path d="M 650 420
+         L 650 360
+         L 450 360
+         L 450 200"
+      stroke="#eab308"
+      stroke-width="1"
+      fill="none"
+/>
+
+
+
+<!-- Pump 1 → Line 1 -->
+<path d="M 450 420 L 450 380 L 250 380 L 250 160"
+      stroke="#eab308"
+      stroke-width="1"
+      fill="none"
+/>
+
+      </g>
+
+
+
+
+      <!-- التسميات الجانبية -->
+      <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+      <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+      <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+      <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+      <!-- الخط الفاصل -->
+      <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+      <!-- الصف العلوي (الأجنحة والمراكز) -->
+      <!-- تم تعديل Center core 1 ليصبح بنفس لون المضخات -->
+<g id="Center_core_Slab" onclick="highlightItem('Center_core_Slab'); showDetails('Center core (Slab)','No SPB Installed')" style="cursor:pointer">
+  <rect x="180" y="100" width="140" height="60" fill="#1E88E5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="250" y="125" fill="#ffffff" font-size="14" font-weight="bold" text-anchor="middle">Center core</text>
+  <text x="250" y="145" fill="#ffffff" font-size="14" text-anchor="middle">(Slab)</text>
+</g>
+
+<g id="Wing_C" onclick="highlightItem('Wing_C'); showDetails('Wing C','SPB# 320043')" style="cursor:pointer">
+  <rect x="380" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="450" y="125" fill="#fff" font-size="14" text-anchor="middle">Wing C</text>
+  <text x="450" y="145" fill="#fff" font-size="14" text-anchor="middle">(SPB# 320043)</text>
+</g>
+
+<g id="Center_core_1" onclick="highlightItem('Center_core_1'); showDetails('CC (TC3)','SPB# 320050')" style="cursor:pointer">
+  <rect x="580" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="660" y="125" fill="#fff" font-size="14" text-anchor="middle">CC (TC3)</text>
+  <text x="660" y="145" fill="#fff" font-size="14" text-anchor="middle">(SPB# 320050)</text>
+</g>
+<g id="Center_core_2" onclick="highlightItem('Center_core_2'); showDetails('CC (TC2)','SPB# 320051')" style="cursor:pointer">
+  <rect x="780" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="860" y="125" fill="#fff" font-size="14" text-anchor="middle">CC (TC2)</text>
+  <text x="860" y="145" fill="#fff" font-size="14" text-anchor="middle">(SPB# 320051)</text>
+</g>
+<g id="Wing_A" onclick="highlightItem('Wing_A'); showDetails('Wing A','SPB# 320049')" style="cursor:pointer">
+  <rect x="1000" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="1070" y="125" fill="#fff" font-size="14" text-anchor="middle">Wing A</text>
+  <text x="1070" y="145" fill="#fff" font-size="14" text-anchor="middle">(SPB# 320049)</text>
+</g>
+<g id="Wing_B" onclick="highlightItem('Wing_B'); showDetails('Wing B','SPB# 320048')" style="cursor:pointer">
+  <rect x="1200" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="1270" y="125" fill="#fff" font-size="14" text-anchor="middle">Wing B</text>
+  <text x="1270" y="145" fill="#fff" font-size="14" text-anchor="middle">(SPB# 320048)</text>
+</g>
+
+
+      <!-- الصف الثاني (L.xx – أزرق) -->
+      <g fill="#fff" font-size="16" text-anchor="middle">
+        <rect x="210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="215">L.89</text>
+        <rect x="410" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="215">L.71</text>
+        <rect x="610" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="215">L.88</text>
+        <rect x="810" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="215">L.88</text>
+        <rect x="1010" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="215">L.71</text>
+        <rect x="1210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="215">L.68</text>
+      </g>
+
+      <!-- الصف الثالث (Line #) -->
+      <g fill="#fff" font-size="16" text-anchor="middle">
+        <rect x="210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="305">Line #1</text>
+        <rect x="410" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="305">Line #2</text>
+        <rect x="610" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="305">Line #3</text>
+        <rect x="810" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="305">Line #4</text>
+        <rect x="1010" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="305">Line #5</text>
+        <rect x="1210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="305">Line #6</text>
+      </g>
+
+      <!-- الصف السفلي (المضخات – خوخي) -->
+      <g fill="#000" font-size="16" text-anchor="middle">
+      
+  <g id="SP1" onclick="highlightItem('SP1'); showDetails('SP1','Concrete Pump')" style="cursor:pointer">
+  <rect x="380" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+  <text x="460" y="445" font-weight="bold">SP.Pump (1)</text>
+  <text x="460" y="465">8800126</text>
+</g>
+
+      
+      
+      
+        <g id="SP1" onclick="highlightItem('SP1'); showDetails('SP1','Concrete Pump')" style="cursor:pointer">
+          <rect x="380" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="460" y="445" font-weight="bold">SP.Pump (1)</text>
+          <text x="460" y="465">8800126</text>
+        </g>
+        <g id="SP2" onclick="highlightItem('SP2'); showDetails('SP2','Concrete Pump')" style="cursor:pointer">
+          <rect x="580" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="660" y="445" font-weight="bold">SP.Pump (2)</text>
+          <text x="660" y="465">8800121</text>
+        </g>
+        <g id="SP3" onclick="highlightItem('SP3'); showDetails('SP3','Concrete Pump')"  style="cursor:pointer">
+          <rect x="780" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="860" y="445" font-weight="bold">SP.Pump (3)</text>
+          <text x="860" y="465">8800124</text>
+        </g>
+        <g id="SP4" onclick="highlightItem('SP4'); showDetails('SP4','Concrete Pump')" style="cursor:pointer">
+          <rect x="980" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="1060" y="445" font-weight="bold">SP.Pump (4)</text>
+          <text x="1060" y="465">8800127</text>
+        </g>
+     
+
+
+
+
+
+    </svg>
+  </div>
+</div>  </div>
+  <!-- RIGHT: DETAILS BOX -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1 / span 2; overflow-y:auto;">
+
+    <h2 id="detailName">Select an Item</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <!-- BOX 1: الكتلوج – التأمين – المواصفات -->
+    <div class="doc-box">
+  <h2> Documents </h2>
+
+  <div class="doc-icons">
+
+    <!-- Insurance -->
+    <div class="doc-btn" id="btnInsurance"
+     href="#"
+     onclick="openPdfViewer(this.href, currentLang === 'EN' ? 'وثيقة التأمين' : 'Insurance'); return false;">
+  
+  <div>
+    <svg width="28" height="28" viewBox="0 0 64 64">
+
+      <!-- الدرع -->
+      <path d="M32 6 L54 14 L54 30 Q54 46 32 58 Q10 46 10 30 L10 14 Z"
+            fill="#2563eb"/>
+
+      <!-- إطار داخلي -->
+      <path d="M32 12 L48 18 L48 30 Q48 42 32 52 Q16 42 16 30 L16 18 Z"
+            fill="none" stroke="#ffffff" stroke-width="3"/>
+
+      <!-- علامة الصح -->
+      <path d="M24 32 L30 38 L42 26"
+            stroke="#ffffff"
+            stroke-width="4"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
+    </svg>
+  </div>
+
+  <span>Insurances</span>
+</div>
+    <!-- Schedule -->
+    
+
+    <!-- Specifications -->
+    <div class="doc-btn">
+          <div>📑</div>
+          <span><a id="btnSpecs" class="auto-style2" href="#" target="_blank"><span >Specifications</span></a></span>
+        </div>
+        
+<div class="doc-btn" id="btnCatalog"  href="#" onclick="openPdfViewer(this.href, 'Catalog'); return false;">
+  <div>📁</div>
+
+    <span>Manuel</span>
+ 
+</div>
+  </div>
+</div>
+
+  
+    <table class="pdf-table" id="pdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">Date</th>
+          <th id="pdfFileHeader">File</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— Not Files —</td></tr>
+      </tbody>
+    </table>
+
+    <!-- BOX 2: الصيانة -->
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>Maintenances</h2>
+
+      <div class="doc-icons">
+
+	
+
+
+<div class="doc-btn" onclick="showArchive()" id="btnCatalog">
+          <div>📘</div>
+          <span >Inspections</span>
+        </div>
+        
+        
+                
+
+
+<div class="doc-btn" id="maintenanceLogBtn" onclick="openRepairArchive()">
+  <div>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+         stroke="#eab308" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 3h12l6 6v12H3z"/>
+      <path d="M9 3v6h6"/>
+      <path d="M8 15h8"/>
+      <path d="M8 19h5"/>
+      <path d="M18 14l-2 2 2 2"/>
+    </svg>
+  </div>
+  <span>Repairs</span>
+</div>
+
+        <div class="doc-btn" id="maintenanceFilesBtn" onclick="showMaintenance()">
+  <div>
+    <svg width="48" height="48" viewBox="0 0 64 64">
+
+      <!-- الترس -->
+      <g fill="#4b5563">
+        <circle cx="28" cy="28" r="12"/>
+
+        <!-- الأسنان -->
+        <rect x="26" y="4" width="4" height="8"/>
+        <rect x="26" y="44" width="4" height="8"/>
+        <rect x="4" y="26" width="8" height="4"/>
+        <rect x="44" y="26" width="8" height="4"/>
+
+        <rect x="12" y="12" width="6" height="4" transform="rotate(45 15 14)"/>
+        <rect x="38" y="38" width="6" height="4" transform="rotate(45 41 40)"/>
+        <rect x="12" y="38" width="6" height="4" transform="rotate(-45 15 40)"/>
+        <rect x="38" y="12" width="6" height="4" transform="rotate(-45 41 14)"/>
+
+        <!-- خطوط داخلية -->
+        <line x1="28" y1="16" x2="28" y2="40" stroke="#4b5563" stroke-width="3"/>
+        <line x1="16" y1="28" x2="40" y2="28" stroke="#4b5563" stroke-width="3"/>
+      </g>
+
+      <!-- مركز الترس -->
+      <circle cx="28" cy="28" r="4" fill="#ffffff"/>
+
+      <!-- الدرع -->
+      <path d="M42 30 L60 34 L60 48 Q52 60 42 64 Q32 60 24 48 L24 34 Z"
+            fill="#2b7bbb"/>
+
+      <!-- الصح -->
+      <path d="M32 46 L38 52 L52 38"
+            stroke="#ffffff"
+            stroke-width="3"
+            fill="none"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <span>Maintenances</span>
+</div>
+     </div>
+    </div>
+
+    
+
+    <table class="pdf-table" id="maintenancePdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>File</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+<!-- BOX 3: تقارير الخطوط + المطابقة + المستندات -->
+<div class="doc-box" style="margin-top:20px;">
+  <h2>Reports</h2>
+
+  <div class="doc-icons">
+
+    <!-- زر تقارير الخطوط -->
+    <div class="doc-btn" onclick="openLineReports()">
+      <div>📊</div>
+      <span>Line Reports</span>
+    </div>
+
+    <!-- زر المطابقة -->
+    <div class="doc-btn" onclick="openMatching()">
+      <div>✔️</div>
+      <span>Matching</span>
+    </div>
+
+    <!-- زر المستندات -->
+    <div class="doc-btn" onclick="openDocuments()">
+      <div>📂</div>
+      <span>Documents</span>
+    </div>
+
+</div>
+</div>
+
+  </div>
+
+  <!-- REPORT BOX -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>Operations Report</h2>
+
+    <div class="doc-icons" style="margin-top:15px;">
+      <div class="doc-btn" onclick="openDailyReport()">
+        <div>📅</div>
+        <span>Daily Report</span>
+      </div>
+
+      <div class="doc-btn" onclick="openMonthlyReport()">
+        <div>📊</div>
+        <span>Pouring Reports</span>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+<script src="script_data.js"></script>
+
+<script>
+
+
+
+
+
+
+
+
+
+
+/* =======================
+   SHOW DETAILS
+======================= */
+
+function showDetails(id, type) {
+
+  document.querySelectorAll(".doc-box").forEach(box => box.style.display = "block");
+
+  selectedItem = { id, type };
+
+  document.getElementById("detailName").textContent = id;
+  document.getElementById("detailInfo").innerHTML = `<p>${type}</p>`;
+
+  document.getElementById("btnCatalog").href = pdfArchive[id]?.catalog || "#";
+  document.getElementById("btnSpecs").href = pdfArchive[id]?.specs || "#";
+  document.getElementById("btnInsurance").href = pdfArchive[id]?.insurance || "#";
+
+  renderPDFTable(id);
+  renderMaintenancePDF(id);
+}
+
+function hideAllTables() {
+  document.getElementById("pdfTable").style.display = "none";
+  document.getElementById("maintenancePdfTable").style.display = "none";
+}
+function showMaintenanceFiles() {
+  hideAllTables();
+  if (selectedItem) {
+    renderMaintenancePDF(selectedItem.id);
+    document.getElementById("maintenancePdfTable").style.display = "table";
+  }
+}
+/* =======================
+   PDF TABLES
+======================= */
+
+function renderPDFTable(id) {
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.archive || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function renderMaintenancePDF(id) {
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.maintenance || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+
+/* =======================
+   DATE & TIME
+======================= */
+
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString(currentLang === "ar" ? "ar-EG" : "en-GB");
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* =======================
+   LANGUAGE SWITCH
+======================= */
+
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  applyLanguage();
+};
+
+function applyLanguage() {
+
+  if (currentLang === "ar") {
+    document.body.dir = "rtl";
+
+    document.getElementById("mapTitle").textContent = "المخطط الهندسي";
+    document.getElementById("legendTitle").textContent = "رسم بياني – وضع تشغيل الخطوط";
+    document.getElementById("legendActive").textContent = "نشط";
+    document.getElementById("legendStandby").textContent = "جاهز";
+    document.getElementById("legendIdle").textContent = "خامل";
+
+    document.getElementById("pdfTitle").textContent = "أرشيف ملفات PDF";
+    document.getElementById("pdfDateHeader").textContent = "التاريخ";
+    document.getElementById("pdfFileHeader").textContent = "الملف";
+
+    // ترجمة الأزرار
+    document.querySelector("#btnInsurance span").textContent = "التأمين";
+    document.querySelector("#btnCatalog span").textContent = "سجل الفحص";
+    document.querySelector("#btnSpecs span").textContent = "المواصفات";
+
+    document.querySelector("#maintenanceLogBtn span").textContent = "سجل الصيانة";
+    document.querySelector("#scheduleBtn span").textContent = "الجدولة";
+    document.querySelector("#maintenanceFilesBtn span").textContent = "ملفات الصيانة";
+
+    document.getElementById("langAr").classList.add("active");
+    document.getElementById("langEn").classList.remove("active");
+  }
+
+  else {
+    document.body.dir = "ltr";
+
+    document.getElementById("mapTitle").textContent = "Schematic System of Operations";
+    document.getElementById("legendTitle").textContent = "";
+    document.getElementById("legendActive").textContent = "Active";
+    document.getElementById("legendStandby").textContent = "Ready";
+    document.getElementById("legendIdle").textContent = "Idle";
+
+    document.getElementById("pdfTitle").textContent = "PDF Archive";
+    document.getElementById("pdfDateHeader").textContent = "Date";
+    document.getElementById("pdfFileHeader").textContent = "File";
+
+    // ترجمة الأزرار
+    document.querySelector("#btnInsurance span").textContent = "Insurance";
+    document.querySelector("#btnCatalog span").textContent = "Inspection Log";
+    document.querySelector("#btnSpecs span").textContent = "Specifications";
+
+    document.querySelector("#maintenanceLogBtn span").textContent = "Documents";
+    document.querySelector("#scheduleBtn span").textContent = "Schedule";
+    document.querySelector("#maintenanceFilesBtn span").textContent = "Maintenance Files";
+
+    document.getElementById("langEn").classList.add("active");
+    document.getElementById("langAr").classList.remove("active");
+  }
+
+  updateDateTime();
+}
+/* =======================
+   POPUP WINDOW
+======================= */
+
+function openPopup(title, content) {
+  document.getElementById("popupTitle").textContent = title;
+  document.getElementById("popupContent").innerHTML = content;
+
+  document.getElementById("popupOverlay").style.display = "block";
+  document.getElementById("popupWindow").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+  document.getElementById("popupWindow").style.display = "none";
+}
+
+/* =======================
+   REPORTS
+======================= */
+
+function openDailyReport() {
+  openPopup(
+    "التقرير اليومي",
+    `
+      <p>هنا يمكنك عرض تقرير التشغيل اليومي.</p>
+      <ul>
+        <li>عدد ساعات التشغيل</li>
+        <li>عدد الأعطال</li>
+        <li>الخطوط النشطة</li>
+        <li>ملاحظات اليوم</li>
+      </ul>
+    `
+  );
+}
+
+function openMonthlyReport() {
+  openPopup(
+    "التقرير الشهري",
+    `
+      <p>هنا يمكنك عرض تقرير التشغيل الشهري.</p>
+      <ul>
+        <li>إجمالي ساعات التشغيل</li>
+        <li>إحصائيات الأعطال</li>
+        <li>مقارنة الأداء بين الأسابيع</li>
+        <li>مؤشرات التحسين</li>
+      </ul>
+    `
+  );
+}
+
+/* =======================
+   PDF VIEWER (Insurance only)
+======================= */
+
+
+function openPdfViewer(url, title = "عرض ملف PDF") {
+
+  const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
+
+  openPopup(
+    title,
+    `
+      <iframe src="${viewerUrl}" style="
+        width:100%;
+        height:500px;
+        border:none;
+        border-radius:8px;
+        background:#fff;
+      "></iframe>
+    `
+  );
+}
+
+function showMaintenanceLog() {
+  const title = currentLang === "ar" ? "سجل الصيانة" : "Documents";
+  const content =
+    currentLang === "ar"
+      ? "<p>هنا يمكن ربط أو عرض سجل الصيانة التفصيلي من النظام أو ملف خارجي.</p>"
+      : "<p>Here you can link or display the detailed Documents from the system or an external file.</p>";
+  openPopup(title, content);
+}
+
+function showSchedule() {
+  const title = currentLang === "ar" ? "الجدولة" : "Schedule";
+  const content =
+    currentLang === "ar"
+      ? "<p>هنا يمكن عرض خطة الصيانة المجدولة (أسبوعية / شهرية / سنوية).</p>"
+      : "<p>Here you can display the scheduled maintenance plan (weekly / monthly / yearly).</p>";
+  openPopup(title, content);
+}
+function openRepairReport() {
+    // عنوان الـ Popup
+    document.getElementById("popupTitle").innerText = "Repair Report";
+
+    // محتوى الـ Popup
+    document.getElementById("popupContent").innerHTML = `
+        <h3 style="margin-bottom:10px;">Maintenance & Repair Report</h3>
+        <p>This section will contain repair logs, maintenance actions, and related documents.</p>
+
+        <ul style="margin-top:10px; line-height:1.8;">
+            <li>✔ Equipment inspection details</li>
+            <li>✔ Repair actions performed</li>
+            <li>✔ Spare parts used</li>
+            <li>✔ Technician notes</li>
+        </ul>
+    `;
+
+    // إظهار الـ Popup
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+
+
+function showArchive() {
+
+  // عنوان البوب أب
+  document.getElementById("popupTitle").innerText = "سجل الفحص";
+
+  // محتوى الجدول (نفس الجدول لكن داخل popup)
+  document.getElementById("popupContent").innerHTML = `
+    <table style="width:100%; border-collapse: collapse; text-align:center;">
+      <thead>
+        <tr style="background:#1e293b;">
+          <th style="padding:8px; border:1px solid #334155;">التاريخ</th>
+          <th style="padding:8px; border:1px solid #334155;">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:8px; border:1px solid #334155;">2026-05-01</td>
+          <td style="padding:8px; border:1px solid #334155;">
+            <a href="#" style="color:#38bdf8;">Inspection_Report_1.pdf</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td style="padding:8px; border:1px solid #334155;">2026-05-05</td>
+          <td style="padding:8px; border:1px solid #334155;">
+            <a href="#" style="color:#38bdf8;">Inspection_Report_2.pdf</a>
+          </td>
+        </tr>
+
+        <tr>
+          <td colspan="2" style="padding:10px;">— يمكنك إضافة المزيد —</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+
+  // إظهار البوب أب
+  document.getElementById("popupOverlay").style.display = "block";
+  document.getElementById("popupWindow").style.display = "block";
+}
+
+
+
+/* =======================
+   ✅ SHOW ARCHIVE (FIXED)
+======================= */
+function showArchive() {
+
+  // تحقق من اختيار عنصر
+  if (!selectedItem) {
+    alert("❗ الرجاء اختيار عنصر أولاً");
+    return;
+  }
+
+  const files = pdfArchive[selectedItem.id]?.archive || [];
+
+  let rows = "";
+
+  if (!files.length) {
+    rows = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+  } else {
+
+    // ترتيب حسب التاريخ (الأحدث أولاً)
+    files.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    files.forEach(f => {
+
+      // تجاهل القيم الفارغة
+      if (!f.url || !f.url.startsWith("http")) return;
+
+      rows += `
+        <tr>
+          <td style="padding:8px; border:1px solid #334155;">
+            ${f.date || "-"}
+          </td>
+
+          <td style="padding:8px; border:1px solid #334155;">
+            <a href="${f.url}" target="_blank" style="color:#38bdf8;">
+              📄 View report
+            </a>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  document.getElementById("popupTitle").innerText =
+    "سجل الفحص - " + selectedItem.id;
+
+  document.getElementById("popupContent").innerHTML = `
+    <div style="max-height:400px; overflow-y:auto;">
+      <table style="width:100%; border-collapse: collapse; text-align:center;">
+        
+        <thead>
+          <tr style="background:#1e293b;">
+            <th style="padding:8px; border:1px solid #334155;">التاريخ</th>
+            <th style="padding:8px; border:1px solid #334155;">الملف</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+
+      </table>
+    </div>
+  `;
+
+  document.getElementById("popupOverlay").style.display = "block";
+  document.getElementById("popupWindow").style.display = "block";
+}
+
+/* =======================
+   ✅ CLOSE POPUP
+======================= */
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+  document.getElementById("popupWindow").style.display = "none";
+}
+
+/* =======================
+   ✅ SELECT ITEM
+======================= */
+function selectItem(id) {
+  selectedItem = { id };
+  showArchive();
+}
+/* =======================
+   ✅ SHOW MAINTENANCE (FIXED)
+======================= */
+
+function showMaintenance() {
+
+  // تحقق من اختيار عنصر
+  if (!selectedItem) {
+    alert("❗ الرجاء اختيار عنصر أولاً");
+    return;
+  }
+
+  const files = pdfArchive[selectedItem.id]?.maintenance || [];
+
+  let rows = "";
+
+  if (!files.length) {
+    rows = `<tr><td colspan="2">— لا توجد ملفات صيانة —</td></tr>`;
+  } else {
+
+    // ترتيب حسب التاريخ
+    files.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    files.forEach(f => {
+
+      // تجاهل الروابط الفارغة
+      if (!f.url || !f.url.startsWith("http")) return;
+
+      rows += `
+        <tr>
+          <td style="padding:8px; border:1px solid #334155;">
+            ${f.date || "-"}
+          </td>
+
+          <td style="padding:8px; border:1px solid #334155;">
+            <a href="${f.url}" target="_blank" style="color:#22c55e;">
+              🔧 
+            </a>
+          </td>
+        </tr>
+      `;
+    });
+  }
+
+  document.getElementById("popupTitle").innerText =
+    "سجل الصيانة - " + selectedItem.id;
+
+  document.getElementById("popupContent").innerHTML = `
+    <div style="max-height:400px; overflow-y:auto;">
+      <table style="width:100%; border-collapse: collapse; text-align:center;">
+        
+        <thead>
+          <tr style="background:#1e293b;">
+            <th style="padding:8px; border:1px solid #334155;">التاريخ</th>
+            <th style="padding:8px; border:1px solid #334155;">الملف</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${rows}
+        </tbody>
+
+      </table>
+    </div>
+  `;
+
+  document.getElementById("popupOverlay").style.display = "block";
+  document.getElementById("popupWindow").style.display = "block";
+}
+
+
+function highlightItem(id) {
+    // إزالة التمييز من كل العناصر
+    document.querySelectorAll('.selected-item').forEach(el => {
+        el.classList.remove('selected-item');
+    });
+
+    // إضافة التمييز للعنصر الذي تم النقر عليه
+    const item = document.getElementById(id);
+    if (item) {
+        item.classList.add('selected-item');
+    }
+}
+function pieChart(containerId, data) {
+    const total = Object.values(data).reduce((a, b) => a + b, 0);
+    const container = document.getElementById(containerId);
+
+    let cumulative = 0;
+    let slices = "";
+
+    const colors = [
+        "#3b82f6", "#22c55e", "#f97316", "#eab308",
+        "#8b5cf6", "#ec4899", "#14b8a6", "#0ea5e9"
+    ];
+
+    let i = 0;
+
+    Object.keys(data).forEach(key => {
+        const value = data[key];
+        const start = cumulative / total * 360;
+        const end = (cumulative + value) / total * 360;
+        cumulative += value;
+
+        slices += `
+            <div class="pie-slice" style="
+                --start:${start}deg;
+                --end:${end}deg;
+                background:${colors[i % colors.length]};
+            " title="${key}: ${value} m³"></div>
+        `;
+
+        i++;
+    });
+
+    container.innerHTML = `
+        <div class="pie-chart">${slices}</div>
+        <div class="pie-legend">
+            ${Object.keys(data).map((key, idx) => `
+                <div class="legend-item">
+                    <span class="legend-color" style="background:${colors[idx % colors.length]}"></span>
+                    ${key} (${data[key]} m³)
+                </div>
+            `).join("")}
+        </div>
+    `;
+}
+
+function openMonthlyReport() {
+
+    // Open popup
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+    document.getElementById("popupTitle").innerText =
+        "Concrete Pouring Report ";
+
+    // ============================
+    // Official Data (English Version)
+    // ============================
+
+    const mixtures = { 
+        "Mixture C40": 5437, 
+        "Mixture C85": 13750, 
+        "Mixture C75": 0 
+    };
+
+    const pumps = {
+        "SP 8800126": 2476,
+        "SP 8800121": 7593,
+        "SP 8800124": 3627,
+        "SP 8800127": 5491
+    };
+
+    const lines = {
+        "Line 1": 1866,
+        "Line 2": 2027,
+        "Line 3": 6038,
+        "Line 4": 3160,
+        "Line 5": 3687,
+        "Line 6": 2409
+    };
+
+    const elements = {
+        "Slab": 5437,
+        "Wall": 13750
+    };
+
+    const spb = {
+        "SPB 320043": 2000,
+        "SPB 320048": 2281,
+        "SPB 320049": 3474,
+        "SPB 320050": 5707,
+        "SPB 320051": 3088,
+        "Pipeline": 2637
+    };
+
+    const total = 19187;
+
+    const dailyPours = [
+        { date: "2026-01-03", qty: 320, mixture: "Mixture C40", pump: "SP 8800126", line: "Line 1", element: "Slab", spb: "SPB 320043" },
+        { date: "2026-01-05", qty: 410, mixture: "Mixture C85", pump: "SP 8800121", line: "Line 3", element: "Wall", spb: "SPB 320048" },
+        { date: "2026-01-08", qty: 380, mixture: "Mixture C85", pump: "SP 8800127", line: "Line 5", element: "Wall", spb: "SPB 320050" },
+        { date: "2026-01-10", qty: 290, mixture: "Mixture C40", pump: "SP 8800124", line: "Line 2", element: "Slab", spb: "SPB 320049" },
+        { date: "2026-01-12", qty: 450, mixture: "Mixture C85", pump: "SP 8800121", line: "Line 4", element: "Wall", spb: "SPB 320051" },
+        { date: "2026-01-15", qty: 520, mixture: "Mixture C85", pump: "SP 8800127", line: "Line 6", element: "Wall", spb: "Pipeline" }
+    ];
+
+    // ============================
+    // Tabs (English)
+    // ============================
+
+    document.getElementById("popupContent").innerHTML = `
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('overviewTab', this)">Overview</button>
+            <button class="tab-btn" onclick="switchTab('mixturesTab', this)">Mixtures</button>
+            <button class="tab-btn" onclick="switchTab('pumpsTab', this)">Concrete Pumps (SP)</button>
+            <button class="tab-btn" onclick="switchTab('linesTab', this)">ID Lines</button>
+            <button class="tab-btn" onclick="switchTab('elementsTab', this)">Elements</button>
+            <button class="tab-btn" onclick="switchTab('spbTab', this)">Placing Boom (SPB)</button>
+            <button class="tab-btn" onclick="switchTab('dailyTab', this)">Daily Pours</button>
+        </div>
+
+        <div id="overviewTab" class="tab-content" style="display:block;"></div>
+        <div id="mixturesTab" class="tab-content" style="display:none;"></div>
+        <div id="pumpsTab" class="tab-content" style="display:none;"></div>
+        <div id="linesTab" class="tab-content" style="display:none;"></div>
+        <div id="elementsTab" class="tab-content" style="display:none;"></div>
+        <div id="spbTab" class="tab-content" style="display:none;"></div>
+        <div id="dailyTab" class="tab-content" style="display:none;"></div>
+    `;
+
+    // ============================
+    // Helper Functions
+    // ============================
+
+    function fillCards(id, data) {
+        document.getElementById(id).innerHTML = Object.keys(data).map(k => `
+            <div class="card">
+                <div class="card-title">${k}</div>
+                <div class="card-value">${data[k]} m³</div>
+            </div>
+        `).join("");
+    }
+
+    function barChart(id, data, color) {
+        document.getElementById(id).innerHTML = Object.keys(data).map(k => `
+            <div style="margin:6px 0;">
+                <div>${k} — ${data[k]} m³</div>
+                <div style="height:14px; background:#1e293b;">
+                    <div style="width:${(data[k] / total) * 100}%; height:100%; background:${color};"></div>
+                </div>
+            </div>
+        `).join("");
+    }
+
+    window.toggleSection = id => {
+        document.getElementById(id).classList.toggle("open");
+    };
+
+    // ============================
+    // Overview Tab (NO PIE CHARTS)
+    // ============================
+
+    document.getElementById("overviewTab").innerHTML = `
+        <div id="sectionMixtures" class="section open">
+            <div class="section-header" onclick="toggleSection('sectionMixtures')">Mixtures <span>▼</span></div>
+            <div class="section-content">
+                <div id="mixturesCards" class="card-grid"></div>
+                <h4>Bar Chart</h4>
+                <div id="mixturesChart"></div>
+            </div>
+        </div>
+
+        <div id="sectionPumps" class="section">
+            <div class="section-header" onclick="toggleSection('sectionPumps')">Concrete Pumps (SP) <span>▼</span></div>
+            <div class="section-content">
+                <div id="pumpsCards" class="card-grid"></div>
+                <h4>Bar Chart</h4>
+                <div id="pumpsChart"></div>
+            </div>
+        </div>
+
+        <div id="sectionLines" class="section">
+            <div class="section-header" onclick="toggleSection('sectionLines')">ID Lines <span>▼</span></div>
+            <div class="section-content">
+                <div id="linesCards" class="card-grid"></div>
+                <h4>Bar Chart</h4>
+                <div id="linesChart"></div>
+            </div>
+        </div>
+
+        <div id="sectionElements" class="section">
+            <div class="section-header" onclick="toggleSection('sectionElements')">Elements <span>▼</span></div>
+            <div class="section-content">
+                <div id="elementsCards" class="card-grid"></div>
+                <h4>Bar Chart</h4>
+                <div id="elementsChart"></div>
+            </div>
+        </div>
+
+        <div id="sectionSPB" class="section">
+            <div class="section-header" onclick="toggleSection('sectionSPB')">Placing Boom (SPB) <span>▼</span></div>
+            <div class="section-content">
+                <div id="spbCards" class="card-grid"></div>
+                <h4>Bar Chart</h4>
+                <div id="spbChart"></div>
+            </div>
+        </div>
+    `;
+
+    fillCards("mixturesCards", mixtures);
+    fillCards("pumpsCards", pumps);
+    fillCards("linesCards", lines);
+    fillCards("elementsCards", elements);
+    fillCards("spbCards", spb);
+
+    barChart("mixturesChart", mixtures, "#3b82f6");
+    barChart("pumpsChart", pumps, "#22c55e");
+    barChart("linesChart", lines, "#f97316");
+    barChart("elementsChart", elements, "#eab308");
+    barChart("spbChart", spb, "#8b5cf6");
+
+    // ============================
+    // Mixtures Tab
+    // ============================
+
+    document.getElementById("mixturesTab").innerHTML = `
+        <h3>Mixtures Details</h3>
+        <table class="pdf-table">
+            <thead><tr><th>Mixture</th><th>Quantity</th><th>Percentage</th></tr></thead>
+            <tbody>
+                ${Object.keys(mixtures).map(t => `
+                    <tr>
+                        <td>${t}</td>
+                        <td>${mixtures[t]}</td>
+                        <td>${((mixtures[t] / total) * 100).toFixed(2)}%</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <div id="mixturesDetailChart"></div>
+    `;
+    barChart("mixturesDetailChart", mixtures, "#3b82f6");
+
+    // ============================
+    // Pumps Tab
+    // ============================
+
+    document.getElementById("pumpsTab").innerHTML = `
+        <h3>Concrete Pumps (SP)</h3>
+        <table class="pdf-table">
+            <thead><tr><th>Pump</th><th>Quantity</th><th>Percentage</th></tr></thead>
+            <tbody>
+                ${Object.keys(pumps).map(p => `
+                    <tr>
+                        <td>${p}</td>
+                        <td>${pumps[p]}</td>
+                        <td>${((pumps[p] / total) * 100).toFixed(2)}%</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <div id="pumpsDetailChart"></div>
+    `;
+    barChart("pumpsDetailChart", pumps, "#22c55e");
+
+    // ============================
+    // Lines Tab
+    // ============================
+
+    document.getElementById("linesTab").innerHTML = `
+        <h3>ID Lines</h3>
+        <table class="pdf-table">
+            <thead><tr><th>Line</th><th>Quantity</th><th>Percentage</th></tr></thead>
+            <tbody>
+                ${Object.keys(lines).map(l => `
+                    <tr>
+                        <td>${l}</td>
+                        <td>${lines[l]}</td>
+                        <td>${((lines[l] / total) * 100).toFixed(2)}%</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <div id="linesDetailChart"></div>
+    `;
+    barChart("linesDetailChart", lines, "#f97316");
+
+    // ============================
+    // Elements Tab
+    // ============================
+
+    document.getElementById("elementsTab").innerHTML = `
+        <h3>Elements</h3>
+        <table class="pdf-table">
+            <thead><tr><th>Element</th><th>Quantity</th><th>Percentage</th></tr></thead>
+            <tbody>
+                ${Object.keys(elements).map(e => `
+                    <tr>
+                        <td>${e}</td>
+                        <td>${elements[e]}</td>
+                        <td>${((elements[e] / total) * 100).toFixed(2)}%</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <div id="elementsDetailChart"></div>
+    `;
+    barChart("elementsDetailChart", elements, "#eab308");
+
+    // ============================
+    // SPB Tab
+    // ============================
+
+    document.getElementById("spbTab").innerHTML = `
+        <h3>Placing Boom (SPB)</h3>
+        <table class="pdf-table">
+            <thead><tr><th>SPB</th><th>Quantity</th><th>Percentage</th></tr></thead>
+            <tbody>
+                ${Object.keys(spb).map(s => `
+                    <tr>
+                        <td>${s}</td>
+                        <td>${spb[s]}</td>
+                        <td>${((spb[s] / total) * 100).toFixed(2)}%</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+        <div id="spbDetailChart"></div>
+    `;
+    barChart("spbDetailChart", spb, "#8b5cf6");
+
+    // ============================
+    // Daily Pours Tab
+    // ============================
+
+    document.getElementById("dailyTab").innerHTML = `
+        <h3>Daily Pours</h3>
+
+        <table class="pdf-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Quantity</th>
+                    <th>Mixture</th>
+                    <th>Pump</th>
+                    <th>Line</th>
+                    <th>Element</th>
+                    <th>SPB</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${dailyPours.map(p => `
+                    <tr>
+                        <td>${p.date}</td>
+                        <td>${p.qty}</td>
+                        <td>${p.mixture}</td>
+                        <td>${p.pump}</td>
+                        <td>${p.line}</td>
+                        <td>${p.element}</td>
+                        <td>${p.spb}</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+
+        <h4>Timeline Chart</h4>
+        <div id="dailyChart"></div>
+    `;
+
+    let dailyHTML = "";
+    dailyPours.forEach(p => {
+        dailyHTML += `
+            <div style="margin:6px 0;">
+                <div>${p.date} — ${p.qty} m³</div>
+                <div style="height:14px; background:#1e293b;">
+                    <div style="width:${(p.qty / 600) * 100}%; height:100%; background:#0ea5e9;"></div>
+                </div>
+            </div>
+        `;
+    });
+    document.getElementById("dailyChart").innerHTML = dailyHTML;
+}
+
+window.onload = function () {
+    document.getElementById("langEn").click();
+};
+
+function openLineReports() {
+    showDetails("Line Reports", "Coming soon…");
+}
+
+function openMatching() {
+    showDetails("Matching", "Coming soon…");
+}
+
+function openDocuments() {
+    showDetails("Documents", "Coming soon…");
+}
+function openLineReports() {
+    document.getElementById("popupTitle").innerText = "Line Reports";
+
+    document.getElementById("popupContent").innerHTML = `
+        <h3>Line Reports Overview</h3>
+        <p>This section will contain detailed reports for each ID Line.</p>
+
+        <ul style="margin-top:10px; line-height:1.8;">
+            <li>✔ Line performance</li>
+            <li>✔ Pouring quantities</li>
+            <li>✔ SPB usage</li>
+            <li>✔ Pump distribution</li>
+        </ul>
+    `;
+
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+
+function openMatching() {
+    document.getElementById("popupTitle").innerText = "Matching";
+
+    document.getElementById("popupContent").innerHTML = `
+        <h3>Matching System</h3>
+        <p>This section will include matching data between pumps, lines, and SPB units.</p>
+
+        <ul style="margin-top:10px; line-height:1.8;">
+            <li>✔ Pump to Line Matching</li>
+            <li>✔ SPB to Location Matching</li>
+            <li>✔ Pouring Sequence Validation</li>
+        </ul>
+    `;
+
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+
+function openDocuments() {
+    document.getElementById("popupTitle").innerText = "Documents";
+
+    document.getElementById("popupContent").innerHTML = `
+        <h3>Documents Archive</h3>
+        <p>This section will contain all related documents and PDF files.</p>
+
+        <ul style="margin-top:10px; line-height:1.8;">
+            <li>✔ Technical Documents</li>
+            <li>✔ Safety Certificates</li>
+            <li>✔ Inspection Reports</li>
+        </ul>
+    `;
+
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+function openRepairArchive() {
+
+    document.getElementById("popupTitle").innerText = "Repair Report Archive";
+
+    document.getElementById("popupContent").innerHTML = `
+        <h3 style="margin-bottom:10px;">Repair Report – PDF Archive</h3>
+
+        <table class="pdf-table" style="margin-top:15px; width:100%;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody id="repairArchiveBody">
+                <tr><td colspan="2">— No Files Available —</td></tr>
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+function openRepairArchive() {
+    document.getElementById("popupTitle").innerText = "Repair Report Archive";
+
+    document.getElementById("popupContent").innerHTML = `
+        <h3 style="margin-bottom:10px;">Repair Report – PDF Archive</h3>
+
+        <table class="pdf-table" style="margin-top:15px; width:100%;">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>File</th>
+                </tr>
+            </thead>
+            <tbody id="repairArchiveBody">
+                <tr><td colspan="2">— No Files Available —</td></tr>
+            </tbody>
+        </table>
+    `;
+
+    document.getElementById("popupOverlay").style.display = "block";
+    document.getElementById("popupWindow").style.display = "block";
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+
+let currentScale = 0.5;
+let currentTranslate = { x: 0, y: 0 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.0, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+</script>
+
+
+<!-- POPUP OVERLAY -->
+<div id="popupOverlay" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  z-index:999;
+"></div>
+
+<!-- POPUP WINDOW -->
+<div id="popupWindow" style="
+  display:none;
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  width:820px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:20px;
+  z-index:1000;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+  color:#e5e7eb;
+">
+
+  <h2 id="popupTitle" style="margin-top:0; text-align:center;"></h2>
+
+  <div id="popupContent" style="margin-top:15px; font-size:14px; line-height:1.7;">
+  </div>
+
+  <button onclick="closePopup()" style="
+    margin-top:20px;
+    width:100%;
+    padding:10px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:8px;
+    color:#e5e7eb;
+    cursor:pointer;
+    font-size:14px;
+  ">Close</button>
+
+</div>
+
+</body>
+</html>
+
+
+
+

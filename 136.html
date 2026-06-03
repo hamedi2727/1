@@ -1,0 +1,346 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style30.css">
+
+</head>
+
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">جاهز</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative; background-color: #1a1a1a; border-radius: 8px;">
+  <div class="svg-container" id="svgContainer">
+    <!-- SVG المحدث بلون المصبة المتوافق مع المضخات -->
+    <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+      <!-- عنوان -->
+      <text x="700" y="40" fill="#fff" font-size="22" text-anchor="middle">Concrete Pumping Control System</text>
+
+      <!-- GRID -->
+      <g>
+        <line x1="150" y1="60" x2="150" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="350" y1="60" x2="350" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="550" y1="60" x2="550" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="750" y1="60" x2="750" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="950" y1="60" x2="950" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="1150" y1="60" x2="1150" y2="620" stroke="#333" stroke-width="0.5"/>
+
+        <line x1="100" y1="120" x2="1300" y2="120" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="210" x2="1300" y2="210" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="300" x2="1300" y2="300" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="420" x2="1300" y2="420" stroke="#333" stroke-width="0.5"/>
+      </g>
+
+      <!-- التسميات الجانبية -->
+      <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+      <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+      <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+      <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+      <!-- الخط الفاصل -->
+      <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+      <!-- الصف العلوي (الأجنحة والمراكز) -->
+      <!-- تم تعديل Center core 1 ليصبح بنفس لون المضخات -->
+      <g id="Center core 1" onclick="showDetails('Center core 1','Placing Boom')" style="cursor:pointer">
+        <rect x="180" y="100" width="140" height="60" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="250" y="125" fill="#000" font-size="12" font-weight="bold" text-anchor="middle">Center core</text>
+        <text x="250" y="145" fill="#000" font-size="12" text-anchor="middle">(Slab)</text>
+      </g>
+
+      <g id="Wing C" onclick="showDetails('Wing C','Placing Boom')" style="cursor:pointer">
+        <rect x="380" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="450" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing C</text>
+        <text x="450" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320043)</text>
+      </g>
+
+      <g id="Center core 2" onclick="showDetails('Center core 2','Placing Boom')" style="cursor:pointer">
+        <rect x="580" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="660" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC3)</text>
+        <text x="660" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320050)</text>
+      </g>
+
+      <g id="Wing A" onclick="showDetails('Wing A','Placing Boom')" style="cursor:pointer">
+        <rect x="780" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="860" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC2)</text>
+        <text x="860" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320051)</text>
+      </g>
+
+      <g id="Wing B" onclick="showDetails('Wing B','Placing Boom')" style="cursor:pointer">
+        <rect x="1000" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="1070" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing A</text>
+        <text x="1070" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320049)</text>
+      </g>
+
+      <g id="Wing B 2" onclick="showDetails('Wing B 2','Placing Boom')" style="cursor:pointer">
+        <rect x="1200" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="1270" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing B</text>
+        <text x="1270" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320048)</text>
+      </g>
+
+      <!-- الصف الثاني (L.xx – أزرق) -->
+      <g fill="#fff" font-size="12" text-anchor="middle">
+        <rect x="210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="215">L.88</text>
+        <rect x="410" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="215">L.71</text>
+        <rect x="610" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="215">L.81</text>
+        <rect x="810" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="215">L.80</text>
+        <rect x="1010" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="215">L.71</text>
+        <rect x="1210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="215">L.68</text>
+      </g>
+
+      <!-- الصف الثالث (Line #) -->
+      <g fill="#fff" font-size="12" text-anchor="middle">
+        <rect x="210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="305">Line #1</text>
+        <rect x="410" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="305">Line #2</text>
+        <rect x="610" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="305">Line #3</text>
+        <rect x="810" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="305">Line #4</text>
+        <rect x="1010" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="305">Line #5</text>
+        <rect x="1210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="305">Line #6</text>
+      </g>
+
+      <!-- الصف السفلي (المضخات – خوخي) -->
+      <g fill="#000" font-size="12" text-anchor="middle">
+        <g id="SP1" onclick="showDetails('SP1','Concrete Pump')" style="cursor:pointer">
+          <rect x="380" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="460" y="445" font-weight="bold">SP.Pump (1)</text>
+          <text x="460" y="465">8800126</text>
+        </g>
+        <g id="SP2" onclick="showDetails('SP2','Concrete Pump')" style="cursor:pointer">
+          <rect x="580" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="660" y="445" font-weight="bold">SP.Pump (2)</text>
+          <text x="660" y="465">8800121</text>
+        </g>
+        <g id="SP3" onclick="showDetails('SP3','Concrete Pump')" style="cursor:pointer">
+          <rect x="780" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="860" y="445" font-weight="bold">SP.Pump (3)</text>
+          <text x="860" y="465">8800124</text>
+        </g>
+        <g id="SP4" onclick="showDetails('SP4','Concrete Pump')" style="cursor:pointer">
+          <rect x="980" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="1060" y="445" font-weight="bold">SP.Pump (4)</text>
+          <text x="1060" y="465">8800127</text>
+        </g>
+     
+
+      <!-- خطوط الربط -->
+      <g stroke="#E0E0E0" stroke-width="2">
+        <path d="M 250 330 L 250 380 L 450 380 L 450 420" fill="none" />
+        <path d="M 450 330 L 450 380" fill="none" />
+        <path d="M 650 330 L 650 420" fill="none" />
+        <path d="M 850 330 L 850 420" fill="none" />
+        <path d="M 1050 330 L 1050 420" fill="none" />
+        <path d="M 1250 330 L 1250 380 L 1050 380" fill="none" />
+      </g>
+
+    </svg>
+  </div>
+</div>  </div>
+  <!-- RIGHT: DETAILS BOX -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1 / span 2; overflow-y:auto;">
+
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <!-- BOX 1: الكتلوج – التأمين – المواصفات -->
+    <div class="doc-box">
+      <h2>الكتلوج – التأمين – المواصفات</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn">
+          <div>🔒</div>
+          
+            <a id="btnInsurance" href="#" onclick="openPdfViewer(this.href, 'وثيقة التأمين'); return false;" class="auto-style1">
+             <span> التأمين</span>
+            </a>
+          
+        </div>
+
+                <div class="doc-btn" id="maintenanceLogBtn" onclick="showMaintenanceLog()">
+          <div>🛠️</div>
+          <span>-</span>
+        </div>
+
+
+        <div class="doc-btn">
+          <div>📑</div>
+          <span><a id="btnSpecs" class="auto-style2" href="#" target="_blank"><span >المواصفات</span></a></span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 id="pdfTitle" style="margin-top:20px">أرشيف ملفات PDF</h3>
+
+    <table class="pdf-table" id="pdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+    <!-- BOX 2: الصيانة -->
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>الصيانة</h2>
+
+      <div class="doc-icons">
+
+	
+
+
+<div class="doc-btn" onclick="showArchive()">
+          <div>📘</div>
+          <span><a id="btnCatalog" class="auto-style2"><span >سجل الفحص</span></a></span>
+        </div>
+        <div class="doc-btn"  id="scheduleBtn"  onclick="showSchedule()">
+          <div>📅</div>
+          <span>الجدولة</span>
+        </div>
+
+        <div class="doc-btn"  id="maintenanceFilesBtn" onclick="showMaintenanceFiles()">
+          <div>📂</div>
+          <span>ملفات الصيانة</span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px">ملفات PDF الخاصة بالصيانة</h3>
+
+    <table class="pdf-table" id="maintenancePdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- REPORT BOX -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>تقرير التشغيل</h2>
+
+    <div class="doc-icons" style="margin-top:15px;">
+      <div class="doc-btn" onclick="openDailyReport()">
+        <div>📅</div>
+        <span>التقرير اليومي</span>
+      </div>
+
+      <div class="doc-btn" onclick="openMonthlyReport()">
+        <div>📊</div>
+        <span>التقرير الشهري</span>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+<script src="script32.js"></script>
+
+<!-- POPUP OVERLAY -->
+<div id="popupOverlay" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  z-index:999;
+"></div>
+
+<!-- POPUP WINDOW -->
+<div id="popupWindow" style="
+  display:none;
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  width:420px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:20px;
+  z-index:1000;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+  color:#e5e7eb;
+">
+
+  <h2 id="popupTitle" style="margin-top:0; text-align:center;"></h2>
+
+  <div id="popupContent" style="margin-top:15px; font-size:14px; line-height:1.7;">
+  </div>
+
+  <button onclick="closePopup()" style="
+    margin-top:20px;
+    width:100%;
+    padding:10px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:8px;
+    color:#e5e7eb;
+    cursor:pointer;
+    font-size:14px;
+  ">إغلاق</button>
+
+</div>
+
+</body>
+</html>
+
+
+
+

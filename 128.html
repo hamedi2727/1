@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Concrete Pump Control</title>
+    <style>
+        /* تصميمك الأصلي كما هو */
+        :root {
+            --primary-bg: #1a1a1a;
+            --sidebar-bg: #2c3e50;
+            --accent-color: #3498db;
+            --text-color: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 350px;
+            background-color: var(--sidebar-bg);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #444;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .map-container {
+            background: #252525;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* تنسيق الأزرار والجداول كما صممتها */
+        .btn-action {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background: var(--accent-color);
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        #pdfTable {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+            display: none;
+        }
+
+        #pdfTable th, #pdfTable td {
+            border: 1px solid #555;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2 id="detailName">تفاصيل العنصر</h2>
+        <div id="detailInfo">اضغط على عنصر في المخطط</div>
+        
+        <div id="linksContainer" style="display:none;">
+            <a id="insuranceLink" href="#" target="_blank" class="btn-action">وثيقة التأمين</a>
+            <a id="specsLink" href="#" target="_blank" class="btn-action">المواصفات الفنية</a>
+            <button onclick="showArchive()" class="btn-action" style="background:#27ae60; border:none; cursor:pointer;">الأرشيف اليومي</button>
+        </div>
+
+        <table id="pdfTable">
+            <thead>
+                <tr>
+                    <th>التاريخ</th>
+                    <th>الملف</th>
+                </tr>
+            </thead>
+            <tbody id="archiveBody"></tbody>
+        </table>
+    </div>
+
+    <div class="main-content">
+        <div class="map-container">
+            <svg viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                <!-- هنا تضع الـ SVG الخاص بك مع إضافة onclick لكل عنصر -->
+                <rect id="SP1" x="50" y="50" width="60" height="40" fill="#27ae60" onclick="selectElement('SP1', 'Stationary Pump 1')" style="cursor:pointer;"/>
+                <text x="60" y="75" fill="white" font-size="12" pointer-events="none">SP1</text>
+            </svg>
+        </div>
+    </div>
+
+    <script>
+        let currentElement = null;
+
+        const pdfArchive = {
+            SP1: {
+                insurance: "insurance_sp1.pdf",
+                specs: "specs_sp1.pdf",
+                archive: [
+                    { date: "2026-05-10", url: "archive_10_5.pdf" },
+                    { date: "2026-05-09", url: "archive_9_5.pdf" }
+                ]
+            }
+            // أضف بقية العناصر هنا بنفس التنسيق
+        };
+
+        function selectElement(id, name) {
+            currentElement = id;
+            document.getElementById('detailName').innerText = name;
+            document.getElementById('detailInfo').innerText = "تم اختيار: " + id;
+            document.getElementById('linksContainer').style.display = 'block';
+            document.getElementById('pdfTable').style.display = 'none';
+
+            if(pdfArchive[id]) {
+                document.getElementById('insuranceLink').href = pdfArchive[id].insurance;
+                document.getElementById('specsLink').href = pdfArchive[id].specs;
+            }
+        }
+
+        function showArchive() {
+            const tbody = document.getElementById('archiveBody');
+            tbody.innerHTML = "";
+            
+            if(currentElement && pdfArchive[currentElement]) {
+                pdfArchive[currentElement].archive.forEach(item => {
+                    tbody.innerHTML += `<tr><td>${item.date}</td><td><a href="${item.url}" target="_blank" style="color:#3498db;">عرض</a></td></tr>`;
+                });
+                document.getElementById('pdfTable').style.display = 'table';
+            }
+        }
+    </script>
+</body>
+</html>

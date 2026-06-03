@@ -1,0 +1,329 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Concrete Pumping Control System</title>
+  <style>
+    body {
+      margin: 0;
+      background: #020617;
+      color: #e5e7eb;
+      font-family: Arial, sans-serif;
+    }
+
+    #svgWrapper {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: radial-gradient(circle at top, #1e293b, #020617);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #svgContainer {
+      transform-origin: center center;
+      transition: transform 0.1s linear;
+    }
+
+    /* حركة تدفق تدريجي من الأسفل للأعلى */
+    .flow-line {
+      stroke: #ffffff;
+      stroke-width: 3;
+      cursor: pointer;
+
+      /* طول تقريبي للخطوط */
+      stroke-dasharray: 300;
+      stroke-dashoffset: 300;
+
+      /* سرعة الحركة (غيّر الرقم حسب رغبتك) */
+      animation: progressiveFlow 2.5s linear infinite;
+
+      transition: 0.25s ease;
+    }
+
+    /* الحركة التدريجية */
+    @keyframes progressiveFlow {
+      0% {
+        stroke-dashoffset: 300; /* يبدأ من الأسفل */
+      }
+      100% {
+        stroke-dashoffset: 0;   /* يصعد للأعلى */
+      }
+    }
+
+    /* عند المرور */
+    .flow-line:hover {
+      stroke-width: 4;
+      filter: drop-shadow(0 0 4px #ffffff);
+    }
+
+    /* عند النقر – توقف الحركة + إضاءة */
+    .line-active {
+      stroke-width: 6 !important;
+      filter: drop-shadow(0 0 10px #ffffff);
+      animation: none !important;
+      stroke-dashoffset: 0 !important;
+    }
+  </style>
+</head>
+<body>
+
+<div id="svgWrapper">
+  <div id="svgContainer">
+    <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+      <!-- عنوان -->
+      <text x="700" y="40" fill="#fff" font-size="22" text-anchor="middle">
+        Concrete Pumping Control System
+      </text>
+
+      <!-- GRID -->
+      <g>
+        <line x1="150" y1="60" x2="150" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="350" y1="60" x2="350" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="550" y1="60" x2="550" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="750" y1="60" x2="750" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="950" y1="60" x2="950" y2="620" stroke="#333" stroke-width="0.5"/>
+        <line x1="1150" y1="60" x2="1150" y2="620" stroke="#333" stroke-width="0.5"/>
+
+        <line x1="100" y1="120" x2="1300" y2="120" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="210" x2="1300" y2="210" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="300" x2="1300" y2="300" stroke="#333" stroke-width="0.5"/>
+        <line x1="100" y1="420" x2="1300" y2="420" stroke="#333" stroke-width="0.5"/>
+      </g>
+
+      <!-- التسميات الجانبية -->
+      <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+      <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+      <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+      <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+      <!-- الخط الفاصل -->
+      <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+      <!-- الصف العلوي (الأجنحة والمراكز) -->
+      <g id="Center core 1" onclick="showDetails('Center core 1','Placing Boom')" style="cursor:pointer">
+        <rect x="180" y="100" width="140" height="60" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="250" y="125" fill="#000" font-size="12" font-weight="bold" text-anchor="middle">Center core</text>
+        <text x="250" y="145" fill="#000" font-size="12" text-anchor="middle">(Slab)</text>
+      </g>
+
+      <g id="Wing C" onclick="showDetails('Wing C','Placing Boom')" style="cursor:pointer">
+        <rect x="380" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="450" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing C</text>
+        <text x="450" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320043)</text>
+      </g>
+
+      <g id="Center core 2" onclick="showDetails('Center core 2','Placing Boom')" style="cursor:pointer">
+        <rect x="580" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="660" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC3)</text>
+        <text x="660" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320050)</text>
+      </g>
+
+      <g id="Wing A" onclick="showDetails('Wing A','Placing Boom')" style="cursor:pointer">
+        <rect x="780" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="860" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC2)</text>
+        <text x="860" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320051)</text>
+      </g>
+
+      <g id="Wing B" onclick="showDetails('Wing B','Placing Boom')" style="cursor:pointer">
+        <rect x="1000" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="1070" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing A</text>
+        <text x="1070" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320049)</text>
+      </g>
+
+      <g id="Wing B 2" onclick="showDetails('Wing B 2','Placing Boom')" style="cursor:pointer">
+        <rect x="1200" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+        <text x="1270" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing B</text>
+        <text x="1270" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320048)</text>
+      </g>
+
+      <!-- الصف الثاني (L.xx – أزرق) -->
+      <g fill="#fff" font-size="12" text-anchor="middle">
+        <rect x="210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="215">L.88</text>
+        <rect x="410" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="215">L.71</text>
+        <rect x="610" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="215">L.81</text>
+        <rect x="810" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="215">L.80</text>
+        <rect x="1010" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="215">L.71</text>
+        <rect x="1210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="215">L.68</text>
+      </g>
+
+      <!-- الصف الثالث (Line #) -->
+      <g fill="#fff" font-size="12" text-anchor="middle">
+        <rect x="210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="250" y="305">Line #1</text>
+        <rect x="410" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="450" y="305">Line #2</text>
+        <rect x="610" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="650" y="305">Line #3</text>
+        <rect x="810" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="850" y="305">Line #4</text>
+        <rect x="1010" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1050" y="305">Line #5</text>
+        <rect x="1210" y="280" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/><text x="1250" y="305">Line #6</text>
+      </g>
+
+      <!-- الصف السفلي (المضخات – خوخي) -->
+      <g fill="#000" font-size="12" text-anchor="middle">
+        <g id="SP1" onclick="showDetails('SP1','Concrete Pump')" style="cursor:pointer">
+          <rect x="380" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="460" y="445" font-weight="bold">SP.Pump (1)</text>
+          <text x="460" y="465">8800126</text>
+        </g>
+        <g id="SP2" onclick="showDetails('SP2','Concrete Pump')" style="cursor:pointer">
+          <rect x="580" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="660" y="445" font-weight="bold">SP.Pump (2)</text>
+          <text x="660" y="465">8800121</text>
+        </g>
+        <g id="SP3" onclick="showDetails('SP3','Concrete Pump')" style="cursor:pointer">
+          <rect x="780" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="860" y="445" font-weight="bold">SP.Pump (3)</text>
+          <text x="860" y="465">8800124</text>
+        </g>
+        <g id="SP4" onclick="showDetails('SP4','Concrete Pump')" style="cursor:pointer">
+          <rect x="980" y="420" width="160" height="70" fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+          <text x="1060" y="445" font-weight="bold">SP.Pump (4)</text>
+          <text x="1060" y="465">8800127</text>
+        </g>
+    
+
+      <!-- خطوط الربط الأصلية (خلفية) -->
+      <g stroke="#E0E0E0" stroke-width="2">
+        <path d="M 250 330 L 250 380 L 450 380 L 450 420" fill="none" />
+        <path d="M 450 330 L 450 380" fill="none" />
+        <path d="M 650 330 L 650 420" fill="none" />
+        <path d="M 850 330 L 850 420" fill="none" />
+        <path d="M 1050 330 L 1050 420" fill="none" />
+        <path d="M 1250 330 L 1250 380 L 1050 380" fill="none" />
+      </g>
+
+      <!-- خطوط التدفق (من المضخات → ID Lines → Lev.Reducer → Locations) -->
+      <g>
+
+        <!-- من المضخات إلى ID Lines (رأسي مستقيم) -->
+        <!-- SP1 → Line #2 -->
+        <line id="FL_SP1_L2" class="flow-line"
+              x1="460" y1="420" x2="450" y2="330"
+              onclick="highlightLine('FL_SP1_L2')" />
+
+        <!-- SP2 → Line #3 -->
+        <line id="FL_SP2_L3" class="flow-line"
+              x1="660" y1="420" x2="650" y2="330"
+              onclick="highlightLine('FL_SP2_L3')" />
+
+        <!-- SP3 → Line #4 -->
+        <line id="FL_SP3_L4" class="flow-line"
+              x1="860" y1="420" x2="850" y2="330"
+              onclick="highlightLine('FL_SP3_L4')" />
+
+        <!-- SP4 → Line #5 -->
+        <line id="FL_SP4_L5" class="flow-line"
+              x1="1060" y1="420" x2="1050" y2="330"
+              onclick="highlightLine('FL_SP4_L5')" />
+
+        <!-- من ID Lines إلى Lev.Reducer (رأسي) -->
+        <line id="FL_L1_R1" class="flow-line"
+              x1="250" y1="330" x2="250" y2="240"
+              onclick="highlightLine('FL_L1_R1')" />
+
+        <line id="FL_L2_R2" class="flow-line"
+              x1="450" y1="330" x2="450" y2="240"
+              onclick="highlightLine('FL_L2_R2')" />
+
+        <line id="FL_L3_R3" class="flow-line"
+              x1="650" y1="330" x2="650" y2="240"
+              onclick="highlightLine('FL_L3_R3')" />
+
+        <line id="FL_L4_R4" class="flow-line"
+              x1="850" y1="330" x2="850" y2="240"
+              onclick="highlightLine('FL_L4_R4')" />
+
+        <line id="FL_L5_R5" class="flow-line"
+              x1="1050" y1="330" x2="1050" y2="240"
+              onclick="highlightLine('FL_L5_R5')" />
+
+        <line id="FL_L6_R6" class="flow-line"
+              x1="1250" y1="330" x2="1250" y2="240"
+              onclick="highlightLine('FL_L6_R6')" />
+
+        <!-- من Lev.Reducer إلى Locations (رأسي) -->
+        <line id="FL_R1_LOC1" class="flow-line"
+              x1="250" y1="190" x2="250" y2="160"
+              onclick="highlightLine('FL_R1_LOC1')" />
+
+        <line id="FL_R2_LOC2" class="flow-line"
+              x1="450" y1="190" x2="450" y2="160"
+              onclick="highlightLine('FL_R2_LOC2')" />
+
+        <line id="FL_R3_LOC3" class="flow-line"
+              x1="650" y1="190" x2="650" y2="160"
+              onclick="highlightLine('FL_R3_LOC3')" />
+
+        <line id="FL_R4_LOC4" class="flow-line"
+              x1="850" y1="190" x2="850" y2="160"
+              onclick="highlightLine('FL_R4_LOC4')" />
+
+        <line id="FL_R5_LOC5" class="flow-line"
+              x1="1050" y1="190" x2="1050" y2="160"
+              onclick="highlightLine('FL_R5_LOC5')" />
+
+        <line id="FL_R6_LOC6" class="flow-line"
+              x1="1250" y1="190" x2="1250" y2="160"
+              onclick="highlightLine('FL_R6_LOC6')" />
+
+      </g>
+
+    </svg>
+  </div>
+</div>
+
+<script>
+  // دالة بسيطة حتى لا يحدث خطأ عند الضغط على العناصر
+  function showDetails(id, type) {
+    console.log('Show details:', id, type);
+  }
+
+  // تمييز خط التدفق عند النقر
+  function highlightLine(id) {
+    document.querySelectorAll(".flow-line")
+      .forEach(l => l.classList.remove("line-active"));
+    const el = document.getElementById(id);
+    if (el) el.classList.add("line-active");
+  }
+
+  // زوم + سحب بسيط (اختياري)
+  let currentScale = 1;
+  let currentTranslate = { x: 0, y: 0 };
+  let isPanning = false;
+  let startPan = { x: 0, y: 0 };
+
+  const svgContainer = document.getElementById("svgContainer");
+  const svgWrapper = document.getElementById("svgWrapper");
+
+  function updateTransform() {
+    svgContainer.style.transform =
+      `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+  }
+
+  svgWrapper.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const delta = e.deltaY < 0 ? 0.1 : -0.1;
+    currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+    updateTransform();
+  });
+
+  svgWrapper.addEventListener("mousedown", (e) => {
+    isPanning = true;
+    startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+  });
+
+  window.addEventListener("mousemove", (e) => {
+    if (!isPanning) return;
+    currentTranslate.x = e.clientX - startPan.x;
+    currentTranslate.y = e.clientY - startPan.y;
+    updateTransform();
+  });
+
+  window.addEventListener("mouseup", () => {
+    isPanning = false;
+  });
+</script>
+
+</body>
+</html>

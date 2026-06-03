@@ -1,0 +1,208 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام التحكم والمتابعة الهندسي</title>
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --panel-bg: #1e293b;
+            --active-green: #22c55e; /* لون التشغيل */
+            --border-color: #334155;
+            --text-main: #e5e7eb;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        /* تنسيق الـ Slab والخطوط */
+        #Slab { 
+            fill: var(--panel-bg); /* تلوين الـ Slab بنفس لون المربعات */
+            stroke: var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        /* الخطوط النشطة */
+        .line-active {
+            stroke: var(--active-green) !important;
+            stroke-width: 3;
+            filter: drop-shadow(0 0 5px var(--active-green));
+        }
+
+        /* المضخات النشطة */
+        .pump-active {
+            fill: var(--active-green) !important;
+        }
+
+        /* تنسيق واجهة المستخدم */
+        .container { display: flex; height: 100vh; }
+        .map-section { flex: 1; position: relative; background: #000; overflow: hidden; }
+        .details-panel { width: 400px; background: var(--panel-bg); border-left: 1px solid var(--border-color); padding: 20px; overflow-y: auto; }
+        
+        .doc-box { display: none; margin-top: 20px; border: 1px solid var(--border-color); padding: 15px; border-radius: 8px; }
+        .pdf-icon { cursor: pointer; text-decoration: none; font-size: 20px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; font-size: 12px; }
+        
+        .btn-main {
+            background: #334155; border: 1px solid #475569; color: #fff;
+            padding: 8px 12px; border-radius: 6px; cursor: pointer; margin: 5px 0;
+            display: flex; align-items: center; justify-content: center; width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- منطقة المخطط الهندسي -->
+    <div class="map-section" id="svgWrapper">
+        <div id="svgContainer">
+            <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+                <!-- المربع المعدل Slab -->
+                <rect id="Slab" x="100" y="100" width="800" height="400" rx="10" />
+
+                <!-- الخطوط (Line 3 & Line 4) -->
+                <!-- تم إضافة class "line-active" لتلوينها بالأخضر -->
+                <path id="Line3" d="M150 200 L400 200" fill="none" class="line-active" />
+                <path id="Line4" d="M150 300 L400 300" fill="none" class="line-active" />
+
+                <!-- المضخات الموصلة -->
+                <!-- المضخة 8800121 موصلة بخط 3 -->
+                <circle id="pump-8800121" cx="150" cy="200" r="15" class="pump-active" onclick="showDetails('8800121', 'Pump')" />
+                <text x="135" y="180" fill="white" font-size="10">8800121</text>
+
+                <!-- المضخة 8800127 موصلة بخط 4 -->
+                <circle id="pump-8800127" cx="150" cy="300" r="15" class="pump-active" onclick="showDetails('8800127', 'Pump')" />
+                <text x="135" y="280" fill="white" font-size="10">8800127</text>
+                
+                <!-- مثال لمضخة خاملة -->
+                <circle id="pump-other" cx="150" cy="400" r="15" fill="#475569" onclick="showDetails('Other', 'Pump')" />
+            </svg>
+        </div>
+    </div>
+
+    <!-- لوحة التفاصيل -->
+    <div class="details-panel">
+        <h2 id="detailName">اختر عنصراً</h2>
+        <div id="detailInfo"></div>
+
+        <div class="doc-box">
+            <button class="btn-main" id="btnInsurance">📄 <span>التأمين</span></button>
+            <button class="btn-main" id="btnCatalog">📋 <span>سجل الفحص</span></button>
+            
+            <div style="margin-top:20px;">
+                <button class="btn-main" onclick="showMaintenanceFiles()">🛠️ ملفات الصيانة</button>
+                <button class="btn-main" onclick="showArchive()">📦 الأرشيف</button>
+            </div>
+
+            <table id="pdfTable" style="display:none;">
+                <thead><tr><th id="pdfDateHeader">التاريخ</th><th id="pdfFileHeader">الملف</th></tr></thead>
+                <tbody></tbody>
+            </table>
+
+            <table id="maintenancePdfTable" style="display:none;">
+                <thead><tr><th>التاريخ</th><th>الملف</th></tr></thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- نظام الـ POPUP -->
+<div id="popupOverlay" onclick="closePopup()"></div>
+<div id="popupWindow">
+    <h2 id="popupTitle"></h2>
+    <div id="popupContent"></div>
+    <button class="btn-main" onclick="closePopup()">إغلاق</button>
+</div>
+
+<script>
+    let selectedItem = null;
+    let currentLang = "ar";
+
+    // بيانات الأرشيف (تأكد من وجود البيانات التي أدخلتها سابقاً هنا)
+    const pdfArchive = {
+        "8800121": {
+            maintenance: [{ date: "2026-04-26", url: "#" }],
+            insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800121.pdf"
+        },
+        "8800127": {
+            maintenance: [{ date: "2026-05-01", url: "#" }],
+            insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800127.pdf"
+        }
+    };
+
+    function showDetails(id, type) {
+        document.querySelectorAll(".doc-box").forEach(box => box.style.display = "block");
+        selectedItem = { id, type };
+        document.getElementById("detailName").textContent = id;
+        document.getElementById("detailInfo").innerHTML = `<p>الحالة: <span style="color:var(--active-green)">نشط (متصل)</span></p>`;
+
+        // ربط أزرار الـ PDF
+        document.getElementById("btnInsurance").onclick = () => {
+            const url = pdfArchive[id]?.insurance;
+            if (url && url !== "#") openPdfViewer(url, "وثيقة التأمين");
+        };
+    }
+
+    function openPdfViewer(url, title) {
+        const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
+        openPopup(title, `<iframe src="${viewerUrl}" style="width:100%; height:500px; border:none;"></iframe>`);
+    }
+
+    function openPopup(title, content) {
+        document.getElementById("popupTitle").textContent = title;
+        document.getElementById("popupContent").innerHTML = content;
+        document.getElementById("popupOverlay").style.display = "block";
+        document.getElementById("popupWindow").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("popupOverlay").style.display = "none";
+        document.getElementById("popupWindow").style.display = "none";
+    }
+
+    function showMaintenanceFiles() {
+        renderTable("maintenancePdfTable", pdfArchive[selectedItem.id]?.maintenance);
+    }
+
+    function showArchive() {
+        renderTable("pdfTable", pdfArchive[selectedItem.id]?.archive);
+    }
+
+    function renderTable(tableId, data) {
+        document.getElementById("pdfTable").style.display = "none";
+        document.getElementById("maintenancePdfTable").style.display = "none";
+        const table = document.getElementById(tableId);
+        const tbody = table.querySelector("tbody");
+        tbody.innerHTML = "";
+        
+        if (data && data.length > 0) {
+            data.forEach(item => {
+                tbody.innerHTML += `<tr><td>${item.date}</td><td><a href="${item.url}" target="_blank">📄</a></td></tr>`;
+            });
+            table.style.display = "table";
+        } else {
+            tbody.innerHTML = "<tr><td colspan='2'>لا توجد بيانات</td></tr>";
+            table.style.display = "table";
+        }
+    }
+
+    // الزووم والتحريك (Zoom & Pan)
+    let currentScale = 1;
+    const svgContainer = document.getElementById("svgContainer");
+    document.getElementById("svgWrapper").addEventListener("wheel", (e) => {
+        e.preventDefault();
+        currentScale += e.deltaY * -0.001;
+        currentScale = Math.min(Math.max(.5, currentScale), 3);
+        svgContainer.style.transform = `scale(${currentScale})`;
+    });
+</script>
+</body>
+</html>

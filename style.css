@@ -1,0 +1,98 @@
+﻿body {
+    margin: 0;
+    font-family: "Tajawal", sans-serif;
+    background: #f4f4f4;
+}
+
+header {
+    background: #1a1a1a;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+nav button {
+    margin: 5px;
+    padding: 10px 20px;
+    background: #ffc107;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.page-section {
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* بطاقات المضخات */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 15px;
+}
+
+.card {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px #ccc;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.03);
+}
+
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+/* الجداول */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 0 10px #ccc;
+}
+
+.data-table th, .data-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.data-table th {
+    background: #ffc107;
+}
+
+/* نافذة التفاصيل */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+    background: white;
+    width: 60%;
+    margin: 80px auto;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.close {
+    float: left;
+    font-size: 28px;
+    cursor: pointer;
+}

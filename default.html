@@ -1,0 +1,1009 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <title>CPCREC  </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+        :root {
+            --bg-dark: #05060a;
+            --bg-section: #0b0d14;
+            --primary: #0ab3ff;
+            --primary-soft: rgba(10, 179, 255, 0.15);
+            --text-main: #f5f7fb;
+            --text-muted: #a4a9b8;
+            --accent: #1f2635;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: radial-gradient(circle at top left, #101322 0, #05060a 45%, #020308 100%);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ====== HEADER ====== */
+        header {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(5, 6, 10, 0.96), rgba(5, 6, 10, 0.85), transparent);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.7rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logo-mark {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: radial-gradient(circle at 30% 20%, #0ab3ff, #004b7a);
+            box-shadow: 0 0 18px rgba(10, 179, 255, 0.7);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::before,
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .logo-mark::before {
+            width: 70%;
+            height: 70%;
+            top: 15%;
+            right: -10%;
+        }
+
+        .logo-mark::after {
+            width: 40%;
+            height: 40%;
+            bottom: 5%;
+            left: 5%;
+        }
+
+        .logo-text-main {
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            font-size: 0.9rem;
+        }
+
+        .logo-text-sub {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        nav ul li a {
+            position: relative;
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        nav ul li a::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: -0.3rem;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #0ab3ff, #4be1ff);
+            border-radius: 999px;
+            transition: width 0.25s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--text-main);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            padding: 0.45rem 1.1rem;
+            border-radius: 999px;
+            border: 1px solid rgba(10, 179, 255, 0.7);
+            background: radial-gradient(circle at top left, rgba(10, 179, 255, 0.18), transparent);
+            color: var(--primary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 12px rgba(10, 179, 255, 0.35);
+        }
+
+        .nav-cta:hover {
+            background: radial-gradient(circle at top left, rgba(10, 179, 255, 0.3), rgba(10, 179, 255, 0.05));
+            transform: translateY(-1px);
+            box-shadow: 0 0 18px rgba(10, 179, 255, 0.55);
+        }
+
+        /* ====== HERO ====== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 6rem 1.5rem 3rem;
+        }
+
+        .hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.7rem;
+            border-radius: 999px;
+            background: rgba(10, 179, 255, 0.08);
+            border: 1px solid rgba(10, 179, 255, 0.4);
+            font-size: 0.75rem;
+            color: var(--primary);
+            margin-bottom: 0.9rem;
+        }
+
+        .hero-badge-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #0ab3ff;
+            box-shadow: 0 0 10px rgba(10, 179, 255, 0.8);
+        }
+
+        .hero-title {
+            font-size: 2.4rem;
+            line-height: 1.25;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero-title span {
+            color: var(--primary);
+        }
+
+        .hero-subtitle {
+            font-size: 0.98rem;
+            color: var(--text-muted);
+            max-width: 480px;
+            margin-bottom: 1.4rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.6rem;
+        }
+
+        .btn-primary {
+            padding: 0.6rem 1.4rem;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #0ab3ff, #4be1ff);
+            color: #020308;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(10, 179, 255, 0.6);
+            transition: transform 0.15s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 0 24px rgba(10, 179, 255, 0.85);
+        }
+
+        .btn-outline {
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.02);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s ease, border-color 0.2s ease;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .hero-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .hero-meta-item strong {
+            display: block;
+            color: var(--text-main);
+            font-size: 0.9rem;
+        }
+
+        /* Hero visual */
+        .hero-visual {
+            position: relative;
+            min-height: 260px;
+        }
+
+        .hero-card {
+            position: relative;
+            background: radial-gradient(circle at top left, rgba(10, 179, 255, 0.18), rgba(3, 6, 18, 0.98));
+            border-radius: 18px;
+            padding: 1.2rem 1.1rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.7);
+            overflow: hidden;
+        }
+
+        .hero-grid {
+            position: relative;
+            border-radius: 14px;
+            padding: 1rem;
+            background: radial-gradient(circle at top, rgba(10, 179, 255, 0.12), rgba(2, 3, 10, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .hero-grid::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 22px 22px;
+            opacity: 0.35;
+            mix-blend-mode: screen;
+        }
+
+        .hero-grid-inner {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.4rem;
+        }
+
+        .grid-node {
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(2, 3, 10, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .grid-node.highlight {
+            background: radial-gradient(circle at top left, rgba(10, 179, 255, 0.35), rgba(2, 3, 10, 0.95));
+            border-color: rgba(10, 179, 255, 0.8);
+            box-shadow: 0 0 18px rgba(10, 179, 255, 0.7);
+        }
+
+        .grid-node::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0.08), transparent 40%);
+            opacity: 0.7;
+        }
+
+        .hero-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 0.8rem;
+            margin-bottom: 0.4rem;
+            font-size: 0.8rem;
+        }
+
+        .hero-card-title {
+            font-weight: 600;
+        }
+
+        .hero-card-tag {
+            padding: 0.15rem 0.6rem;
+            border-radius: 999px;
+            background: rgba(10, 179, 255, 0.12);
+            border: 1px solid rgba(10, 179, 255, 0.5);
+            color: var(--primary);
+            font-size: 0.7rem;
+        }
+
+        .hero-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.4rem;
+        }
+
+        .hero-orbit {
+            position: absolute;
+            inset: -40px;
+            border-radius: 999px;
+            border: 1px dashed rgba(10, 179, 255, 0.25);
+            pointer-events: none;
+        }
+
+        .hero-orbit-dot {
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: #0ab3ff;
+            box-shadow: 0 0 14px rgba(10, 179, 255, 0.9);
+            top: 12%;
+            left: 18%;
+        }
+
+        .hero-floating-badge {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.4rem 0.8rem;
+            border-radius: 999px;
+            background: rgba(2, 3, 10, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .hero-floating-badge span {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #2ecc71;
+            box-shadow: 0 0 10px rgba(46, 204, 113, 0.9);
+        }
+
+        /* ====== SECTIONS ====== */
+        section {
+            padding: 3.5rem 1.5rem;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+        }
+
+        .section-kicker {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            max-width: 520px;
+        }
+
+        /* Services */
+        .services {
+            background: radial-gradient(circle at top, rgba(10, 179, 255, 0.12), rgba(5, 6, 10, 1));
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.5rem;
+        }
+
+        .service-card {
+            background: rgba(5, 6, 10, 0.96);
+            border-radius: 14px;
+            padding: 1.2rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .service-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(10, 179, 255, 0.18), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+            border-color: rgba(10, 179, 255, 0.7);
+        }
+
+        .service-card:hover::before {
+            opacity: 1;
+        }
+
+        .service-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: rgba(10, 179, 255, 0.12);
+            border: 1px solid rgba(10, 179, 255, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .service-title {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .service-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.7rem;
+        }
+
+        .service-meta {
+            font-size: 0.75rem;
+            color: var(--primary);
+        }
+
+        /* Projects */
+        .projects {
+            background: radial-gradient(circle at top right, rgba(10, 179, 255, 0.12), rgba(5, 6, 10, 1));
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.4rem;
+        }
+
+        .project-card {
+            background: rgba(5, 6, 10, 0.96);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+            border-color: rgba(10, 179, 255, 0.7);
+        }
+
+        .project-thumb {
+            height: 130px;
+            background: linear-gradient(135deg, rgba(10, 179, 255, 0.4), rgba(3, 6, 18, 1));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-thumb::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+            background-size: 26px 26px;
+            opacity: 0.4;
+            mix-blend-mode: screen;
+        }
+
+        .project-body {
+            padding: 0.9rem 0.9rem 0.8rem;
+            font-size: 0.85rem;
+        }
+
+        .project-title {
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .project-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .project-tag {
+            display: inline-flex;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            background: rgba(10, 179, 255, 0.12);
+            border: 1px solid rgba(10, 179, 255, 0.5);
+            color: var(--primary);
+            font-size: 0.7rem;
+        }
+
+        /* Contact */
+        .contact {
+            background: #05060a;
+        }
+
+        .contact-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: rgba(5, 6, 10, 0.96);
+            border-radius: 16px;
+            padding: 1.4rem 1.2rem;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .contact-row {
+            display: flex;
+            gap: 1.2rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+        }
+
+        .contact-label {
+            width: 80px;
+            color: var(--text-muted);
+        }
+
+        .contact-value {
+            color: var(--text-main);
+        }
+
+        .contact-form {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.8rem;
+        }
+
+        .field label {
+            color: var(--text-muted);
+        }
+
+        .field input,
+        .field textarea {
+            background: rgba(5, 6, 10, 0.96);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 0.5rem 0.6rem;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .field input:focus,
+        .field textarea:focus {
+            border-color: rgba(10, 179, 255, 0.8);
+            box-shadow: 0 0 0 1px rgba(10, 179, 255, 0.4);
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding: 1.2rem 1.5rem 1.5rem;
+            background: #04050a;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: minmax(0, 1fr);
+            }
+
+            .hero-visual {
+                order: -1;
+            }
+
+            .services-grid,
+            .projects-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .contact-layout {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            nav ul {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 1.9rem;
+            }
+
+            .services-grid,
+            .projects-grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-mark"></div>
+                <div>
+                    <div class="logo-text-main">CPCREC</div>
+                    <div class="logo-text-sub">استشارات هندسية وتقنية متقدمة</div>
+                </div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#hero">الرئيسية</a></li>
+                    <li><a href="#services">الخدمات</a></li>
+                    <li><a href="#projects">المشاريع</a></li>
+                    <li><a href="#contact">التواصل</a></li>
+                </ul>
+            </nav>
+            <button class="nav-cta" onclick="scrollToSection('contact')">احجز استشارة</button>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <main>
+        <section class="hero" id="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="hero-badge">
+                        <div class="hero-badge-dot"></div>
+                        <span>مكتب هندسي بتوجه تقني</span>
+                    </div>
+                    <h1 class="hero-title">
+                        حلول <span>هندسية وتقنية</span><br />
+                        لمشاريع تتطلب دقة ووضوح.
+                    </h1>
+                    <p class="hero-subtitle">
+                        في <strong>CPCREC</strong> ندمج بين الخبرة الهندسية والأنظمة الرقمية لنعطيك رؤية واضحة لمشاريعك،
+                        من الفكرة وحتى التنفيذ، مع لوحات تحكم تفاعلية وربط بيانات احترافي.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn-primary" onclick="scrollToSection('projects')">استعرض المشاريع</button>
+                        <button class="btn-outline" onclick="scrollToSection('services')">تعرف على الخدمات</button>
+                    </div>
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <strong>+10</strong>
+                            سنوات خبرة هندسية وتقنية
+                        </div>
+                        <div class="hero-meta-item">
+                            <strong>مشاريع كبرى</strong>
+                            بنية تحتية، مباني، حلول عرض بيانات
+                        </div>
+                        <div class="hero-meta-item">
+                            <strong>تكامل</strong>
+                            بين المخططات، النمذجة، ولوحات التحكم
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-visual">
+                    <div class="hero-card">
+                        <div class="hero-grid">
+                            <div class="hero-grid-inner">
+                                <div class="grid-node"></div>
+                                <div class="grid-node highlight"></div>
+                                <div class="grid-node"></div>
+                                <div class="grid-node"></div>
+
+                                <div class="grid-node"></div>
+                                <div class="grid-node"></div>
+                                <div class="grid-node highlight"></div>
+                                <div class="grid-node"></div>
+
+                                <div class="grid-node highlight"></div>
+                                <div class="grid-node"></div>
+                                <div class="grid-node"></div>
+                                <div class="grid-node"></div>
+
+                                <div class="grid-node"></div>
+                                <div class="grid-node"></div>
+                                <div class="grid-node highlight"></div>
+                                <div class="grid-node"></div>
+                            </div>
+                        </div>
+                        <div class="hero-card-header">
+                            <div class="hero-card-title">لوحة توزيع عناصر مشروع</div>
+                            <div class="hero-card-tag">عرض هندسي تفاعلي</div>
+                        </div>
+                        <div class="hero-card-footer">
+                            <span>مضخات · خطوط · بوابات · حساسات</span>
+                            <span>متصل بقاعدة بيانات حية</span>
+                        </div>
+                        <div class="hero-orbit">
+                            <div class="hero-orbit-dot"></div>
+                        </div>
+                        <div class="hero-floating-badge">
+                            <span></span>
+                            نموذج تمثيلي لأسلوب عرض بيانات مشاريع CPCREC
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SERVICES -->
+        <section class="services" id="services">
+            <div class="section-inner">
+                <div class="section-header">
+                    <div class="section-kicker">الخدمات</div>
+                    <h2 class="section-title">ما الذي يقدمه مكتب CPCREC؟</h2>
+                    <p class="section-subtitle">
+                        نغطي سلسلة متكاملة من الخدمات الهندسية والتقنية، مع تركيز خاص على وضوح البيانات، ودقة العرض،
+                        وربط المعلومات بين الموقع والمكتب.
+                    </p>
+                </div>
+
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-icon">🏗️</div>
+                        <h3 class="service-title">تصميم وإشراف هندسي</h3>
+                        <p class="service-text">
+                            إعداد مخططات معمارية وإنشائية واضحة، مع متابعة التنفيذ ميدانيًا وربط الملاحظات بنظام رقمي
+                            يسهل الرجوع له.
+                        </p>
+                        <div class="service-meta">مخططات، تقارير، ونماذج متابعة تنفيذ.</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🧠</div>
+                        <h3 class="service-title">نمذجة وحلول عرض بيانات</h3>
+                        <p class="service-text">
+                            تحويل عناصر المشروع (مضخات، خطوط، بوابات...) إلى واجهات تفاعلية، مع ربطها بقواعد بيانات
+                            وأنظمة تقارير.
+                        </p>
+                        <div class="service-meta">SVG، لوحات تحكم، تكامل مع قواعد بيانات.</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">📊</div>
+                        <h3 class="service-title">لوحات تحكم للمشاريع</h3>
+                        <p class="service-text">
+                            تصميم Dashboards هندسية تعرض حالة المشروع، تقدم الأعمال، توزيع العناصر، مع إمكانيات تصدير
+                            وتقارير.
+                        </p>
+                        <div class="service-meta">Excel، PDF، تقارير تفاعلية.</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🌐</div>
+                        <h3 class="service-title">مواقع وأنظمة للمكاتب الهندسية</h3>
+                        <p class="service-text">
+                            بناء مواقع تعريفية وأنظمة داخلية للمكاتب الهندسية، مع واجهات عربية احترافية وتجربة استخدام
+                            واضحة.
+                        </p>
+                        <div class="service-meta">واجهات ويب، تكامل مع أنظمة داخلية.</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🧩</div>
+                        <h3 class="service-title">تكامل بين المخططات والواقع</h3>
+                        <p class="service-text">
+                            ربط ما هو موجود في المخططات بما هو منفذ على أرض الواقع، مع طبقات عرض متعددة للمراجعة
+                            والتدقيق.
+                        </p>
+                        <div class="service-meta">طبقات عرض، مراجعة، توثيق.</div>
+                    </div>
+
+                    <div class="service-card">
+                        <div class="service-icon">🔐</div>
+                        <h3 class="service-title">حلول مخصصة حسب المشروع</h3>
+                        <p class="service-text">
+                            تطوير حلول خاصة لمشاريع معينة تحتاج طريقة عرض أو متابعة مختلفة، مع إمكانية التطوير التدريجي.
+                        </p>
+                        <div class="service-meta">حلول مرنة، قابلة للتوسع.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS -->
+        <section class="projects" id="projects">
+            <div class="section-inner">
+                <div class="section-header">
+                    <div class="section-kicker">المشاريع</div>
+                    <h2 class="section-title">نماذج من نوعية المشاريع</h2>
+                    <p class="section-subtitle">
+                        هذه أمثلة وصفية يمكنك لاحقًا استبدالها بمشاريعك الفعلية، مع صور حقيقية وروابط لتفاصيل أكثر.
+                    </p>
+                </div>
+
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-thumb"></div>
+                        <div class="project-body">
+                            <div class="project-title">نظام عرض مضخات وخطوط رئيسية</div>
+                            <div class="project-meta">مشروع بنية تحتية · لوحة تحكم تفاعلية</div>
+                            <div class="project-tag">ربط SVG مع قاعدة بيانات</div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-thumb"></div>
+                        <div class="project-body">
+                            <div class="project-title">لوحة متابعة صب الخرسانة لمشروع برج</div>
+                            <div class="project-meta">مشروع مبنى مرتفع · تقارير تنفيذ</div>
+                            <div class="project-tag">تصدير Excel وPDF</div>
+                        </div>
+                    </div>
+
+                    <div class="project-card">
+                        <div class="project-thumb"></div>
+                        <div class="project-body">
+                            <div class="project-title">مخطط تفاعلي متعدد الطبقات</div>
+                            <div class="project-meta">مخططات معمارية · طبقات عرض</div>
+                            <div class="project-tag">فصل عناصر، تمييز بصري</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section class="contact" id="contact">
+            <div class="section-inner">
+                <div class="section-header">
+                    <div class="section-kicker">التواصل</div>
+                    <h2 class="section-title">تواصل مع مكتب CPCREC</h2>
+                    <p class="section-subtitle">
+                        سواء كنت في مرحلة الفكرة أو في منتصف التنفيذ، يمكننا مساعدتك في تنظيم الصورة وربط البيانات
+                        بالمخططات والميدان.
+                    </p>
+                </div>
+
+                <div class="contact-layout">
+                    <div class="contact-card">
+                        <div class="contact-row">
+                            <div class="contact-label">البريد:</div>
+                            <div class="contact-value">info@cpc-rec.com</div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-label">الهاتف:</div>
+                            <div class="contact-value">+966-5X-XXX-XXXX</div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-label">الموقع:</div>
+                            <div class="contact-value">السعودية · مكتب هندسي بتوجه تقني</div>
+                        </div>
+                        <div class="contact-row">
+                            <div class="contact-label">اللغة:</div>
+                            <div class="contact-value">عربي · إنجليزي</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <form class="contact-form" onsubmit="handleForm(event)">
+                            <div class="field">
+                                <label for="name">الاسم</label>
+                                <input id="name" type="text" placeholder="اكتب اسمك أو اسم الجهة" required />
+                            </div>
+                            <div class="field">
+                                <label for="email">البريد الإلكتروني</label>
+                                <input id="email" type="email" placeholder="example@domain.com" required />
+                            </div>
+                            <div class="field">
+                                <label for="message">وصف مختصر لاحتياجك</label>
+                                <textarea id="message" placeholder="مثال: أحتاج لوحة تحكم لمشروع مضخات وخطوط..."></textarea>
+                            </div>
+                            <button class="btn-primary" type="submit">إرسال الطلب</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <div>© <span id="year"></span> CPCREC · جميع الحقوق محفوظة.</div>
+            <div>مكتب هندسي بتوجه تقني · تصميم وتنفيذ حلول عرض بيانات للمشاريع.</div>
+        </div>
+    </footer>
+
+    <script>
+        // سنة ديناميكية
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        // تمرير سلس للأقسام
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            window.scrollTo({
+                top: el.offsetTop - 70,
+                behavior: "smooth",
+            });
+        }
+
+        // نموذج تواصل (مبدئي)
+        function handleForm(e) {
+            e.preventDefault();
+            alert("تم استلام طلبك بشكل مبدئي. يمكنك لاحقًا ربط هذا النموذج بنظام بريد أو قاعدة بيانات.");
+        }
+    </script>
+</body>
+</html>

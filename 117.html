@@ -1,0 +1,1179 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPC - REC | Operations Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Tajawal', sans-serif;
+  background: #111827;
+  color: #e5e7eb;
+}
+
+/* HEADER */
+.fixed-header {
+  direction: ltr !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #020617;
+  padding: 15px 25px;
+  border-bottom: 1px solid #1f2937;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  direction: ltr !important;
+}
+
+.header-logo {
+  height: 60px;
+  object-fit: contain;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #e5e7eb;
+  direction: rtl;
+}
+
+.lang-switch {
+  display:flex;
+  gap:8px;
+  direction:ltr !important;
+}
+
+.lang-switch button {
+  padding:6px 12px;
+  border-radius:6px;
+  border:1px solid #1f2937;
+  background:#020617;
+  color:#e5e7eb;
+  cursor:pointer;
+  font-size:13px;
+}
+.lang-switch button.active {
+  background:#0ea5e9;
+  border-color:#38bdf8;
+}
+
+/* GRID LAYOUT */
+.dashboard {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 20px;
+  padding: 25px;
+}
+
+/* BOXES */
+.box {
+  background: #020617;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #1f2937;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeSlide 0.6s ease forwards;
+}
+.box h2 {
+  margin: 0 0 15px;
+  font-size: 18px;
+  color: #e5e7eb;
+}
+
+/* SVG WRAPPER */
+.svg-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid #1f2937;
+  background: radial-gradient(circle at top, #111827 0, #020617 55%, #000 100%);
+}
+.svg-container { transform-origin: center center; cursor: grab; }
+.svg-container:active { cursor: grabbing; }
+
+/* MINIMAP */
+.minimap {
+  position:absolute;
+  right:10px;
+  bottom:10px;
+  width:140px;
+  height:90px;
+  border-radius:8px;
+  border:1px solid #1f2937;
+  background:#020617;
+  overflow:hidden;
+  opacity:0.85;
+}
+.minimap svg { width:90%; height:90%; }
+.minimap-viewport {
+  fill: none;
+  stroke: #f97316;
+  stroke-width: 1.5;
+}
+
+/* LEGEND */
+.legend-item {
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:2px 6px;
+  border-radius:6px;
+  background:#020617;
+  border:1px solid #1f2937;
+}
+
+/* PDF TABLE */
+.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.pdf-table th, .pdf-table td {
+  padding: 8px;
+  border: 1px solid #1f2937;
+  text-align: center;
+}
+.pdf-icon { color: #f97316; font-size: 18px; }
+
+/* DOCUMENT BOX */
+.doc-box {
+  background: linear-gradient(115deg, #0f172a, #1e293b);
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 12px;
+  margin-top: 15px;
+  box-shadow: 0 0 14px rgba(0,0,0,0.25);
+  display: none;
+}
+.doc-box h2 {
+  margin: 0 0 15px;
+  font-size: 17px;
+  color: #e2e8f0;
+  text-align:center;
+}
+
+/* ICON BUTTONS */
+.doc-icons {
+  display:flex;
+  justify-content:space-between;
+  gap:6px;
+}
+.doc-btn {
+  flex:1;
+  background:#1e293b;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:15px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.25s;
+}
+.doc-btn:hover {
+  background:#0f172a;
+  transform:translateY(-3px);
+}
+.doc-btn div {
+  font-size:26px;
+  margin-bottom:6px;
+}
+.doc-btn span {
+  font-size:13px;
+  opacity:0.85;
+}
+
+/* DATETIME BAR */
+.datetime-bar {
+  background: #0f172a;
+  border-bottom: 1px solid #1f2937;
+  padding: 8px 25px;
+  font-size: 15px;
+  direction:ltr;
+}
+
+/* ANIMATION */
+@keyframes fadeSlide {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auto-style1 { color: #E5E7EB; }
+.auto-style2 { color: #FFFEFE; }
+</style>
+</head>
+
+<body>
+
+<header class="fixed-header">
+  <div class="header-left">
+    <img src="qq.png" class="header-logo" alt="Logo">
+    <div class="title">CPC - REC | Operations Dashboard</div>
+  </div>
+
+  <div class="lang-switch">
+    <button id="langAr" class="active">العربية</button>
+    <button id="langEn">English</button>
+  </div>
+</header>
+
+<div class="datetime-bar">
+  <span id="dateTime"></span>
+</div>
+
+<div class="dashboard">
+
+  <!-- LEFT: ENGINEERING MAP -->
+  <div class="box" id="mapBox" style="grid-column:1; grid-row:1;">
+    <h2 id="mapTitle">المخطط الهندسي</h2>
+
+    <h3 id="legendTitle" style="font-size:14px; margin:10px 0 8px;">
+      وسيلة الإيضاح – وضع تشغيل الخطوط
+    </h3>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:12px;">
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#22c55e; display:inline-block;"></span>
+        <span id="legendActive">نشط</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#eab308; display:inline-block;"></span>
+        <span id="legendStandby">جاهز</span>
+      </div>
+      <div class="legend-item">
+        <span style="width:14px; height:4px; background:#6b7280; display:inline-block;"></span>
+        <span id="legendIdle">خامل</span>
+      </div>
+    </div>
+
+    <div class="svg-wrapper" id="svgWrapper" style="margin-top:10px; height:380px; position:relative;">
+      <div class="svg-container" id="svgContainer">
+
+        <!-- SVG الجديد بالكامل -->
+        <svg id="mainSvg" width="100%" height="100%" viewBox="0 0 1400 650">
+
+          <!-- عنوان -->
+          <text x="700" y="40" fill="#fff" font-size="22" text-anchor="middle"></text>
+
+          <!-- GRID -->
+          <g>
+            <line x1="150" y1="60" x2="150" y2="620" stroke="#333" stroke-width="0.5"/>
+            <line x1="350" y1="60" x2="350" y2="620" stroke="#333" stroke-width="0.5"/>
+            <line x1="550" y1="60" x2="550" y2="620" stroke="#333" stroke-width="0.5"/>
+            <line x1="750" y1="60" x2="750" y2="620" stroke="#333" stroke-width="0.5"/>
+            <line x1="950" y1="60" x2="950" y2="620" stroke="#333" stroke-width="0.5"/>
+            <line x1="1150" y1="60" x2="1150" y2="620" stroke="#333" stroke-width="0.5"/>
+
+            <line x1="100" y1="120" x2="1300" y2="120" stroke="#333" stroke-width="0.5"/>
+            <line x1="100" y1="210" x2="1300" y2="210" stroke="#333" stroke-width="0.5"/>
+            <line x1="100" y1="300" x2="1300" y2="300" stroke="#333" stroke-width="0.5"/>
+            <line x1="100" y1="420" x2="1300" y2="420" stroke="#333" stroke-width="0.5"/>
+          </g>
+
+          <!-- التسميات الجانبية -->
+          <text x="20" y="140" fill="#fff" font-size="14" font-weight="bold">Locations</text>
+          <text x="20" y="230" fill="#fff" font-size="14" font-weight="bold">Lev. Reducer</text>
+          <text x="20" y="320" fill="#fff" font-size="14" font-weight="bold">ID Lines</text>
+          <text x="20" y="450" fill="#fff" font-size="14" font-weight="bold">ID Pumps</text>
+
+          <!-- الخط الفاصل -->
+          <line x1="140" y1="80" x2="140" y2="600" stroke="#777" stroke-width="1.2" />
+
+          <!-- الصف العلوي (الأجنحة والمراكز) -->
+          <g id="Center core 1" onclick="showDetails('Center core 1','Placing Boom')" style="cursor:pointer">
+            <rect x="180" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="250" y="125" fill="#fff" font-size="12" text-anchor="middle">Center core</text>
+            <text x="250" y="145" fill="#fff" font-size="12" text-anchor="middle">(Slabs)</text>
+          </g>
+
+          <g id="Wing C" onclick="showDetails('Wing C','Placing Boom')" style="cursor:pointer">
+            <rect x="380" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="450" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing C</text>
+            <text x="450" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320043)</text>
+          </g>
+
+          <g id="Center core 2" onclick="showDetails('Center core 2','Placing Boom')" style="cursor:pointer">
+            <rect x="580" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="660" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC3)</text>
+            <text x="660" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320050)</text>
+          </g>
+
+          <g id="Wing A" onclick="showDetails('Wing A','Placing Boom')" style="cursor:pointer">
+            <rect x="780" y="100" width="160" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="860" y="125" fill="#fff" font-size="12" text-anchor="middle">CC (TC2)</text>
+            <text x="860" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320051)</text>
+          </g>
+
+          <g id="Wing B" onclick="showDetails('Wing B','Placing Boom')" style="cursor:pointer">
+            <rect x="1000" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1070" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing A</text>
+            <text x="1070" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320049)</text>
+          </g>
+
+          <g id="Wing B 2" onclick="showDetails('Wing B','Placing Boom')" style="cursor:pointer">
+            <rect x="1200" y="100" width="140" height="60" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1270" y="125" fill="#fff" font-size="12" text-anchor="middle">Wing B</text>
+            <text x="1270" y="145" fill="#fff" font-size="12" text-anchor="middle">(SPB# 320048)</text>
+          </g>
+
+          <!-- الصف الثاني (L.xx – أزرق) -->
+          <g id="L1" onclick="showDetails('L1','line')" style="cursor:pointer">
+            <rect x="210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="250" y="215" fill="#fff" font-size="12" text-anchor="middle">L.77</text>
+          </g>
+
+          <g id="L2" onclick="showDetails('L2','line')" style="cursor:pointer">
+            <rect x="410" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="450" y="215" fill="#fff" font-size="12" text-anchor="middle">L.71</text>
+          </g>
+
+          <g id="L3" onclick="showDetails('L3','line')" style="cursor:pointer">
+            <rect x="610" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="650" y="215" fill="#fff" font-size="12" text-anchor="middle">L.77</text>
+          </g>
+
+          <g id="L4" onclick="showDetails('L4','line')" style="cursor:pointer">
+            <rect x="810" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="850" y="215" fill="#fff" font-size="12" text-anchor="middle">L.75</text>
+          </g>
+
+          <g id="L5" onclick="showDetails('L5','line')" style="cursor:pointer">
+            <rect x="1010" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1050" y="215" fill="#fff" font-size="12" text-anchor="middle">L.71</text>
+          </g>
+
+          <g id="L6" onclick="showDetails('L6','line')" style="cursor:pointer">
+            <rect x="1210" y="190" width="80" height="50" fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1250" y="215" fill="#fff" font-size="12" text-anchor="middle">L.68</text>
+          </g>
+                    <!-- الصف الثالث (Line # – أزرق) -->
+          <g id="Line1" onclick="showDetails('L1','line')" style="cursor:pointer">
+            <rect x="210" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="250" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #1</text>
+          </g>
+
+          <g id="Line2" onclick="showDetails('L2','line')" style="cursor:pointer">
+            <rect x="410" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="450" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #2</text>
+          </g>
+
+          <g id="Line3" onclick="showDetails('L3','line')" style="cursor:pointer">
+            <rect x="610" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="650" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #3</text>
+          </g>
+
+          <g id="Line4" onclick="showDetails('L4','line')" style="cursor:pointer">
+            <rect x="810" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="850" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #4</text>
+          </g>
+
+          <g id="Line5" onclick="showDetails('L5','line')" style="cursor:pointer">
+            <rect x="1010" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1050" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #5</text>
+          </g>
+
+          <g id="Line6" onclick="showDetails('L6','line')" style="cursor:pointer">
+            <rect x="1210" y="280" width="80" height="50"
+              fill="#42A5F5" stroke="#1E88E5" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1250" y="305" fill="#fff" font-size="12" text-anchor="middle">Line #6</text>
+          </g>
+
+          <!-- الصف السفلي (المضخات – خوخي) -->
+          <g id="SP1" onclick="showDetails('SP1','Concrete Pump')" style="cursor:pointer">
+            <rect x="380" y="420" width="160" height="70"
+              fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="460" y="445" fill="#000" font-size="12" text-anchor="middle">SP.Pump (1)</text>
+            <text x="460" y="465" fill="#000" font-size="12" text-anchor="middle">8800126</text>
+          </g>
+
+          <g id="SP2" onclick="showDetails('SP2','Concrete Pump')" style="cursor:pointer">
+            <rect x="580" y="420" width="160" height="70"
+              fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="660" y="445" fill="#000" font-size="12" text-anchor="middle">SP.Pump (2)</text>
+            <text x="660" y="465" fill="#000" font-size="12" text-anchor="middle">8800121</text>
+          </g>
+
+          <g id="SP3" onclick="showDetails('SP3','Concrete Pump')" style="cursor:pointer">
+            <rect x="780" y="420" width="160" height="70"
+              fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="860" y="445" fill="#000" font-size="12" text-anchor="middle">SP.Pump (3)</text>
+            <text x="860" y="465" fill="#000" font-size="12" text-anchor="middle">8800124</text>
+          </g>
+
+          <g id="SP4" onclick="showDetails('SP4','Concrete Pump')" style="cursor:pointer">
+            <rect x="980" y="420" width="160" height="70"
+              fill="#FFCC80" stroke="#FB8C00" stroke-width="1.8" rx="6" ry="6"/>
+            <text x="1060" y="445" fill="#000" font-size="12" text-anchor="middle">SP.Pump (4)</text>
+            <text x="1060" y="465" fill="#000" font-size="12" text-anchor="middle">8800127</text>
+          </g>
+
+          <!-- خطوط الربط بين الخطوط والمضخات -->
+          <line x1="250" y1="330" x2="250" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="250" y1="400" x2="460" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="460" y1="400" x2="460" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+          <line x1="450" y1="330" x2="450" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="650" y1="330" x2="650" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="450" y1="380" x2="650" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="660" y1="380" x2="660" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+          <line x1="850" y1="330" x2="850" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="1050" y1="330" x2="1050" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="850" y1="380" x2="1050" y2="380" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="860" y1="380" x2="860" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+          <line x1="1250" y1="330" x2="1250" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="1250" y1="400" x2="1060" y2="400" stroke="#E0E0E0" stroke-width="2"/>
+          <line x1="1060" y1="400" x2="1060" y2="420" stroke="#E0E0E0" stroke-width="2"/>
+
+        </svg>
+      </div>
+    </div>
+  </div>
+  <!-- RIGHT: DETAILS BOX -->
+  <div class="box" id="detailsBox" style="grid-column:2; grid-row:1 / span 2; overflow-y:auto;">
+
+    <h2 id="detailName">اختر عنصرًا</h2>
+    <div id="detailInfo"><p>—</p></div>
+
+    <!-- BOX 1: الكتلوج – التأمين – المواصفات -->
+    <div class="doc-box">
+      <h2>الكتلوج – التأمين – المواصفات</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn">
+          <div>🔒</div>
+          
+            <a id="btnInsurance" href="#" onclick="openPdfViewer(this.href, 'وثيقة التأمين'); return false;" class="auto-style1">
+             <span> التأمين</span>
+            </a>
+          
+        </div>
+
+        <div class="doc-btn" onclick="showArchive()">
+          <div>📘</div>
+          <span><a id="btnCatalog" class="auto-style2"><span >سجل الفحص</span></a></span>
+        </div>
+
+        <div class="doc-btn">
+          <div>📑</div>
+          <span><a id="btnSpecs" class="auto-style2" href="#" target="_blank"><span >المواصفات</span></a></span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 id="pdfTitle" style="margin-top:20px">أرشيف ملفات PDF</h3>
+
+    <table class="pdf-table" id="pdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th id="pdfDateHeader">التاريخ</th>
+          <th id="pdfFileHeader">الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+    <!-- BOX 2: الصيانة -->
+    <div class="doc-box" style="margin-top:20px;">
+      <h2>الصيانة</h2>
+
+      <div class="doc-icons">
+
+        <div class="doc-btn" id="maintenanceLogBtn" onclick="showMaintenanceLog()">
+          <div>🛠️</div>
+          <span>سجل الصيانة</span>
+        </div>
+	
+
+        <div class="doc-btn"  id="scheduleBtn"  onclick="showSchedule()">
+          <div>📅</div>
+          <span>الجدولة</span>
+        </div>
+
+        <div class="doc-btn"  id="maintenanceFilesBtn" onclick="showMaintenanceFiles()">
+          <div>📂</div>
+          <span>ملفات الصيانة</span>
+        </div>
+
+      </div>
+    </div>
+
+    <h3 style="margin-top:20px">ملفات PDF الخاصة بالصيانة</h3>
+
+    <table class="pdf-table" id="maintenancePdfTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>الملف</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="2">— لا توجد ملفات —</td></tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- REPORT BOX -->
+  <div class="box" id="reportBox" style="grid-column:1; grid-row:2;">
+    <h2>تقرير التشغيل</h2>
+
+    <div class="doc-icons" style="margin-top:15px;">
+      <div class="doc-btn" onclick="openDailyReport()">
+        <div>📅</div>
+        <span>التقرير اليومي</span>
+      </div>
+
+      <div class="doc-btn" onclick="openMonthlyReport()">
+        <div>📊</div>
+        <span>التقرير الشهري</span>
+      </div>
+    </div>
+  </div>
+
+</div> <!-- END DASHBOARD -->
+
+<script>
+
+let currentLang = "ar";
+let selectedItem = null;
+
+/* =======================
+   PDF ARCHIVE
+======================= */
+
+const pdfArchive = {
+
+  
+  SP1: {
+    archive: [
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA6LugmyBXfTo5MxtrSvK5CAYKQXz68VXY151RgK-m-VqE?e=JhV9mV" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAPYn9EUsZZQqtH8mq7k7bZAceSNU7RFw_FT874iytrZhI?e=8CzHpX" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCacfMAOWGiRIXo94JkEpC7AY9eYLWadkH0S4N_wqTXAXk?e=0QzTEu" },       
+
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCxvjZ2oBC3QYooDD4_LG8LAfoAmtiznIhMumseQLcQcDc?e=J60yRc" },    
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA3M3pyCuu1S5xdHqBQ-I3pAUtb7ahsWkYhXawoGzpUIZQ?e=Pv5j9Z" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCF3uiPfPJjQq3gcTwH7dbXAePAwWF7d8douejNtt4becY?e=UEXjFD" },
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAkyC5F_QTbT5nLjwx5I5DhAeQvBXbuRay2i49ScGVJq98?e=eTUS3r" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAAQM99M4GZQZrGDjS5_kErARISFXXtfVRzSbYbirNOPUo?e=SFA1ce" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNuobURN_RS5kvMuBkeFCpAd02dZEGH6L822QL7P7sQb0?e=ZAqecC" },
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBYB_AIMocNQ7nocvyoqDzWAYPaM-FNtRmiJtPPTCpGW7M?e=hsq2Fq" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBh_aFD1nqGSL3TL9au1by0ATAMtLRIvSz4zenNKs201w8?e=Sboh7X" },
+      { date: "2026-01-28", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA46cgKyTriS5hdk32dW7sLAYCN3bpIbfWSf3VvW3H39Ns?e=zsAs2K" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQClPiUUAyb8QIqb_9Ljw3bUAQSSno6VbZ-MM4sK5f1vDpc?e=LlusX3" }
+    ],
+    maintenance: [
+    { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZBA6vOStCRIT3bk71XV7CAcSc2WpunZuGzgiRXxYpYbk?e=OTE5p2" }
+
+,
+      { date: "2026-01-18", url: "#" }
+    ],
+    catalog: "",
+    specs: "#",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800126.pdf"
+  },
+
+  SP2: {
+    archive: [
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBEFjLgEfQOR4pdBB0_D2ieAaIFxuD1Cx2Wuw3MZMMeyKw?e=6yZuqL" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCq2H7-xl4iQIiDfkDgikTqAZPX9GiI9agcPx2f7af5Nm8?e=Kgo1Nv" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDAMitPwqhYRZpmNZuCGNCyASRlEKKKefyprk9cwQThPwo?e=56SU1M" },       
+   
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDidSqkmS8VRJJtGnlWz149AS0Q-owbZvPVu3EpJ9mGYLE?e=l8Lt1s" },       
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB97Ed1DOegRI1mdRBxDqBzAW4csqrSXuoztIhk_r0fvpU?e=lM4UYb" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBPCsDzE2Y9Ro73UANTV9UMAdOkp2VtotwffjMTo_QYL0g?e=8jBsUV" },   
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQABP_spG1gSRpd658j21J5qAWz74Mexx-ftPAPI2qNu9gM?e=qd5Vrk" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZtZi5ylsZQ79MsH5-3lMuAczrsAB7Mi2JvKDtAFyC5W8?e=JIng1q" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBd1Hxv9v5vSKYT_intqFvgAcb7t-rKduuFhwhTQE5AxOc?e=vQwy8n" },
+      { date: "2026-01-30", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD9bPv-Wuj2RLPQo4oIi3SGARERKrkPWqjT_N-KelgaSI0?e=1RW0UP" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBEx1L6HumUTb6SRgSVsm_AAcDw_YITHZ_qsEsXJge9e5o?e=gKfvhj" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDFLkYmzDFxRb-NcGTs7oznAeLhapA-Qbogfc0Teu3POu4?e=REgc0k" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAEBzG5qzA0Qb98NgqzfMkbAcLvSoIYTN84wyDjsGGUr1s?e=xCcZy4" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChG7dWhdGHRa_3Pbzw6TDHAbmnhZwUbUbIAEilmT819UA?e=6mwkoZ" }
+
+    ],
+    catalog: "",
+    specs: "#",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800121.pdf"
+  },
+
+  SP3: {
+      archive: [
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAPvtaxAmbgQauykFf_bKz4ASQWXnldzN7WdswqFdYxCMw?e=viyEnq" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAzMavjngG9SLhTz6DZ0A8BAbFSfdXC_EpucfnDFFWTPPQ?e=hBdNPT" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQARooH119XWQ6fcRZkJht4NAVN2kuRZfcrMI8NBPeKfuUQ?e=qvztVj" },       
+
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAvEvpkr2dsRKJXwH3gCNgzAcHGw5JVskQJYDOPdDRMUvk?e=roebwO" },         
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC2D4QCcTzURbD2igynTBJuAU5cYro39BsRJ_AoNRW1-LY?e=t5tKt7" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBjBSk47nipTqSMUCcq6vNwAV6l0LewtjLZ-cZhTOzxl1I?e=Gl7ZLl" },         
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCUWj-rC6f2R4rb6Bq22JiHAWzo2hnag76qUfm1lzbE68M?e=XPrxQP" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCZAHngp7aoQ6W8qtehYZ8IAbD5MP1adE7NaIwBAJ3x3mk?e=iXaTa1" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD0DTovVeGmQZR50B2hdfr7ARGlpWJDA8QQUUOixs3xdVw?e=a7Y7Xg" },   
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKjbx42NNdSrd0GxJtw4myARji0keycCyuDGRgX6a0MCE?e=zS5ti7" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNGwrqQaoJSJdq6ep1VdDVAWFR0PTvXa1xuHLuxhD1ef4?e=q7q05O" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDKR1RackY-QJ54eOQFnW-TAf7ss5YzK7fxgg0cJ_XCvzo?e=03IfE2" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBVmvltVJN1Spapk5J455bwAcyb4HkdZ5fmV4HF69dLKyw?e=cgM2oi" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDqnbdxeZCGS7wdUHR_0vrdAan6lmltHG1i3TFov0KK6c8?e=mrvA2p" }
+
+    ],
+    catalog: "",
+    specs: "#",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800124.pdf"
+  },
+
+  SP4: {
+    archive: [
+      { date: "2026-02-15", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBdkZqJkWM3QLXAlIO15IXHARHUWaWOTc2Icdcm3R61aVw?e=JrjOyh" },      
+      { date: "2026-02-14", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQD-vQLipeP4TYwqEB95hgLsAT2zj0Nnr0ECnXZT5aUjhmk?e=IbcChQ" },
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDZFjQa9zWbSZl0u21os4R8AaSpVTVYBVv1kipchEyPUKY?e=VhjIxb" },       
+    
+      { date: "2026-02-11", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDRv-x9rJunT40hVEkipWoNAY1CWsVAwhuleml5RIzKDCY?e=FylYE1" },        
+      { date: "2026-02-10", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDJ-7waG5p1TrosFT9HCQPCAa2a99VPDKEFeO99oDU5EPg?e=BGHrhG" }, 
+      { date: "2026-02-09", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAwpBUW4Y24R7GzDcMeCf3FAbD0zhhJ4sjwk0HNXJ7Lv2c?e=lRdSG9" },   
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCGGsMBEN_QTJonlqjtj3BoAfcb6zrIpjvMXWXnpGWJw0M?e=lPMwsZ" },
+      { date: "2026-02-07", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGvUDTahYkR6zKxQZ8WTywAS7fZ26CO7YFNVoe3IBEg1E?e=qrv8tc" },
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCroUT4_XkHS4S7gPjF0dnuARbN7dElHOIedCZjgX_dJl0?e=eTVYN6" },   
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB0PycAqh3vRp7UC1515PIAAUJZ638nUvHtoMKi_XZuIL4?e=OJQzOS" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB7wtNDDuvERK7o2gvEkFaCAVcNaJt2QjdDR2__wKZP2JY?e=9Yby4R" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBjnIHwx6RFSp-J74__UqQZATRcN6Xl7caABR2j155HvQk?e=8B3Pzq" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCTtYajvDLHS5dJYttuXjJHAbqqaAomWlFglzmSIkyZ39c?e=XdChkK" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChG7dWhdGHRa_3Pbzw6TDHAbmnhZwUbUbIAEilmT819UA?e=6mwkoZ" }
+
+    ],
+    catalog: "",
+    specs: "#",
+    insurance: "http://www.ibsoft.somee.com/JD/9/2030/PDF/8800127.pdf"
+  },
+
+  L1: {
+    archive: [
+    
+      { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA7noAN4XwNToiC-7rQYsKgAdvJN6qunuA8md8bWGflucU?e=vJRMKa" }, 
+   
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCrBJqKwpZ9TbGXJgaliI4cAaianFhrClb-Fzmp5L9IDEU?e=KhKPmM" }, 
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBXO_yD78JsRai_EFG7wxiCAb1MFY1kDsRf1pU4of9ges0?e=KhUpkZ" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQL-eersUBS58EmXO90ln-AWE8d158sxTJQRPlHP1mYhM?e=oCYU7y" },   
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCNuobURN_RS5kvMuBkeFCpAd02dZEGH6L822QL7P7sQb0?e=ZAqecC" },   
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBgmrS4S_q9SYTLsKLSwl6QAc8vVe2P324mSYHCrLbYklo?e=F1ua3z" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDV95jjYJbDRobSLXYQxfojAQDqUJ503CX4x1u908QBJd0?e=DVRsAG" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZmFOTefooTLm9c3uh2UgiAXGy9OrQneOm8vLUxobkCgI?e=gx5mjC" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAbClb25rtYR4-h-9btzgqOAawD8PKPYeO7wfbu_fa8sPI?e=tfJ9Ka" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L2: {
+    archive: [
+ 	  { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBZzFZs56Q5Sa3KmToQ5X6DAfBQwSpjqpwoPTSUBx_BFJE?e=T0Zni5" },    
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBI0adicBjPQoBemt-2VUeiAS7Mgtip_YhIIe0M_yj1GPg?e=pmFZoc" },    
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAkKqY506ZPTI26Ep5ip-uRAR3m_A5vTJfU6a2H5-_SL4c?e=6fNVaE" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBQLQ_FmC3eQb9OTryQVNT-Ab9MTF0F1XgwUMRBcbkzetg?e=j0BCsP" },   
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCjkJOi8OOnSLyRzReGo1rDAXq5n0t0itud-Ufl1CsdTnI?e=8QwQFu" },    
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAH7CRy7rioSKD1_-X8pLBTAWBdW3tXmdmp0KOyjYk4zQc?e=A2WBUT" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCaQsjJDhoHSqZEJTtqhz-aAUgzk0ub8LhJZ57DUni7xHo?e=h9WWgl" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAQe2gmTG6VSrfDo6fQk_2NARM9i_XNlKUdBGo0ev_NQpA?e=sNB4Fw" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBqI6SA58GASaJCn7I_Ns4SAatfcv-RdRT339VNfo46Fc0?e=2iWIuy" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L3: {
+    archive: [
+      { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAX_J0EeX7tTYZtkVQ2vTB7ARmetebcnsZKG8cRMvnk_74?e=sR4lF4" }, 
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAIXjoJKErkQpGxnJwzy554AfgDllRJcHSMI4a13ZCAn8U?e=P5vUZl" },    
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCpWMZhIJ5USZu0DOTJdZ-FAfJOfOE9iKPgro3JRWnsrIM?e=XRS8xH" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAf9HDMLPDoQbMGopOxgkkZAcBWxuBeEPSqrzBAtMU4VsQ?e=Bf7LaT" },
+    
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCADvKGTAEAQZw8aaNB13e4Aeony4D2BX4ISyjO9kOrN30?e=XNoEEN" },
+    
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAwOvvPUt81Tr7VW3U0ZbWlAZwbd8jinudPO8meNcU8MZs?e=PtcIkU" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBM-MdUP1KPSJJtiBOPDaBIAV6vrN6ejHm-XefDsUWPSzc?e=j7WY5m" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDYL99DB-g2R4843BQQelCuAVkpatvepkFYXcNWgvPCEwk?e=NfVSQU" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDHCKFpVIpeTqbHNC9-VkosAYgNXGKi8CIoLt8pm27GtG8?e=l7IkDT" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L4: {
+    archive: [
+	  { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAKQWhSzakkRJSgfhmkSdoJAeGk3NstOgfsTcSAIx7dEbo?e=s8k8BO" },     
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDOjfLQFbcRQ5rkwmDHFR9IAQCQaC9xeCMa-bEUU1LrbEI?e=1HrJ3g" },    
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCZqfOGIdsBQLVg4pL-9lJIAaHqlIn9yg3x4E5rB-nJmQ8?e=exQKND" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDwl_Cxc1ubTq6Z_QbQI29fAdisNvyraX8H0JQep-Hggbk?e=z3HEes" },
+    
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCxccYyaHz1Q7I1YisFgIwmASch5mzBeO2sIxd2mDgCR5k?e=n9GfKS" },
+    
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDIQNzu2HjhSogkEaLBj_piAVUPka6m1nNLorBHzIDn3yU?e=jbua9n" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQC5kI6FsmxrRodnUBLzpGR0AaSpF78dC06krs1oZp8xUpg?e=gfO3vQ" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDYd7_aMvE7S5rpH1DysjW6AQtCCN5G_yshOt58yUKc7_o?e=36RySL" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDcbD-5zegNTqE_FUsA-k9RAZ1A2_zBRAka-ZYbfryP6aA?e=g5czVh" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L5: {
+    archive: [
+      { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDN34_qYiLyT5e_c-4nHCe3AduYG3fl2DsTzBIEpP04-Qs?e=xCIQ7m" },  
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCF16eO1NCARpG6xa2YUG7vAXuwXIpVjslYtQ4L3QJCEjg?e=FGnz0l" },    
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQACqF7ZZEZFQI6lKik80TSnAWWcKxogV6rF_YCLj9SeuZk?e=0h8An0" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQB_tFDAckJtRqdBoT8q-wtVARZPPGGXXxP9X0qWzOGRzBM?e=C7KJU4" },
+    
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA_WfGRlbGGR5FDWXEGX7BQAUS3Z7dZ2Iz-AmaBH5zh8i0?e=7aJN6D" },
+    
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCVJhCuL-lEQYtSYGTKGQHMAfABybrMDVDb6e9mHuSnPQ4?e=Ul8wjo" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCiFDyCNis1QqwoFhJv9IUBAYhQ5xVIIaZLALdJnh-EqLo?e=gtR8Qd" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDNQio-oITzT67lYTj4rep_AXxpjvjVyhtOQ6MgeL4fqNs?e=pfLfq0" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQCXhAj0VSczRLG03u7nYv3MAX0Jc32b9FVkNed7OWwhD9U?e=HLl13Q" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  L6: {
+    archive: [
+      { date: "2026-02-16", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBq7wOtyzKjQoCx-zORfWWKAYXm7zU72ZS6-I4d0T_hQ-I?e=6Jf0c1" }, 
+      { date: "2026-02-12", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGZrkzicZUTb77J3U9jfQBARa80hOAOKTyGYEpC-MUCQo?e=dahYhd" },    
+      { date: "2026-02-08", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQArIRgj9SkKTJLRXfpeuOlIAfO16WBM4gZlT-X_TtiVt3Q?e=bTcj4c" },
+      { date: "2026-02-03", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQDM2crriF2DQKW-YODORZxgAc1i4C-u6OO8cSi_j4HMzE8?e=zxaHKh" },
+    
+      { date: "2026-02-02", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQChG7dWhdGHRa_3Pbzw6TDHAbmnhZwUbUbIAEilmT819UA?e=6mwkoZ" },
+    
+      { date: "2026-01-31", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA9V3lpxsf-TIQhc1-c_RV9ARc4cHkT-4Zlij-L-HU1Yqs?e=eNBgrY" },
+      { date: "2026-01-29", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQAGtG8J8ndAQJK7g4mPIVD0AQ42X6IUoheYfyvMf7_vFhI?e=VRbBTf" },
+      { date: "2026-01-26", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQBxtC3Ysx3-QocBl2ZS34ZTASpsgVdXbMg_qyPu5Uw3zrE?e=YON0hJ" },
+      { date: "2026-01-25", url: "https://cpcholding0-my.sharepoint.com/:b:/g/personal/pumps_division_cpcrec_com/IQA4jZVOge-3QY__bMyqM4kcAWDj6fblAxp-xYICF2cyCww?e=psCQWZ" }
+    ],
+    maintenance: [
+      { date: "2026-01-20", url: "#" }
+    ],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+ 
+    "Wing C": {
+    archive: [],
+    maintenance: [],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  "Center core 1": {
+    archive: [],
+    maintenance: [],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  "Center core 2": {
+    archive: [],
+    maintenance: [],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  "Wing A": {
+    archive: [],
+    maintenance: [],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  },
+
+  "Wing B": {
+    archive: [],
+    maintenance: [],
+    catalog: "#",
+    specs: "#",
+    insurance: "#"
+  }
+
+};
+/* =======================
+   SHOW DETAILS
+======================= */
+
+function showDetails(id, type) {
+
+  document.querySelectorAll(".doc-box").forEach(box => box.style.display = "block");
+
+  selectedItem = { id, type };
+
+  document.getElementById("detailName").textContent = id;
+  document.getElementById("detailInfo").innerHTML = `<p>نوع العنصر: ${type}</p>`;
+
+  document.getElementById("btnCatalog").href = pdfArchive[id]?.catalog || "#";
+  document.getElementById("btnSpecs").href = pdfArchive[id]?.specs || "#";
+  document.getElementById("btnInsurance").href = pdfArchive[id]?.insurance || "#";
+
+  renderPDFTable(id);
+  renderMaintenancePDF(id);
+}
+
+function hideAllTables() {
+  document.getElementById("pdfTable").style.display = "none";
+  document.getElementById("maintenancePdfTable").style.display = "none";
+}
+function showMaintenanceFiles() {
+  hideAllTables();
+  if (selectedItem) {
+    renderMaintenancePDF(selectedItem.id);
+    document.getElementById("maintenancePdfTable").style.display = "table";
+  }
+}
+/* =======================
+   PDF TABLES
+======================= */
+
+function renderPDFTable(id) {
+  const tableBody = document.querySelector("#pdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.archive || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+function renderMaintenancePDF(id) {
+  const tableBody = document.querySelector("#maintenancePdfTable tbody");
+  tableBody.innerHTML = "";
+
+  const files = pdfArchive[id]?.maintenance || [];
+
+  if (!files.length) {
+    tableBody.innerHTML = `<tr><td colspan="2">— لا توجد ملفات —</td></tr>`;
+    return;
+  }
+
+  files.forEach(f => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${f.date}</td>
+      <td><a href="${f.url}" target="_blank" class="pdf-icon">📄</a></td>
+    `;
+    tableBody.appendChild(tr);
+  });
+}
+
+/* =======================
+   ZOOM + PAN
+======================= */
+
+let currentScale = 1;
+let currentTranslate = { x: 0, y: 0 };
+let isPanning = false;
+let startPan = { x: 0, y: 0 };
+
+const svgContainer = document.getElementById("svgContainer");
+const svgWrapper = document.getElementById("svgWrapper");
+
+function updateTransform() {
+  svgContainer.style.transform =
+    `translate(${currentTranslate.x}px, ${currentTranslate.y}px) scale(${currentScale})`;
+}
+
+svgWrapper.addEventListener("wheel", (e) => {
+  e.preventDefault();
+  const delta = e.deltaY < 0 ? 0.1 : -0.1;
+  currentScale = Math.min(2.5, Math.max(0.7, currentScale + delta));
+  updateTransform();
+});
+
+svgWrapper.addEventListener("mousedown", (e) => {
+  isPanning = true;
+  startPan = { x: e.clientX - currentTranslate.x, y: e.clientY - currentTranslate.y };
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!isPanning) return;
+  currentTranslate.x = e.clientX - startPan.x;
+  currentTranslate.y = e.clientY - startPan.y;
+  updateTransform();
+});
+
+window.addEventListener("mouseup", () => {
+  isPanning = false;
+});
+
+/* =======================
+   DATE & TIME
+======================= */
+
+function updateDateTime() {
+  const now = new Date();
+  document.getElementById("dateTime").textContent =
+    now.toLocaleString(currentLang === "ar" ? "ar-EG" : "en-GB");
+}
+
+setInterval(updateDateTime, 1000);
+updateDateTime();
+
+/* =======================
+   LANGUAGE SWITCH
+======================= */
+
+document.getElementById("langAr").onclick = () => {
+  currentLang = "ar";
+  applyLanguage();
+};
+
+document.getElementById("langEn").onclick = () => {
+  currentLang = "en";
+  applyLanguage();
+};
+
+function applyLanguage() {
+
+  if (currentLang === "ar") {
+    document.body.dir = "rtl";
+
+    document.getElementById("mapTitle").textContent = "المخطط الهندسي";
+    document.getElementById("legendTitle").textContent = "رسم بياني – وضع تشغيل الخطوط";
+    document.getElementById("legendActive").textContent = "نشط";
+    document.getElementById("legendStandby").textContent = "جاهز";
+    document.getElementById("legendIdle").textContent = "خامل";
+
+    document.getElementById("pdfTitle").textContent = "أرشيف ملفات PDF";
+    document.getElementById("pdfDateHeader").textContent = "التاريخ";
+    document.getElementById("pdfFileHeader").textContent = "الملف";
+
+    // ترجمة الأزرار
+    document.querySelector("#btnInsurance span").textContent = "التأمين";
+    document.querySelector("#btnCatalog span").textContent = "سجل الفحص";
+    document.querySelector("#btnSpecs span").textContent = "المواصفات";
+
+    document.querySelector("#maintenanceLogBtn span").textContent = "سجل الصيانة";
+    document.querySelector("#scheduleBtn span").textContent = "الجدولة";
+    document.querySelector("#maintenanceFilesBtn span").textContent = "ملفات الصيانة";
+
+    document.getElementById("langAr").classList.add("active");
+    document.getElementById("langEn").classList.remove("active");
+  }
+
+  else {
+    document.body.dir = "ltr";
+
+    document.getElementById("mapTitle").textContent = "Schematic System of Operations";
+    document.getElementById("legendTitle").textContent = "";
+    document.getElementById("legendActive").textContent = "Active";
+    document.getElementById("legendStandby").textContent = "Ready";
+    document.getElementById("legendIdle").textContent = "Idle";
+
+    document.getElementById("pdfTitle").textContent = "PDF Archive";
+    document.getElementById("pdfDateHeader").textContent = "Date";
+    document.getElementById("pdfFileHeader").textContent = "File";
+
+    // ترجمة الأزرار
+    document.querySelector("#btnInsurance span").textContent = "Insurance";
+    document.querySelector("#btnCatalog span").textContent = "Inspection Log";
+    document.querySelector("#btnSpecs span").textContent = "Specifications";
+
+    document.querySelector("#maintenanceLogBtn span").textContent = "Maintenance Log";
+    document.querySelector("#scheduleBtn span").textContent = "Schedule";
+    document.querySelector("#maintenanceFilesBtn span").textContent = "Maintenance Files";
+
+    document.getElementById("langEn").classList.add("active");
+    document.getElementById("langAr").classList.remove("active");
+  }
+
+  updateDateTime();
+}
+/* =======================
+   POPUP WINDOW
+======================= */
+
+function openPopup(title, content) {
+  document.getElementById("popupTitle").textContent = title;
+  document.getElementById("popupContent").innerHTML = content;
+
+  document.getElementById("popupOverlay").style.display = "block";
+  document.getElementById("popupWindow").style.display = "block";
+}
+
+function closePopup() {
+  document.getElementById("popupOverlay").style.display = "none";
+  document.getElementById("popupWindow").style.display = "none";
+}
+
+/* =======================
+   REPORTS
+======================= */
+
+function openDailyReport() {
+  openPopup(
+    "التقرير اليومي",
+    `
+      <p>هنا يمكنك عرض تقرير التشغيل اليومي.</p>
+      <ul>
+        <li>عدد ساعات التشغيل</li>
+        <li>عدد الأعطال</li>
+        <li>الخطوط النشطة</li>
+        <li>ملاحظات اليوم</li>
+      </ul>
+    `
+  );
+}
+
+function openMonthlyReport() {
+  openPopup(
+    "التقرير الشهري",
+    `
+      <p>هنا يمكنك عرض تقرير التشغيل الشهري.</p>
+      <ul>
+        <li>إجمالي ساعات التشغيل</li>
+        <li>إحصائيات الأعطال</li>
+        <li>مقارنة الأداء بين الأسابيع</li>
+        <li>مؤشرات التحسين</li>
+      </ul>
+    `
+  );
+}
+
+/* =======================
+   PDF VIEWER (Insurance only)
+======================= */
+
+
+function openPdfViewer(url, title = "عرض ملف PDF") {
+
+  const viewerUrl = `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(url)}`;
+
+  openPopup(
+    title,
+    `
+      <iframe src="${viewerUrl}" style="
+        width:100%;
+        height:500px;
+        border:none;
+        border-radius:8px;
+        background:#fff;
+      "></iframe>
+    `
+  );
+}
+
+function showArchive() {
+  hideAllTables();
+  if (selectedItem) {
+    renderPDFTable(selectedItem.id);
+    document.getElementById("pdfTable").style.display = "table";
+  }
+}
+</script>
+
+<!-- POPUP OVERLAY -->
+<div id="popupOverlay" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter: blur(3px);
+  z-index:999;
+"></div>
+
+<!-- POPUP WINDOW -->
+<div id="popupWindow" style="
+  display:none;
+  position:fixed;
+  top:50%; left:50%;
+  transform:translate(-50%, -50%);
+  width:420px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:20px;
+  z-index:1000;
+  box-shadow:0 0 20px rgba(0,0,0,0.4);
+  color:#e5e7eb;
+">
+
+  <h2 id="popupTitle" style="margin-top:0; text-align:center;"></h2>
+
+  <div id="popupContent" style="margin-top:15px; font-size:14px; line-height:1.7;">
+  </div>
+
+  <button onclick="closePopup()" style="
+    margin-top:20px;
+    width:100%;
+    padding:10px;
+    background:#1e293b;
+    border:1px solid #334155;
+    border-radius:8px;
+    color:#e5e7eb;
+    cursor:pointer;
+    font-size:14px;
+  ">إغلاق</button>
+
+</div>
+
+</body>
+</html>
+
+
+
+
